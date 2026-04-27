@@ -1,0 +1,68 @@
+SG90 subject-level MICOM abnormality review
+Community input: Results/subject_level_fba/tables/06_sg90_subject_community_growth_summary_by_diet.csv
+Taxon input: Results/subject_level_fba/tables/06_sg90_subject_taxon_growth_by_diet.csv
+QC input: Suplementary_Data/processed_data/subject_level_micom_sg90/sg90_subject_input_qc_summary.csv
+Build report input: Results/subject_level_fba/reports/06_sg90_subject_level_micom_build_report.txt
+
+Validation checks
+- expected subjects: 215
+- observed subjects: 215
+- expected subject-diet rows: 430
+- observed subject-diet rows: 430
+- solver status counts: {'optimal': 430}
+- build report selected subjects: 215
+
+Per-diet thresholds
+- western: growth q1=0.489773, q3=0.646338, low_outlier<0.254924, high_outlier>0.881187
+- western: matched metabolites q1=119.00, q3=126.00, low_outlier<108.50
+- high_fiber: growth q1=0.402579, q3=0.556507, low_outlier<0.171689, high_outlier>0.787397
+- high_fiber: matched metabolites q1=119.00, q3=126.00, low_outlier<108.50
+
+Flag counts
+- flagged subjects total: 33
+- extreme high-growth outlier: 6
+- extreme low-growth outlier: 2
+- poor diet-medium coverage: 19
+- reporting/solver artifact: 21
+- sparse-input subject: 10
+- unusual diet-response pattern: 1
+
+Overall assessment counts
+- biologically interesting outlier: 5
+- sparse-but-valid case: 1
+- technical issue: 27
+
+Flagged subjects
+- MBS1256 [91_100] technical issue | reporting/solver artifact; sparse-input subject; poor diet-medium coverage; unusual diet-response pattern | negative objective on western (-0.120829) | only 2 nonzero modeled input taxa; total raw modeled abundance=26.711252 | low medium matching on western (104 matched, 60 missing), high_fiber (104 matched, 60 missing) | high_fiber growth (0.336558) exceeded western growth (0.327181) | very few growing taxa on western (2 taxa), high_fiber (2 taxa)
+- MBS1263 [81_90] technical issue | reporting/solver artifact; sparse-input subject; poor diet-medium coverage | negative objective on western (-0.472458), high_fiber (-0.388192) | only 2 nonzero modeled input taxa; total raw modeled abundance=0.371256 | low medium matching on western (107 matched, 57 missing), high_fiber (107 matched, 57 missing) | very few growing taxa on western (2 taxa), high_fiber (2 taxa)
+- MBS1478 [81_90] technical issue | reporting/solver artifact; sparse-input subject; poor diet-medium coverage | negative objective on western (-0.108826), high_fiber (-0.075872) | only 1 nonzero modeled input taxa; total raw modeled abundance=0.128351 | low medium matching on western (103 matched, 61 missing), high_fiber (103 matched, 61 missing) | very few growing taxa on western (1 taxa), high_fiber (1 taxa) | duplicate-looking sparse profile shared with MBS1498, MBS1534
+- MBS1498 [81_90] technical issue | reporting/solver artifact; sparse-input subject; poor diet-medium coverage | negative objective on western (-0.108826), high_fiber (-0.075872) | only 1 nonzero modeled input taxa; total raw modeled abundance=1.922908 | low medium matching on western (103 matched, 61 missing), high_fiber (103 matched, 61 missing) | very few growing taxa on western (1 taxa), high_fiber (1 taxa) | duplicate-looking sparse profile shared with MBS1478, MBS1534
+- MBS1506 [81_90] technical issue | reporting/solver artifact; sparse-input subject; poor diet-medium coverage | negative objective on western (-0.113296), high_fiber (-0.079771) | only 2 nonzero modeled input taxa; total raw modeled abundance=18.735820 | low medium matching on western (104 matched, 60 missing), high_fiber (104 matched, 60 missing) | very few growing taxa on western (2 taxa), high_fiber (2 taxa)
+- MBS1534 [81_90] technical issue | reporting/solver artifact; sparse-input subject; poor diet-medium coverage | negative objective on western (-0.108826), high_fiber (-0.075872) | only 1 nonzero modeled input taxa; total raw modeled abundance=0.412784 | low medium matching on western (103 matched, 61 missing), high_fiber (103 matched, 61 missing) | very few growing taxa on western (1 taxa), high_fiber (1 taxa) | duplicate-looking sparse profile shared with MBS1478, MBS1498
+- MBS1554 [91_100] technical issue | reporting/solver artifact; sparse-input subject; poor diet-medium coverage | negative objective on western (-0.250154), high_fiber (-0.197796) | only 2 nonzero modeled input taxa; total raw modeled abundance=1.710689 | low medium matching on western (107 matched, 57 missing), high_fiber (107 matched, 57 missing) | very few growing taxa on western (2 taxa), high_fiber (2 taxa)
+- MBS1606 [81_90] technical issue | reporting/solver artifact; sparse-input subject; poor diet-medium coverage | negative objective on western (-0.178522), high_fiber (-0.137747) | only 2 nonzero modeled input taxa; total raw modeled abundance=6.246272 | low medium matching on western (107 matched, 57 missing), high_fiber (107 matched, 57 missing) | very few growing taxa on western (2 taxa), high_fiber (2 taxa)
+- MBS1434 [91_100] technical issue | reporting/solver artifact; poor diet-medium coverage | negative objective on western (-0.197859) | low medium matching on western (108 matched, 56 missing), high_fiber (108 matched, 56 missing)
+- MBS1477 [81_90] technical issue | reporting/solver artifact; poor diet-medium coverage | negative objective on western (-0.215654), high_fiber (-0.164560) | low medium matching on western (108 matched, 56 missing), high_fiber (108 matched, 56 missing)
+- MBS1508 [91_100] technical issue | reporting/solver artifact; poor diet-medium coverage | negative objective on western (-0.349222), high_fiber (-0.277623) | low medium matching on western (108 matched, 56 missing), high_fiber (108 matched, 56 missing)
+- MBS1531 [91_100] technical issue | reporting/solver artifact; poor diet-medium coverage | negative objective on western (-0.283128), high_fiber (-0.221607) | low medium matching on western (107 matched, 57 missing), high_fiber (107 matched, 57 missing)
+- MBS1547 [91_100] technical issue | reporting/solver artifact; sparse-input subject | negative objective on western (-0.412568), high_fiber (-0.253450) | only 2 nonzero modeled input taxa; total raw modeled abundance=2.862519 | very few growing taxa on western (2 taxa), high_fiber (2 taxa)
+- MBS1560 [81_90] technical issue | reporting/solver artifact; poor diet-medium coverage | negative objective on western (-0.354416), high_fiber (-0.277662) | low medium matching on western (108 matched, 56 missing), high_fiber (108 matched, 56 missing)
+- MBS1216 [71_80] technical issue | reporting/solver artifact; extreme high-growth outlier | negative objective on high_fiber (-1.700947) | high growth on western (0.903747), high_fiber (0.787731)
+- MBS1240 [91_100] technical issue | reporting/solver artifact | negative objective on western (-0.376912), high_fiber (-0.304281)
+- MBS1243 [81_90] technical issue | poor diet-medium coverage; extreme low-growth outlier | low medium matching on western (107 matched, 57 missing), high_fiber (107 matched, 57 missing) | low growth on western (0.237572)
+- MBS1480 [81_90] technical issue | reporting/solver artifact | negative objective on high_fiber (-2.977298)
+- MBS1501 [81_90] technical issue | poor diet-medium coverage; extreme low-growth outlier | low medium matching on western (93 matched, 71 missing), high_fiber (93 matched, 71 missing) | low growth on western (0.159200), high_fiber (0.125169)
+- MBS1502 [81_90] technical issue | reporting/solver artifact | negative objective on high_fiber (-0.235741)
+- MBS1522 [81_90] technical issue | reporting/solver artifact | negative objective on western (-0.873090), high_fiber (-0.596685)
+- MBS1538 [81_90] technical issue | reporting/solver artifact | negative objective on western (-1.786411), high_fiber (-1.347769)
+- MBS1545 [81_90] technical issue | reporting/solver artifact | negative objective on western (-0.282063), high_fiber (-0.224115)
+- MBS1520 [81_90] sparse-but-valid case | sparse-input subject | only 2 nonzero modeled input taxa; total raw modeled abundance=9.914055 | very few growing taxa on western (2 taxa), high_fiber (2 taxa)
+- MBS1260 [91_100] technical issue | poor diet-medium coverage | low medium matching on western (108 matched, 56 missing), high_fiber (108 matched, 56 missing)
+- MBS1519 [81_90] technical issue | poor diet-medium coverage | low medium matching on western (107 matched, 57 missing), high_fiber (107 matched, 57 missing)
+- MBS1601 [81_90] technical issue | poor diet-medium coverage | low medium matching on western (107 matched, 57 missing), high_fiber (107 matched, 57 missing)
+- MBS1609 [71_80] technical issue | poor diet-medium coverage | low medium matching on western (108 matched, 56 missing), high_fiber (108 matched, 56 missing)
+- MBS1248 [91_100] biologically interesting outlier | extreme high-growth outlier | high growth on western (0.930981), high_fiber (0.842319)
+- MBS1558 [81_90] biologically interesting outlier | extreme high-growth outlier | high growth on western (0.934330), high_fiber (0.846313)
+- MBS1585 [71_80] biologically interesting outlier | extreme high-growth outlier | high growth on western (0.899287), high_fiber (0.793706)
+- MBS1587 [81_90] biologically interesting outlier | extreme high-growth outlier | high growth on western (0.903005), high_fiber (0.792866)
+- MBS1615 [81_90] biologically interesting outlier | extreme high-growth outlier | high growth on western (0.962592), high_fiber (0.883107)

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project is focused on community metabolic modeling of a small microbiome species set using SBML genome-scale metabolic models and diet constraints. The main goal is to understand which species dominate modeled community growth, how that behavior changes across age-bin-specific abundance weightings, and whether butyrate-related metabolism is supported by pathway and exchange evidence.
+This project is focused on community metabolic modeling of a small microbiome species set using SBML genome-scale metabolic models and diet constraints. The main goal is to understand which species dominate modeled community growth, how that behavior changes across age-bin-specific abundance weightings, how those age-bin patterns compare with SG90 subject-level MICOM results, and whether butyrate-related metabolism is supported by pathway and exchange evidence.
 
 The project is intentionally cautious about interpretation. In this workflow, "butyrate production" is not treated as a single yes/no signal. Instead, evidence is separated into:
 
@@ -23,6 +23,7 @@ The project now also has an explicit operating standard in:
 - If yes, through which butyrate biosynthesis routes or related pathway steps do they contribute?
 - Do age-bin-specific abundance weights change which species dominate community growth?
 - In older age bins, do the dominant modeled species align with the age-enriched species reported in the octogenarian paper?
+- For the SG90 cohort, do subject-level MICOM results support or weaken the age-bin-level dominance patterns?
 - Which species are associated with butyrate-related metabolism in younger age bins versus older age bins?
 - For older age bins, is the evidence for butyrate production better seen from internal pathway flux, exchange with the shared environment, or both?
 
@@ -43,7 +44,7 @@ The project now also has an explicit operating standard in:
 - `Results/`: top-level home for generated tables, figures, and build reports.
 - `Results/cobrapy_fba/`: COBRApy outputs grouped into `tables/`, `figures/`, and `reports/`.
 - `Results/micom_fba/`: MICOM outputs grouped into `tables/`, `figures/`, and `reports/`.
-- `Results/subject_level_fba/`: reserved results space for future subject-level FBA analyses.
+- `Results/subject_level_fba/`: SG90 subject-level MICOM outputs grouped into `tables/`, `figures/`, and `reports/`.
 - `Models/vmh_agora1.03_sbml/`: legacy AGORA 1.03 SBML XML models for the selected microbial species.
 - `Models/vmh_agora2_sbml/`: primary VMH AGORA2 SBML XML models for the selected microbial species.
 - `Medium_files/diet.csv`: diet or medium constraints used for modeling.
@@ -73,6 +74,7 @@ The project now also has an explicit operating standard in:
 - `Results/micom_fba/tables/05_micom_agebin_taxon_growth_by_diet.csv`: MICOM age-bin per-taxon growth summary by diet.
 - `Results/micom_fba/tables/05_micom_agebin_taxon_growth_by_diet_wide.csv`: wide-format MICOM per-taxon growth rates across age bins.
 - `Results/micom_fba/reports/05_micom_agebin_model_build_report.txt`: MICOM age-bin build and diet-mapping report.
+- `Scripts/modelling/00_subject_level_micom_utils.py`: shared helper functions for SG90 subject-level MICOM preprocessing, QC, and per-subject taxonomy-table construction.
 - `Scripts/data_processing/02_prepare_sg90_subject_level_micom_inputs.py`: rebuilds the SG90 subject-level 10-species MICOM input tables directly from the raw metadata and raw abundance workbook, including subjects above age 90.
 - `Suplementary_Data/processed_data/subject_level_micom_sg90/`: SG90-only subject-level MICOM input tables, QC tables, and missing-subject audit files.
 - `Scripts/modelling/06_micom_subject_level_sg90.py`: subject-level MICOM runner for SG90 using the recovered raw-workbook subject set.
@@ -81,6 +83,9 @@ The project now also has an explicit operating standard in:
 - `Results/subject_level_fba/tables/06_sg90_subject_taxon_growth_by_diet_wide.csv`: wide-format SG90 subject-level MICOM taxon growth table.
 - `Results/subject_level_fba/reports/06_sg90_subject_level_micom_build_report.txt`: SG90 subject-level MICOM build and solve report.
 - `Scripts/modelling/07_summarize_sg90_subject_level_micom_growth.py`: summarizes SG90 subject-level MICOM growth and dominance patterns by age group.
+- `Results/subject_level_fba/tables/07_sg90_subject_top_grower_summary.csv`: top-growing taxon per SG90 subject and diet.
+- `Results/subject_level_fba/tables/07_sg90_subject_growth_summary_by_agegroup.csv`: SG90 subject-level community growth summaries for `71_80`, `81_90`, and `91_100`.
+- `Results/subject_level_fba/tables/07_sg90_subject_species_prevalence_by_agegroup.csv`: SG90 taxon growth prevalence and central tendency by age group and diet.
 - `MD/`: project markdown notes and references except for this README.
 - `PDF/`: project PDF references.
 
@@ -94,7 +99,9 @@ The official workflow standard for this repository is:
 4. run the COBRApy age-bin weighted community
 5. run the MICOM baseline community
 6. run the MICOM age-bin weighted community
-7. rebuild SG90 raw subject inputs and run SG90 subject-level MICOM
+7. rebuild SG90 raw subject inputs
+8. run SG90 subject-level MICOM
+9. summarize SG90 subject-level growth and dominance outputs
 
 The detailed SOP and MICOM-specific practice note live in:
 
@@ -211,6 +218,39 @@ The key outputs are:
 - `Results/micom_fba/tables/05_micom_agebin_taxon_growth_by_diet.csv`
 - `Results/micom_fba/tables/05_micom_agebin_taxon_growth_by_diet_wide.csv`
 - `Results/micom_fba/reports/05_micom_agebin_model_build_report.txt`
+
+## SG90 Subject-Level MICOM
+
+The SG90 subject-level MICOM branch is implemented in:
+
+- `Scripts/modelling/00_subject_level_micom_utils.py`
+- `Scripts/data_processing/02_prepare_sg90_subject_level_micom_inputs.py`
+- `Scripts/modelling/06_micom_subject_level_sg90.py`
+- `Scripts/modelling/07_summarize_sg90_subject_level_micom_growth.py`
+
+This branch:
+
+- rebuilds the SG90 subject-level 10-species input tables directly from the raw metadata and raw abundance workbook,
+- recovers SG90 subjects above age `90` into a `91_100` age bin,
+- keeps a QC and missing-subject audit for metadata-listed SG90 subjects absent from the abundance workbook,
+- builds one MICOM community per SG90 subject under both `western` and `high_fiber`,
+- summarizes per-subject community growth, per-taxon growth, top growers, and taxon growth prevalence by age group.
+
+The SG90 subject-level processed inputs live under:
+
+- `Suplementary_Data/processed_data/subject_level_micom_sg90/sg90_subject_taxonomy_for_micom.csv`
+- `Suplementary_Data/processed_data/subject_level_micom_sg90/sg90_subject_input_qc_summary.csv`
+- `Suplementary_Data/processed_data/subject_level_micom_sg90/sg90_subjects_missing_from_abundance_workbook.csv`
+
+The key SG90 subject-level outputs are:
+
+- `Results/subject_level_fba/tables/06_sg90_subject_community_growth_summary_by_diet.csv`
+- `Results/subject_level_fba/tables/06_sg90_subject_taxon_growth_by_diet.csv`
+- `Results/subject_level_fba/tables/06_sg90_subject_taxon_growth_by_diet_wide.csv`
+- `Results/subject_level_fba/reports/06_sg90_subject_level_micom_build_report.txt`
+- `Results/subject_level_fba/tables/07_sg90_subject_top_grower_summary.csv`
+- `Results/subject_level_fba/tables/07_sg90_subject_growth_summary_by_agegroup.csv`
+- `Results/subject_level_fba/tables/07_sg90_subject_species_prevalence_by_agegroup.csv`
 
 ## Next Step
 
