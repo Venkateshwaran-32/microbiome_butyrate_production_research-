@@ -1,0 +1,3 @@
+diet_name,solver_status,community_growth_rate,objective_value,tradeoff_fraction,num_taxa_total,num_taxa_with_nonzero_growth,matched_diet_metabolites,missing_diet_metabolites
+western,optimal,0.7793453095010943,0.7793453095010944,0.5,10,10,127,37
+high_fiber,optimal,0.6954251726181823,0.6954251726181822,0.5,10,10,127,37

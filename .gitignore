@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+.venv/
+.venv_micom/
+.swift-module-cache/
+.DS_Store
+AGORA2_SBML.zip

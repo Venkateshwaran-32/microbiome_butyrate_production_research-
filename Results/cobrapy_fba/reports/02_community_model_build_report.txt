@@ -1,0 +1,15 @@
+Community build report
+Species count: 10
+Shared metabolites: 649
+
+Bilophila_wadsworthia_3_1_6: extracellular metabolites without direct single-species exchange -> metsox_R_L, so3
+Escherichia_coli_UTI89_UPEC: extracellular metabolites without direct single-species exchange -> metsox_R_L
+Faecalibacterium_prausnitzii_M21_2: extracellular metabolites without direct single-species exchange -> metsox_R_L
+Klebsiella_pneumoniae_pneumoniae_MGH78578: extracellular metabolites without direct single-species exchange -> metsox_R_L
+
+western: matched diet metabolites=127, missing diet metabolites=37, solver_status=optimal
+western missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
+
+high_fiber: matched diet metabolites=127, missing diet metabolites=37, solver_status=optimal
+high_fiber missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
+

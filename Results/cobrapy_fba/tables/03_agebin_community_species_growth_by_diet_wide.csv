@@ -1,0 +1,21 @@
+species_name,model_species_id,diet_name,21_40,41_60,61_70,71_80,81_90
+Alistipes onderdonkii,Alistipes_onderdonkii_DSM_19147,high_fiber,0.0,0.0,0.0,0.0,0.0
+Alistipes onderdonkii,Alistipes_onderdonkii_DSM_19147,western,0.0,0.0,0.0,0.0,0.0
+Alistipes shahii,Alistipes_shahii_WAL_8301,high_fiber,0.0,0.0,0.0,0.0,0.0
+Alistipes shahii,Alistipes_shahii_WAL_8301,western,0.0,0.0,0.0,0.0,0.0
+Bacteroides dorei,Bacteroides_dorei_DSM_17855,high_fiber,0.0,0.0,0.0,0.0,0.0
+Bacteroides dorei,Bacteroides_dorei_DSM_17855,western,0.0,0.0,0.0,0.0,0.0
+Bacteroides xylanisolvens,Bacteroides_xylanisolvens_XB1A,high_fiber,0.0,0.0,0.0,0.0,0.0
+Bacteroides xylanisolvens,Bacteroides_xylanisolvens_XB1A,western,0.0,0.0,0.0,0.0,0.0
+Bilophila wadsworthia,Bilophila_wadsworthia_3_1_6,high_fiber,0.0,0.0,0.0,0.0,0.0
+Bilophila wadsworthia,Bilophila_wadsworthia_3_1_6,western,0.0,0.0,0.0,0.0,0.0
+Escherichia coli,Escherichia_coli_UTI89_UPEC,high_fiber,0.0,0.0,0.0,2.1881921069284638,1.741746021629196
+Escherichia coli,Escherichia_coli_UTI89_UPEC,western,0.0,0.0,0.0,2.1881921069301145,1.5728786609825494
+Faecalibacterium prausnitzii,Faecalibacterium_prausnitzii_M21_2,high_fiber,1.0001850640793903,1.0001850640793748,1.0001850640793828,0.0,0.49133132524398043
+Faecalibacterium prausnitzii,Faecalibacterium_prausnitzii_M21_2,western,1.1357218037717978,1.1357218037717836,1.1357218037717685,0.0,0.6771764403144233
+Klebsiella pneumoniae,Klebsiella_pneumoniae_pneumoniae_MGH78578,high_fiber,0.0,0.0,0.0,0.0,0.0
+Klebsiella pneumoniae,Klebsiella_pneumoniae_pneumoniae_MGH78578,western,0.0,0.0,0.0,0.0,0.0
+Parabacteroides merdae,Parabacteroides_merdae_ATCC_43184,high_fiber,0.0,0.0,0.0,0.0,0.0
+Parabacteroides merdae,Parabacteroides_merdae_ATCC_43184,western,0.0,0.0,0.0,0.0,0.0
+Ruminococcus torques,Ruminococcus_torques_ATCC_27756,high_fiber,0.0,0.0,0.0,0.0,0.0
+Ruminococcus torques,Ruminococcus_torques_ATCC_27756,western,0.0,0.0,0.0,0.0,0.0

@@ -1,0 +1,33 @@
+SG90 subject-level MICOM build report
+Subject input: Suplementary_Data/processed_data/subject_level_micom_sg90/sg90_subject_taxonomy_for_micom.csv
+QC input: Suplementary_Data/processed_data/subject_level_micom_sg90/sg90_subject_input_qc_summary.csv
+Diet file: Medium_files/diet.csv
+Tradeoff fraction: 0.5
+Selection filters: subject_id=ALL, age_group=ALL, limit=ALL
+
+Total SG90 subjects in QC table: 236
+Included subjects with abundance rows: 215
+Excluded subjects: 21
+Subjects missing from abundance workbook: 21
+Selected subjects for this run: 215
+
+Selected subject counts by age group
+71_80: 20
+81_90: 169
+91_100: 26
+
+Selected subject nonzero modeled taxon distribution
+1 nonzero taxa: 3 subjects
+2 nonzero taxa: 7 subjects
+3 nonzero taxa: 15 subjects
+4 nonzero taxa: 12 subjects
+5 nonzero taxa: 31 subjects
+6 nonzero taxa: 37 subjects
+7 nonzero taxa: 58 subjects
+8 nonzero taxa: 36 subjects
+9 nonzero taxa: 16 subjects
+
+
+Solve summary by diet
+high_fiber: successes=215, failures=0
+western: successes=215, failures=0

@@ -1,0 +1,177 @@
+species_name,diet_name,reaction_id,reaction_name,flux_value,is_active
+Alistipes_onderdonkii_DSM_19147,western,ABUTD,Aminobutyraldehyde Dehydrogenase,0.0,False
+Alistipes_onderdonkii_DSM_19147,western,BUTKr,"Butyrate kinase, reversible",0.0,False
+Alistipes_onderdonkii_DSM_19147,western,GGGABADr,gamma-glutamyl-gamma aminobutyric acid dehydrogenase,0.0,False
+Alistipes_onderdonkii_DSM_19147,western,GGGABARr,"Gamma-glutamyl-gamma aminobutyric acid dehydrogenase, NAD",0.0,False
+Alistipes_onderdonkii_DSM_19147,western,GLUABUTt7pp,"4-aminobutyrate/glutamate antiport, periplasmatic",0.18000000000000005,True
+Alistipes_onderdonkii_DSM_19147,western,PBUTT,Phosphate butyryltransferase (EC 2.3.1.19),0.0,False
+Alistipes_onderdonkii_DSM_19147,high_fiber,ABUTD,Aminobutyraldehyde Dehydrogenase,0.0,False
+Alistipes_onderdonkii_DSM_19147,high_fiber,BUTKr,"Butyrate kinase, reversible",0.0,False
+Alistipes_onderdonkii_DSM_19147,high_fiber,GGGABADr,gamma-glutamyl-gamma aminobutyric acid dehydrogenase,0.0,False
+Alistipes_onderdonkii_DSM_19147,high_fiber,GGGABARr,"Gamma-glutamyl-gamma aminobutyric acid dehydrogenase, NAD",0.0,False
+Alistipes_onderdonkii_DSM_19147,high_fiber,GLUABUTt7pp,"4-aminobutyrate/glutamate antiport, periplasmatic",0.18000000000000005,True
+Alistipes_onderdonkii_DSM_19147,high_fiber,PBUTT,Phosphate butyryltransferase (EC 2.3.1.19),0.0,False
+Alistipes_shahii_WAL_8301,western,ABUTD,Aminobutyraldehyde Dehydrogenase,0.0,False
+Alistipes_shahii_WAL_8301,western,ABUTR,4-Aminobutyraldehyde:nad[c]+ oxidoreductase,0.0,False
+Alistipes_shahii_WAL_8301,western,BUTKr,"Butyrate kinase, reversible",0.0,False
+Alistipes_shahii_WAL_8301,western,GGGABADr,gamma-glutamyl-gamma aminobutyric acid dehydrogenase,0.0,False
+Alistipes_shahii_WAL_8301,western,GGGABARr,"Gamma-glutamyl-gamma aminobutyric acid dehydrogenase, NAD",0.0,False
+Alistipes_shahii_WAL_8301,western,GLUABUTt7pp,"4-aminobutyrate/glutamate antiport, periplasmatic",0.0,False
+Alistipes_shahii_WAL_8301,western,PBUTT,Phosphate butyryltransferase (EC 2.3.1.19),0.0,False
+Alistipes_shahii_WAL_8301,high_fiber,ABUTD,Aminobutyraldehyde Dehydrogenase,0.0,False
+Alistipes_shahii_WAL_8301,high_fiber,ABUTR,4-Aminobutyraldehyde:nad[c]+ oxidoreductase,0.0,False
+Alistipes_shahii_WAL_8301,high_fiber,BUTKr,"Butyrate kinase, reversible",0.0,False
+Alistipes_shahii_WAL_8301,high_fiber,GGGABADr,gamma-glutamyl-gamma aminobutyric acid dehydrogenase,0.0,False
+Alistipes_shahii_WAL_8301,high_fiber,GGGABARr,"Gamma-glutamyl-gamma aminobutyric acid dehydrogenase, NAD",0.0,False
+Alistipes_shahii_WAL_8301,high_fiber,GLUABUTt7pp,"4-aminobutyrate/glutamate antiport, periplasmatic",0.0,False
+Alistipes_shahii_WAL_8301,high_fiber,PBUTT,Phosphate butyryltransferase (EC 2.3.1.19),0.0,False
+Bacteroides_dorei_DSM_17855,western,ABUTt2rpp,"Transport of 4-Aminobutyrate  via Proton Symport, Reversible, periplasmatic",0.0,False
+Bacteroides_dorei_DSM_17855,western,BUTKr,"Butyrate kinase, reversible",0.0,False
+Bacteroides_dorei_DSM_17855,western,EX_gbbtn(e),gamma-butyrobetaine exchange,0.0,False
+Bacteroides_dorei_DSM_17855,western,EX_isobut(e),Isobutyrate exchange,0.17729886589035906,True
+Bacteroides_dorei_DSM_17855,western,GBBTNtex,gamma-butyrobetaine diffusion extracellular to periplasm,0.0,False
+Bacteroides_dorei_DSM_17855,western,ISOBUTt2rpp,"Isobutyrate transport via proton symport, periplasmatic",-0.17729886589035906,True
+Bacteroides_dorei_DSM_17855,western,ISOBUTtex,"Isobutyrate, 2-Methylpropanoate diffusion extracellular to periplasm",-0.17729886589035906,True
+Bacteroides_dorei_DSM_17855,western,PBUTT,Phosphate butyryltransferase (EC 2.3.1.19),0.0,False
+Bacteroides_dorei_DSM_17855,high_fiber,ABUTt2rpp,"Transport of 4-Aminobutyrate  via Proton Symport, Reversible, periplasmatic",0.0,False
+Bacteroides_dorei_DSM_17855,high_fiber,BUTKr,"Butyrate kinase, reversible",0.0,False
+Bacteroides_dorei_DSM_17855,high_fiber,EX_gbbtn(e),gamma-butyrobetaine exchange,0.0,False
+Bacteroides_dorei_DSM_17855,high_fiber,EX_isobut(e),Isobutyrate exchange,0.0625226533183801,True
+Bacteroides_dorei_DSM_17855,high_fiber,GBBTNtex,gamma-butyrobetaine diffusion extracellular to periplasm,0.0,False
+Bacteroides_dorei_DSM_17855,high_fiber,ISOBUTt2rpp,"Isobutyrate transport via proton symport, periplasmatic",-0.0625226533183801,True
+Bacteroides_dorei_DSM_17855,high_fiber,ISOBUTtex,"Isobutyrate, 2-Methylpropanoate diffusion extracellular to periplasm",-0.0625226533183801,True
+Bacteroides_dorei_DSM_17855,high_fiber,PBUTT,Phosphate butyryltransferase (EC 2.3.1.19),0.0,False
+Bacteroides_xylanisolvens_XB1A,western,BUTKr,"Butyrate kinase, reversible",0.0,False
+Bacteroides_xylanisolvens_XB1A,western,EX_gbbtn(e),gamma-butyrobetaine exchange,0.0,False
+Bacteroides_xylanisolvens_XB1A,western,EX_isobut(e),Isobutyrate exchange,0.0,False
+Bacteroides_xylanisolvens_XB1A,western,GBBTNtex,gamma-butyrobetaine diffusion extracellular to periplasm,0.0,False
+Bacteroides_xylanisolvens_XB1A,western,ISOBUTt2rpp,"Isobutyrate transport via proton symport, periplasmatic",0.0,False
+Bacteroides_xylanisolvens_XB1A,western,ISOBUTtex,"Isobutyrate, 2-Methylpropanoate diffusion extracellular to periplasm",0.0,False
+Bacteroides_xylanisolvens_XB1A,western,PBUTT,Phosphate butyryltransferase (EC 2.3.1.19),0.0,False
+Bacteroides_xylanisolvens_XB1A,high_fiber,BUTKr,"Butyrate kinase, reversible",0.0,False
+Bacteroides_xylanisolvens_XB1A,high_fiber,EX_gbbtn(e),gamma-butyrobetaine exchange,0.0,False
+Bacteroides_xylanisolvens_XB1A,high_fiber,EX_isobut(e),Isobutyrate exchange,0.1410173477728533,True
+Bacteroides_xylanisolvens_XB1A,high_fiber,GBBTNtex,gamma-butyrobetaine diffusion extracellular to periplasm,0.0,False
+Bacteroides_xylanisolvens_XB1A,high_fiber,ISOBUTt2rpp,"Isobutyrate transport via proton symport, periplasmatic",-0.1410173477728533,True
+Bacteroides_xylanisolvens_XB1A,high_fiber,ISOBUTtex,"Isobutyrate, 2-Methylpropanoate diffusion extracellular to periplasm",-0.1410173477728533,True
+Bacteroides_xylanisolvens_XB1A,high_fiber,PBUTT,Phosphate butyryltransferase (EC 2.3.1.19),0.0,False
+Bilophila_wadsworthia_3_1_6,western,ABUTD,Aminobutyraldehyde Dehydrogenase,0.0,False
+Bilophila_wadsworthia_3_1_6,western,ABUTR,4-Aminobutyraldehyde:nad[c]+ oxidoreductase,0.0,False
+Bilophila_wadsworthia_3_1_6,western,ACACT2r,acetyl-CoA C-acyltransferase (butanoyl-CoA) (r),0.0,False
+Bilophila_wadsworthia_3_1_6,western,ACOAD1,acyl-CoA dehydrogenase (butanoyl-CoA),0.0,False
+Bilophila_wadsworthia_3_1_6,western,BTALDH,Butanal:NAD+ oxidoreductase,0.0,False
+Bilophila_wadsworthia_3_1_6,western,BUTKr,"Butyrate kinase, reversible",0.0,False
+Bilophila_wadsworthia_3_1_6,western,BUTt2rpp,"Butyrate Transport via Proton Symport, Reversible, periplasmatic",0.0,False
+Bilophila_wadsworthia_3_1_6,western,BUTtex,butyrate diffusion extracellular to periplasm,0.0,False
+Bilophila_wadsworthia_3_1_6,western,EX_but(e),Butyrate (n-C4:0) exchange,0.0,False
+Bilophila_wadsworthia_3_1_6,western,HIBD,3 hydroxyisobutyrate dehydrogenase,0.0,False
+Bilophila_wadsworthia_3_1_6,western,PBUTT,Phosphate butyryltransferase (EC 2.3.1.19),0.0,False
+Bilophila_wadsworthia_3_1_6,high_fiber,ABUTD,Aminobutyraldehyde Dehydrogenase,0.0,False
+Bilophila_wadsworthia_3_1_6,high_fiber,ABUTR,4-Aminobutyraldehyde:nad[c]+ oxidoreductase,0.0,False
+Bilophila_wadsworthia_3_1_6,high_fiber,ACACT2r,acetyl-CoA C-acyltransferase (butanoyl-CoA) (r),0.0,False
+Bilophila_wadsworthia_3_1_6,high_fiber,ACOAD1,acyl-CoA dehydrogenase (butanoyl-CoA),0.0,False
+Bilophila_wadsworthia_3_1_6,high_fiber,BTALDH,Butanal:NAD+ oxidoreductase,0.0,False
+Bilophila_wadsworthia_3_1_6,high_fiber,BUTKr,"Butyrate kinase, reversible",0.0,False
+Bilophila_wadsworthia_3_1_6,high_fiber,BUTt2rpp,"Butyrate Transport via Proton Symport, Reversible, periplasmatic",0.0,False
+Bilophila_wadsworthia_3_1_6,high_fiber,BUTtex,butyrate diffusion extracellular to periplasm,0.0,False
+Bilophila_wadsworthia_3_1_6,high_fiber,EX_but(e),Butyrate (n-C4:0) exchange,0.0,False
+Bilophila_wadsworthia_3_1_6,high_fiber,HIBD,3 hydroxyisobutyrate dehydrogenase,0.0,False
+Bilophila_wadsworthia_3_1_6,high_fiber,PBUTT,Phosphate butyryltransferase (EC 2.3.1.19),0.0,False
+Escherichia_coli_UTI89_UPEC,western,ABTAr,4-aminobutyrate transaminase,0.33960513993588076,True
+Escherichia_coli_UTI89_UPEC,western,ABUTD,Aminobutyraldehyde Dehydrogenase,0.33960513993588076,True
+Escherichia_coli_UTI89_UPEC,western,ABUTR,4-Aminobutyraldehyde:nad[c]+ oxidoreductase,0.0,False
+Escherichia_coli_UTI89_UPEC,western,ABUTt2pp,"4-aminobutyrate reversible transport in via proton symport, irreversible, periplasmatic",0.0,False
+Escherichia_coli_UTI89_UPEC,western,ACACT2r,acetyl-CoA C-acyltransferase (butanoyl-CoA) (r),0.0,False
+Escherichia_coli_UTI89_UPEC,western,ACOAD1,acyl-CoA dehydrogenase (butanoyl-CoA),0.0,False
+Escherichia_coli_UTI89_UPEC,western,BBTCOAOX,Butyrobetainyl-CoA conversion to crotonobetainyl-CoA,0.0,False
+Escherichia_coli_UTI89_UPEC,western,BUTCTr,"Acetyl-CoA:butyrate-CoA transferase, reversible",0.0,False
+Escherichia_coli_UTI89_UPEC,western,BUTt2pp,"Butyrate transport via proton symport, periplasmatic",0.0,False
+Escherichia_coli_UTI89_UPEC,western,BUTtex,butyrate diffusion extracellular to periplasm,0.0,False
+Escherichia_coli_UTI89_UPEC,western,CRNCBCT,crotonobetainyl-CoA: carnitine CoA transferase,0.0,False
+Escherichia_coli_UTI89_UPEC,western,CRNCDH,Carnityl-CoA dehydratse,0.0,False
+Escherichia_coli_UTI89_UPEC,western,CRNt7pp,"Carnitine/butyrobetaine antiporter, periplasmatic",0.0,False
+Escherichia_coli_UTI89_UPEC,western,ECOAH12,3-hydroxyacyl-CoA dehydratase (3-hydroxyisobutyryl-CoA),0.0,False
+Escherichia_coli_UTI89_UPEC,western,EX_but(e),Butyrate (n-C4:0) exchange,0.0,False
+Escherichia_coli_UTI89_UPEC,western,EX_gbbtn(e),gamma-butyrobetaine exchange,0.0,False
+Escherichia_coli_UTI89_UPEC,western,GBBTNtex,gamma-butyrobetaine diffusion extracellular to periplasm,0.0,False
+Escherichia_coli_UTI89_UPEC,western,GBBTNtpp,"gamma-butyrobetaine transport, periplasmatic",0.0,False
+Escherichia_coli_UTI89_UPEC,western,GLUABUTt7pp,"4-aminobutyrate/glutamate antiport, periplasmatic",0.0,False
+Escherichia_coli_UTI89_UPEC,western,HBCD,3-hydroxybutyryl-CoA dehydrogenase,0.0,False
+Escherichia_coli_UTI89_UPEC,western,HIBD,3 hydroxyisobutyrate dehydrogenase,0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,ABTAr,4-aminobutyrate transaminase,1.2128081446754877,True
+Escherichia_coli_UTI89_UPEC,high_fiber,ABUTD,Aminobutyraldehyde Dehydrogenase,1.1858251361753034,True
+Escherichia_coli_UTI89_UPEC,high_fiber,ABUTR,4-Aminobutyraldehyde:nad[c]+ oxidoreductase,0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,ABUTt2pp,"4-aminobutyrate reversible transport in via proton symport, irreversible, periplasmatic",0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,ACACT2r,acetyl-CoA C-acyltransferase (butanoyl-CoA) (r),0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,ACOAD1,acyl-CoA dehydrogenase (butanoyl-CoA),0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,BBTCOAOX,Butyrobetainyl-CoA conversion to crotonobetainyl-CoA,0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,BUTCTr,"Acetyl-CoA:butyrate-CoA transferase, reversible",0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,BUTt2pp,"Butyrate transport via proton symport, periplasmatic",0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,BUTtex,butyrate diffusion extracellular to periplasm,0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,CRNCBCT,crotonobetainyl-CoA: carnitine CoA transferase,0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,CRNCDH,Carnityl-CoA dehydratse,0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,CRNt7pp,"Carnitine/butyrobetaine antiporter, periplasmatic",0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,ECOAH12,3-hydroxyacyl-CoA dehydratase (3-hydroxyisobutyryl-CoA),0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,EX_but(e),Butyrate (n-C4:0) exchange,0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,EX_gbbtn(e),gamma-butyrobetaine exchange,0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,GBBTNtex,gamma-butyrobetaine diffusion extracellular to periplasm,0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,GBBTNtpp,"gamma-butyrobetaine transport, periplasmatic",0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,GLUABUTt7pp,"4-aminobutyrate/glutamate antiport, periplasmatic",0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,HBCD,3-hydroxybutyryl-CoA dehydrogenase,0.0,False
+Escherichia_coli_UTI89_UPEC,high_fiber,HIBD,3 hydroxyisobutyrate dehydrogenase,0.0,False
+Faecalibacterium_prausnitzii_M21_2,western,2HBO,2-Hydroxybutyrate:NAD+ Oxidoreductase,0.0,False
+Faecalibacterium_prausnitzii_M21_2,western,3ABUTCOAL,3-aminobutyryl-CoA ammonia-lyase,0.0,False
+Faecalibacterium_prausnitzii_M21_2,western,ABUTD,Aminobutyraldehyde Dehydrogenase,0.0,False
+Faecalibacterium_prausnitzii_M21_2,western,ACACT2r,acetyl-CoA C-acyltransferase (butanoyl-CoA) (r),0.0,False
+Faecalibacterium_prausnitzii_M21_2,western,ACOAD1i,acyl-CoA dehydrogenase (butanoyl-CoA),0.0,False
+Faecalibacterium_prausnitzii_M21_2,western,BTCOAACCOAT,Butyryl-CoA:acetate CoA-transferase,-4.044587090646806e-15,False
+Faecalibacterium_prausnitzii_M21_2,western,BTCOADH,Conversion of crotonoyl-CoA to butyryl-CoA by Bcd-Etf complex,-4.044587090646806e-15,False
+Faecalibacterium_prausnitzii_M21_2,western,BUTt2r,"Butyrate Transport via Proton Symport, Reversible",4.044587090646806e-15,False
+Faecalibacterium_prausnitzii_M21_2,western,EX_but(e),Butyrate (n-C4:0) exchange,-4.044587090646807e-15,False
+Faecalibacterium_prausnitzii_M21_2,western,GGGABADr,gamma-glutamyl-gamma aminobutyric acid dehydrogenase,0.0,False
+Faecalibacterium_prausnitzii_M21_2,western,GGGABARr,"Gamma-glutamyl-gamma aminobutyric acid dehydrogenase, NAD",0.0,False
+Faecalibacterium_prausnitzii_M21_2,high_fiber,2HBO,2-Hydroxybutyrate:NAD+ Oxidoreductase,0.0,False
+Faecalibacterium_prausnitzii_M21_2,high_fiber,3ABUTCOAL,3-aminobutyryl-CoA ammonia-lyase,0.0,False
+Faecalibacterium_prausnitzii_M21_2,high_fiber,ABUTD,Aminobutyraldehyde Dehydrogenase,0.0,False
+Faecalibacterium_prausnitzii_M21_2,high_fiber,ACACT2r,acetyl-CoA C-acyltransferase (butanoyl-CoA) (r),0.0,False
+Faecalibacterium_prausnitzii_M21_2,high_fiber,ACOAD1i,acyl-CoA dehydrogenase (butanoyl-CoA),0.0,False
+Faecalibacterium_prausnitzii_M21_2,high_fiber,BTCOAACCOAT,Butyryl-CoA:acetate CoA-transferase,0.0,False
+Faecalibacterium_prausnitzii_M21_2,high_fiber,BTCOADH,Conversion of crotonoyl-CoA to butyryl-CoA by Bcd-Etf complex,0.0,False
+Faecalibacterium_prausnitzii_M21_2,high_fiber,BUTt2r,"Butyrate Transport via Proton Symport, Reversible",0.0,False
+Faecalibacterium_prausnitzii_M21_2,high_fiber,EX_but(e),Butyrate (n-C4:0) exchange,0.0,False
+Faecalibacterium_prausnitzii_M21_2,high_fiber,GGGABADr,gamma-glutamyl-gamma aminobutyric acid dehydrogenase,0.0,False
+Faecalibacterium_prausnitzii_M21_2,high_fiber,GGGABARr,"Gamma-glutamyl-gamma aminobutyric acid dehydrogenase, NAD",0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,western,ABTAr,4-aminobutyrate transaminase,0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,western,ABUTD,Aminobutyraldehyde Dehydrogenase,0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,western,ABUTR,4-Aminobutyraldehyde:nad[c]+ oxidoreductase,0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,western,ACACT2r,acetyl-CoA C-acyltransferase (butanoyl-CoA) (r),0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,western,ACOAD1,acyl-CoA dehydrogenase (butanoyl-CoA),0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,western,BHBtex,(R)-3-hydroxybutyrate diffusion extracellular to periplasm,0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,western,ECOAH12,3-hydroxyacyl-CoA dehydratase (3-hydroxyisobutyryl-CoA),0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,western,GGGABADr,gamma-glutamyl-gamma aminobutyric acid dehydrogenase,0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,western,GGGABARr,"Gamma-glutamyl-gamma aminobutyric acid dehydrogenase, NAD",0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,western,HIBD,3 hydroxyisobutyrate dehydrogenase,0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,western,UNK3,2-keto-4-methylthiobutyrate transamination,0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,high_fiber,ABTAr,4-aminobutyrate transaminase,-2.750301242484451e-18,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,high_fiber,ABUTD,Aminobutyraldehyde Dehydrogenase,0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,high_fiber,ABUTR,4-Aminobutyraldehyde:nad[c]+ oxidoreductase,2.072134241526086e-34,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,high_fiber,ACACT2r,acetyl-CoA C-acyltransferase (butanoyl-CoA) (r),0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,high_fiber,ACOAD1,acyl-CoA dehydrogenase (butanoyl-CoA),0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,high_fiber,BHBtex,(R)-3-hydroxybutyrate diffusion extracellular to periplasm,0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,high_fiber,ECOAH12,3-hydroxyacyl-CoA dehydratase (3-hydroxyisobutyryl-CoA),0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,high_fiber,GGGABADr,gamma-glutamyl-gamma aminobutyric acid dehydrogenase,0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,high_fiber,GGGABARr,"Gamma-glutamyl-gamma aminobutyric acid dehydrogenase, NAD",0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,high_fiber,HIBD,3 hydroxyisobutyrate dehydrogenase,0.0,False
+Klebsiella_pneumoniae_pneumoniae_MGH78578,high_fiber,UNK3,2-keto-4-methylthiobutyrate transamination,0.0,False
+Parabacteroides_merdae_ATCC_43184,western,ABUTt2rpp,"Transport of 4-Aminobutyrate  via Proton Symport, Reversible, periplasmatic",0.0,False
+Parabacteroides_merdae_ATCC_43184,western,EX_gbbtn(e),gamma-butyrobetaine exchange,0.0,False
+Parabacteroides_merdae_ATCC_43184,western,EX_isobut(e),Isobutyrate exchange,0.26940882732936855,True
+Parabacteroides_merdae_ATCC_43184,western,GBBTNtex,gamma-butyrobetaine diffusion extracellular to periplasm,0.0,False
+Parabacteroides_merdae_ATCC_43184,western,ISOBUTt2rpp,"Isobutyrate transport via proton symport, periplasmatic",-0.26940882732936855,True
+Parabacteroides_merdae_ATCC_43184,western,ISOBUTtex,"Isobutyrate, 2-Methylpropanoate diffusion extracellular to periplasm",-0.26940882732936855,True
+Parabacteroides_merdae_ATCC_43184,high_fiber,ABUTt2rpp,"Transport of 4-Aminobutyrate  via Proton Symport, Reversible, periplasmatic",0.0,False
+Parabacteroides_merdae_ATCC_43184,high_fiber,EX_gbbtn(e),gamma-butyrobetaine exchange,0.0,False
+Parabacteroides_merdae_ATCC_43184,high_fiber,EX_isobut(e),Isobutyrate exchange,0.13278772191918045,True
+Parabacteroides_merdae_ATCC_43184,high_fiber,GBBTNtex,gamma-butyrobetaine diffusion extracellular to periplasm,0.0,False
+Parabacteroides_merdae_ATCC_43184,high_fiber,ISOBUTt2rpp,"Isobutyrate transport via proton symport, periplasmatic",-0.13278772191918045,True
+Parabacteroides_merdae_ATCC_43184,high_fiber,ISOBUTtex,"Isobutyrate, 2-Methylpropanoate diffusion extracellular to periplasm",-0.13278772191918045,True

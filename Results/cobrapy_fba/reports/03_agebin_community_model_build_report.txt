@@ -1,0 +1,54 @@
+Age-bin weighted community build report
+Input table: Suplementary_Data/processed_data/allcohort_agebin_median_abundance_10_species.csv
+Age bins: 21_40, 41_60, 61_70, 71_80, 81_90
+
+Input validation
+21_40: rows=10, total_normalized_weight=1.0, n_subjects=91
+41_60: rows=10, total_normalized_weight=0.9999999999999999, n_subjects=140
+61_70: rows=10, total_normalized_weight=1.0, n_subjects=57
+71_80: rows=10, total_normalized_weight=1.0, n_subjects=33
+81_90: rows=10, total_normalized_weight=1.0, n_subjects=169
+
+Species count: 10
+Shared metabolites: 649
+
+Bilophila_wadsworthia_3_1_6: extracellular metabolites without direct single-species exchange -> metsox_R_L, so3
+Escherichia_coli_UTI89_UPEC: extracellular metabolites without direct single-species exchange -> metsox_R_L
+Faecalibacterium_prausnitzii_M21_2: extracellular metabolites without direct single-species exchange -> metsox_R_L
+Klebsiella_pneumoniae_pneumoniae_MGH78578: extracellular metabolites without direct single-species exchange -> metsox_R_L
+
+21_40:
+  objective weights -> Alistipes_onderdonkii_DSM_19147=0.000000, Alistipes_shahii_WAL_8301=0.020866, Bacteroides_dorei_DSM_17855=0.038617, Bacteroides_xylanisolvens_XB1A=0.000000, Bilophila_wadsworthia_3_1_6=0.000000, Escherichia_coli_UTI89_UPEC=0.047444, Faecalibacterium_prausnitzii_M21_2=0.765445, Klebsiella_pneumoniae_pneumoniae_MGH78578=0.000000, Parabacteroides_merdae_ATCC_43184=0.035036, Ruminococcus_torques_ATCC_27756=0.092593
+  western: matched diet metabolites=127, missing diet metabolites=37
+  western missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
+  high_fiber: matched diet metabolites=127, missing diet metabolites=37
+  high_fiber missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
+
+41_60:
+  objective weights -> Alistipes_onderdonkii_DSM_19147=0.000000, Alistipes_shahii_WAL_8301=0.000000, Bacteroides_dorei_DSM_17855=0.021458, Bacteroides_xylanisolvens_XB1A=0.000000, Bilophila_wadsworthia_3_1_6=0.000000, Escherichia_coli_UTI89_UPEC=0.110890, Faecalibacterium_prausnitzii_M21_2=0.703386, Klebsiella_pneumoniae_pneumoniae_MGH78578=0.000000, Parabacteroides_merdae_ATCC_43184=0.029837, Ruminococcus_torques_ATCC_27756=0.134428
+  western: matched diet metabolites=127, missing diet metabolites=37
+  western missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
+  high_fiber: matched diet metabolites=127, missing diet metabolites=37
+  high_fiber missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
+
+61_70:
+  objective weights -> Alistipes_onderdonkii_DSM_19147=0.000000, Alistipes_shahii_WAL_8301=0.000000, Bacteroides_dorei_DSM_17855=0.034721, Bacteroides_xylanisolvens_XB1A=0.000000, Bilophila_wadsworthia_3_1_6=0.000000, Escherichia_coli_UTI89_UPEC=0.046503, Faecalibacterium_prausnitzii_M21_2=0.791410, Klebsiella_pneumoniae_pneumoniae_MGH78578=0.000000, Parabacteroides_merdae_ATCC_43184=0.026408, Ruminococcus_torques_ATCC_27756=0.100957
+  western: matched diet metabolites=127, missing diet metabolites=37
+  western missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
+  high_fiber: matched diet metabolites=127, missing diet metabolites=37
+  high_fiber missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
+
+71_80:
+  objective weights -> Alistipes_onderdonkii_DSM_19147=0.138096, Alistipes_shahii_WAL_8301=0.000000, Bacteroides_dorei_DSM_17855=0.112311, Bacteroides_xylanisolvens_XB1A=0.006837, Bilophila_wadsworthia_3_1_6=0.000000, Escherichia_coli_UTI89_UPEC=0.448802, Faecalibacterium_prausnitzii_M21_2=0.237081, Klebsiella_pneumoniae_pneumoniae_MGH78578=0.013443, Parabacteroides_merdae_ATCC_43184=0.000000, Ruminococcus_torques_ATCC_27756=0.043430
+  western: matched diet metabolites=127, missing diet metabolites=37
+  western missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
+  high_fiber: matched diet metabolites=127, missing diet metabolites=37
+  high_fiber missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
+
+81_90:
+  objective weights -> Alistipes_onderdonkii_DSM_19147=0.093517, Alistipes_shahii_WAL_8301=0.043059, Bacteroides_dorei_DSM_17855=0.127858, Bacteroides_xylanisolvens_XB1A=0.033712, Bilophila_wadsworthia_3_1_6=0.000000, Escherichia_coli_UTI89_UPEC=0.245562, Faecalibacterium_prausnitzii_M21_2=0.235244, Klebsiella_pneumoniae_pneumoniae_MGH78578=0.032578, Parabacteroides_merdae_ATCC_43184=0.130397, Ruminococcus_torques_ATCC_27756=0.058072
+  western: matched diet metabolites=127, missing diet metabolites=37
+  western missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
+  high_fiber: matched diet metabolites=127, missing diet metabolites=37
+  high_fiber missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
+

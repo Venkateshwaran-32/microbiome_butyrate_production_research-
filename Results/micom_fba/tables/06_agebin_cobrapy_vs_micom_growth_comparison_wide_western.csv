@@ -1,0 +1,10 @@
+species_name,21_40_cobra_growing,21_40_cobra_flux,21_40_micom_growing,21_40_micom_growth,41_60_cobra_growing,41_60_cobra_flux,41_60_micom_growing,41_60_micom_growth,61_70_cobra_growing,61_70_cobra_flux,61_70_micom_growing,61_70_micom_growth,71_80_cobra_growing,71_80_cobra_flux,71_80_micom_growing,71_80_micom_growth,81_90_cobra_growing,81_90_cobra_flux,81_90_micom_growing,81_90_micom_growth
+Alistipes onderdonkii,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,True,0.33069596751584307,False,0.0,True,0.40795785183188243
+Alistipes shahii,False,0.0,True,0.02452906946588816,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,True,0.19455558007303436
+Bacteroides dorei,False,0.0,True,0.03653265942630416,False,0.0,True,0.023902314094401026,False,0.0,True,0.0305407808239657,False,0.0,True,0.26894911377306957,False,0.0,True,0.5577669063821286
+Bacteroides xylanisolvens,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,True,0.016388055720620544,False,0.0,True,0.14705449752655825
+Escherichia coli,False,0.0,True,0.04488332437759974,False,0.0,True,0.12351592668316777,False,0.0,True,0.04090482211310121,True,2.1881921069301145,True,1.0747416099618725,True,1.5728786609825494,True,1.071241987532415
+Faecalibacterium prausnitzii,True,1.1357218037717978,True,0.7241386976389013,True,1.1357218037717836,True,0.7834757302821141,True,1.1357218037717685,True,0.696129523940996,False,0.0,True,0.5677348635955582,True,0.6771764403144233,True,1.0262227911126112
+Klebsiella pneumoniae,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,True,0.03261734907390693,False,0.0,True,0.14211994793881383
+Parabacteroides merdae,False,0.0,True,0.03313603519263693,False,0.0,True,0.033236246034752635,False,0.0,True,0.0232202961098264,False,0.0,False,0.0,False,0.0,True,0.5688448846794165
+Ruminococcus torques,False,0.0,True,0.08759671691258981,False,0.0,True,0.14973408391550236,False,0.0,True,0.08880307475680327,False,0.0,True,0.10400171200536479,False,0.0,True,0.25333484775897985

@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>Every Script Explanation</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="/Users/taknev/Desktop/microbiome_butyrate_production_research/MD/print_style.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">Every Script Explanation</h1>
+</header>
+<h1 id="every-script-explanation">Every Script Explanation</h1>
+<h2 id="what-this-note-is-for">What This Note Is For</h2>
+<p>This note is meant to teach you how to read the three main modelling
+scripts in this repository in the right order:</p>
+<ol type="1">
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/01_single_species_growth_and_butyrate.py:39">01_single_species_growth_and_butyrate.py</a></li>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:16">00_baseline_modeling_utils.py</a></li>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/02_community_shared_environment.py:38">02_community_shared_environment.py</a></li>
+</ol>
+<p>The goal is not just to say what each script does.<br />
+The goal is to help you understand:</p>
+<ul>
+<li>what COBRApy functions and objects are being used</li>
+<li>why they are being used</li>
+<li>what role each script plays in the full workflow</li>
+<li>how the code maps to the biology and modelling logic</li>
+</ul>
+<h2 id="the-big-picture-first">The Big Picture First</h2>
+<p>These scripts form one workflow:</p>
+<ul>
+<li><code>01</code> asks: can each species grow by itself under each
+diet, and does it show butyrate-related signals?</li>
+<li><code>00</code> contains the shared helper functions that make the
+workflow reusable</li>
+<li><code>02</code> asks: what happens when all species are placed
+together in one shared environment?</li>
+</ul>
+<p>So:</p>
+<ul>
+<li><code>01</code> = easiest place to learn the basics</li>
+<li><code>00</code> = toolbox that explains the mechanics</li>
+<li><code>02</code> = full community modelling script</li>
+</ul>
+<p>That is why reading them in the order
+<code>01 -&gt; 00 -&gt; 02</code> makes sense.</p>
+<h2 id="what-cobrapy-is-doing-in-this-project">What COBRApy Is Doing In
+This Project</h2>
+<p>COBRApy is the main Python package used for constraint-based
+metabolic modelling.</p>
+<p>In this repository, COBRApy is used to:</p>
+<ul>
+<li>read SBML models</li>
+<li>inspect reactions and metabolites</li>
+<li>identify exchange reactions</li>
+<li>apply environmental constraints</li>
+<li>run flux balance analysis</li>
+<li>build a larger community model from multiple species models</li>
+</ul>
+<p>The most important COBRApy ideas in this project are:</p>
+<ul>
+<li><code>Model</code></li>
+<li><code>Reaction</code></li>
+<li><code>Metabolite</code></li>
+<li>exchange reactions</li>
+<li>the objective reaction</li>
+<li><code>model.medium</code></li>
+<li><code>model.optimize()</code></li>
+</ul>
+<p>If you understand those, the scripts become much easier to
+follow.</p>
+<h2 id="core-cobrapy-objects-used-here">Core COBRApy Objects Used
+Here</h2>
+<h3 id="model"><code>Model</code></h3>
+<p>Imported in:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:7">00_baseline_modeling_utils.py</a></li>
+</ul>
+<p>What it is:</p>
+<ul>
+<li>a whole metabolic network</li>
+</ul>
+<p>What it contains:</p>
+<ul>
+<li>reactions</li>
+<li>metabolites</li>
+<li>genes</li>
+<li>compartments</li>
+<li>an objective</li>
+</ul>
+<p>Big picture role:</p>
+<ul>
+<li>one species SBML file becomes one COBRApy <code>Model</code></li>
+<li>the community is also represented as one larger
+<code>Model</code></li>
+</ul>
+<p>Why it matters:</p>
+<ul>
+<li>almost everything happens through the <code>Model</code> object</li>
+</ul>
+<h3 id="reaction"><code>Reaction</code></h3>
+<p>Imported in:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:7">00_baseline_modeling_utils.py</a></li>
+</ul>
+<p>What it is:</p>
+<ul>
+<li>one biochemical or exchange process</li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li>a biomass reaction</li>
+<li>a glucose exchange reaction</li>
+<li>a connector reaction between a species and the shared pool</li>
+</ul>
+<p>Big picture role:</p>
+<ul>
+<li>reactions are where flux happens</li>
+<li>bounds on reactions define what is allowed</li>
+</ul>
+<p>Why it matters:</p>
+<ul>
+<li>the model does not think in “amounts”</li>
+<li>it thinks in allowed flux through reactions</li>
+</ul>
+<h3 id="metabolite"><code>Metabolite</code></h3>
+<p>Imported in:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:7">00_baseline_modeling_utils.py</a></li>
+</ul>
+<p>What it is:</p>
+<ul>
+<li>one chemical species in a compartment</li>
+</ul>
+<p>Examples:</p>
+<ul>
+<li>glucose in extracellular space</li>
+<li>butyrate in the shared community environment</li>
+</ul>
+<p>Big picture role:</p>
+<ul>
+<li>metabolites connect reactions together</li>
+<li>in the community model, a shared metabolite is created for the
+common environment</li>
+</ul>
+<h2 id="cobrapy-functions-and-features-used-in-the-scripts">COBRApy
+Functions And Features Used In The Scripts</h2>
+<h3 id="read_sbml_model"><code>read_sbml_model</code></h3>
+<p>Used in:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:106">load_model()</a></li>
+</ul>
+<p>What it does:</p>
+<ul>
+<li>loads an SBML XML file into a COBRApy <code>Model</code></li>
+</ul>
+<p>Why used:</p>
+<ul>
+<li>all the species reconstructions are stored as SBML files</li>
+<li>this is the entry point from file to working Python model</li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>without this, there is no species model to simulate</li>
+</ul>
+<h3 id="modelreactions"><code>model.reactions</code></h3>
+<p>Used in:</p>
+<ul>
+<li>all three scripts, directly or indirectly</li>
+</ul>
+<p>Examples in code:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/01_single_species_growth_and_butyrate.py:54">script
+01 checks <code>model.reactions</code></a></li>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:95">script
+00 loops through <code>model.reactions</code></a></li>
+</ul>
+<p>What it does:</p>
+<ul>
+<li>gives access to the reactions in a model</li>
+</ul>
+<p>Why used:</p>
+<ul>
+<li>to inspect objective reactions</li>
+<li>to search for butyrate-related reactions</li>
+<li>to fetch exchange reactions by ID</li>
+<li>to read flux values after optimization</li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>reactions are the main control points for growth, take in, and
+secretion</li>
+</ul>
+<h3 id="modelexchanges"><code>model.exchanges</code></h3>
+<p>Used in:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:65">build_model_exchange_map()</a></li>
+</ul>
+<p>What it does:</p>
+<ul>
+<li>gives the exchange reactions in a model</li>
+</ul>
+<p>Why used:</p>
+<ul>
+<li>exchange reactions are how the model takes in nutrients or secretes
+metabolites</li>
+<li>the scripts need them to match diet metabolites to actual model
+reaction IDs</li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>if you want to control what can enter or leave the model, exchange
+reactions are the place</li>
+</ul>
+<h3 id="modelmedium"><code>model.medium</code></h3>
+<p>Used in:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/01_single_species_growth_and_butyrate.py:60">script
+01 applies <code>model.medium</code></a></li>
+</ul>
+<p>What it does:</p>
+<ul>
+<li>lets you set the medium for a single model using a dictionary of
+exchange reaction IDs and allowed take-in values</li>
+</ul>
+<p>Why used:</p>
+<ul>
+<li>this is the simplest COBRApy way to apply diet constraints for one
+species model</li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>in script <code>01</code>, this is how the chosen diet is applied
+before running FBA</li>
+</ul>
+<p>Important note:</p>
+<ul>
+<li>script <code>02</code> does not use <code>model.medium</code>
+because the community model is more custom and uses manually built
+shared exchange reactions</li>
+</ul>
+<h3 id="modeloptimize"><code>model.optimize()</code></h3>
+<p>Used in:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/01_single_species_growth_and_butyrate.py:62">script
+01 calls <code>model.optimize()</code></a></li>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/02_community_shared_environment.py:94">script
+02 calls <code>community.optimize()</code></a></li>
+</ul>
+<p>What it does:</p>
+<ul>
+<li>solves the flux balance analysis problem for the model</li>
+</ul>
+<p>Why used:</p>
+<ul>
+<li>to get the best flux distribution under the current constraints</li>
+</ul>
+<p>What it returns:</p>
+<ul>
+<li>a solution object with objective value, status, and fluxes</li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>this is the step where the model actually computes a result</li>
+</ul>
+<h3
+id="solutionobjective_value"><code>solution.objective_value</code></h3>
+<p>Used in:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/01_single_species_growth_and_butyrate.py:75">script
+01 reads <code>solution.objective_value</code></a></li>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/02_community_shared_environment.py:122">script
+02 reads <code>solution.objective_value</code></a></li>
+</ul>
+<p>What it does:</p>
+<ul>
+<li>gives the optimized value of the objective function</li>
+</ul>
+<p>Why used:</p>
+<ul>
+<li>to measure growth or total community objective</li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>this is the main number telling you how well the objective was
+achieved</li>
+</ul>
+<h3 id="solutionfluxes"><code>solution.fluxes</code></h3>
+<p>Used in:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/01_single_species_growth_and_butyrate.py:66">script
+01 reads <code>solution.fluxes</code></a></li>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/02_community_shared_environment.py:97">script
+02 reads <code>solution.fluxes</code></a></li>
+</ul>
+<p>What it does:</p>
+<ul>
+<li>gives the flux value for each reaction in the solution</li>
+</ul>
+<p>Why used:</p>
+<ul>
+<li>to read biomass flux</li>
+<li>to read butyrate exchange flux</li>
+<li>to inspect butyrate-related reactions</li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>this is how you move from “the model solved” to “what actually
+happened”</li>
+</ul>
+<h3 id="with-model"><code>with model:</code></h3>
+<p>Used in:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/01_single_species_growth_and_butyrate.py:57">script
+01 uses <code>with model:</code></a></li>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/02_community_shared_environment.py:79">script
+02 uses <code>with community:</code></a></li>
+</ul>
+<p>What it does:</p>
+<ul>
+<li>creates a temporary context where model changes are automatically
+undone afterward</li>
+</ul>
+<p>Why used:</p>
+<ul>
+<li>each diet scenario changes bounds</li>
+<li>the script needs a clean model state for the next diet</li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>this prevents one diet simulation from accidentally carrying over
+settings into the next one</li>
+</ul>
+<h2 id="script-01-single-species-growth-and-butyrate">Script 01:
+Single-Species Growth And Butyrate</h2>
+<p>File:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/01_single_species_growth_and_butyrate.py:39">01_single_species_growth_and_butyrate.py</a></li>
+</ul>
+<h2 id="why-start-with-script-01">Why Start With Script 01</h2>
+<p>This is the easiest script to understand because:</p>
+<ul>
+<li>it handles one species at a time</li>
+<li>it uses standard COBRApy operations</li>
+<li>it does not yet build a custom community structure</li>
+</ul>
+<p>This is where you should learn:</p>
+<ul>
+<li>model loading</li>
+<li>medium application</li>
+<li>optimization</li>
+<li>reading flux results</li>
+</ul>
+<h2 id="what-script-01-does">What Script 01 Does</h2>
+<p>For each species model:</p>
+<ol type="1">
+<li>load the model</li>
+<li>find the growth objective reaction</li>
+<li>find butyrate-related reactions</li>
+<li>apply one diet</li>
+<li>optimize the model</li>
+<li>record growth and butyrate-related output</li>
+<li>repeat for the next diet</li>
+</ol>
+<h2 id="what-it-uses-from-cobrapy">What It Uses From COBRApy</h2>
+<h3 id="loading-the-model">Loading the model</h3>
+<p>Script <code>01</code> uses a helper from <code>00</code>:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:106">load_model()</a></li>
+</ul>
+<p>That helper calls:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:108"><code>read_sbml_model</code></a></li>
+</ul>
+<p>Why:</p>
+<ul>
+<li>each species starts as an SBML file</li>
+</ul>
+<h3 id="finding-the-objective-reaction">Finding the objective
+reaction</h3>
+<p>Script <code>01</code> uses:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:46">get_active_objective_reaction()</a></li>
+</ul>
+<p>This checks which reaction currently has an objective
+coefficient.</p>
+<p>Why:</p>
+<ul>
+<li>the script needs to know which reaction represents growth</li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>the objective is what the optimizer is trying to maximize</li>
+</ul>
+<h3 id="applying-the-diet">Applying the diet</h3>
+<p>Script <code>01</code> uses:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:76">build_medium_for_model()</a></li>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/01_single_species_growth_and_butyrate.py:61">script
+01 sets <code>model.medium = medium</code></a></li>
+</ul>
+<p>Why:</p>
+<ul>
+<li>the diet file uses metabolite IDs like <code>glc_D</code></li>
+<li>the model needs exact exchange reaction IDs</li>
+<li>the helper maps from diet metabolite ID to the right exchange
+reaction ID</li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>this is how the environment is imposed on the species model</li>
+</ul>
+<h3 id="running-fba">Running FBA</h3>
+<p>Script <code>01</code> uses:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/01_single_species_growth_and_butyrate.py:62">script
+01 runs <code>model.optimize()</code></a></li>
+</ul>
+<p>Why:</p>
+<ul>
+<li>to compute the best growth solution under that diet</li>
+</ul>
+<h3 id="reading-the-results">Reading the results</h3>
+<p>Script <code>01</code> reads:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/01_single_species_growth_and_butyrate.py:75">growth
+from <code>solution.objective_value</code></a></li>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/01_single_species_growth_and_butyrate.py:92">reaction
+fluxes from <code>solution.fluxes[...]</code></a></li>
+</ul>
+<p>Why:</p>
+<ul>
+<li>growth is read from the objective value</li>
+<li>butyrate reaction activity is read from individual reaction
+fluxes</li>
+</ul>
+<h2 id="what-you-should-learn-from-script-01">What You Should Learn From
+Script 01</h2>
+<p>When reading <code>01</code>, focus on these ideas:</p>
+<ul>
+<li>how one SBML file becomes one model</li>
+<li>how one diet becomes one medium</li>
+<li>how <code>optimize()</code> gives a solution</li>
+<li>how fluxes are read afterward</li>
+</ul>
+<p>If you understand script <code>01</code>, you understand the basic
+COBRApy loop:</p>
+<ol type="1">
+<li>load model</li>
+<li>set constraints</li>
+<li>optimize</li>
+<li>inspect solution</li>
+</ol>
+<p>That loop is the foundation for script <code>02</code>.</p>
+<h2 id="script-00-shared-helper-functions">Script 00: Shared Helper
+Functions</h2>
+<p>File:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:16">00_baseline_modeling_utils.py</a></li>
+</ul>
+<h2 id="why-script-00-exists">Why Script 00 Exists</h2>
+<p>Script <code>00</code> is not the main analysis script.<br />
+It is a toolbox.</p>
+<p>It exists because multiple scripts need the same logic, such as:</p>
+<ul>
+<li>loading diet tables</li>
+<li>loading models</li>
+<li>matching diet metabolites to exchange reactions</li>
+<li>finding the objective reaction</li>
+<li>building the community structure</li>
+</ul>
+<p>This is good programming practice because:</p>
+<ul>
+<li>repeated code is avoided</li>
+<li>logic stays consistent between scripts</li>
+<li>the code is easier to maintain</li>
+</ul>
+<h2 id="most-important-helpers-in-script-00">Most Important Helpers In
+Script 00</h2>
+<h3 id="load_diet_table"><code>load_diet_table()</code></h3>
+<p>Code:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:21">load_diet_table()</a></li>
+</ul>
+<p>What it does:</p>
+<ul>
+<li>reads <code>diet.csv</code></li>
+<li>returns a dictionary of diet names and metabolite bounds</li>
+</ul>
+<p>Why used:</p>
+<ul>
+<li>both single-species and community scripts need the same diet
+information</li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>converts the CSV into something the scripts can actually work
+with</li>
+</ul>
+<h3
+id="build_model_exchange_map"><code>build_model_exchange_map()</code></h3>
+<p>Code:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:65">build_model_exchange_map()</a></li>
+</ul>
+<p>What it does:</p>
+<ul>
+<li>maps a metabolite base ID to its exchange reaction ID in a
+model</li>
+</ul>
+<p>Why used:</p>
+<ul>
+<li>the diet file says things like <code>glc_D</code></li>
+<li>the model reactions have IDs like <code>EX_glc(e)</code></li>
+<li>the script needs to connect those two worlds</li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>this is what makes the diet file usable by the model</li>
+</ul>
+<h3
+id="build_medium_for_model"><code>build_medium_for_model()</code></h3>
+<p>Code:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:76">build_medium_for_model()</a></li>
+</ul>
+<p>What it does:</p>
+<ul>
+<li>builds the medium dictionary for one species model</li>
+</ul>
+<p>Why used:</p>
+<ul>
+<li>script <code>01</code> needs to apply diet constraints to one
+model</li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>this helper is the bridge between the CSV diet and COBRApy
+<code>model.medium</code></li>
+</ul>
+<h3
+id="find_butyrate_reactions"><code>find_butyrate_reactions()</code></h3>
+<p>Code:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:92">find_butyrate_reactions()</a></li>
+</ul>
+<p>What it does:</p>
+<ul>
+<li>searches reaction IDs, names, and equations for butyrate-related
+terms</li>
+</ul>
+<p>Why used:</p>
+<ul>
+<li>the project wants a simple screen for possible butyrate-related
+metabolism</li>
+</ul>
+<p>Important caution:</p>
+<ul>
+<li>this is a text-based search, not full biochemical pathway proof</li>
+</ul>
+<h3
+id="namespace_species_model"><code>namespace_species_model()</code></h3>
+<p>Code:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:111">namespace_species_model()</a></li>
+</ul>
+<p>What it does:</p>
+<ul>
+<li>copies a species model</li>
+<li>renames metabolite, gene, reaction, and compartment IDs by adding
+the species name</li>
+</ul>
+<p>Why used:</p>
+<ul>
+<li>different species models often reuse the same IDs</li>
+<li>when models are merged, those IDs would collide</li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>this is what makes multi-species merging possible without
+ambiguity</li>
+</ul>
+<h3
+id="build_shared_environment_community"><code>build_shared_environment_community()</code></h3>
+<p>Code:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:169">build_shared_environment_community()</a></li>
+</ul>
+<p>What it does:</p>
+<ul>
+<li>builds the full combined community model</li>
+</ul>
+<p>This is the most important helper for community modelling.</p>
+<p>It:</p>
+<ol type="1">
+<li>creates a new empty community <code>Model</code></li>
+<li>adds a shared community compartment</li>
+<li>loads each species model</li>
+<li>namespaces it</li>
+<li>merges it into the community</li>
+<li>creates shared metabolites</li>
+<li>creates shared exchange reactions</li>
+<li>creates connector reactions</li>
+<li>sets the community objective as the sum of species biomass
+reactions</li>
+</ol>
+<h2 id="what-it-uses-from-cobrapy-1">What It Uses From COBRApy</h2>
+<h3 id="creating-a-new-model">Creating a new model</h3>
+<p>It uses:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:174"><code>Model("baseline_shared_environment_community")</code></a></li>
+</ul>
+<p>Why:</p>
+<ul>
+<li>the merged community itself must be represented as one COBRApy
+model</li>
+</ul>
+<h3 id="creating-new-metabolites">Creating new metabolites</h3>
+<p>It uses:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:212"><code>Metabolite(...)</code></a></li>
+</ul>
+<p>Why:</p>
+<ul>
+<li>the shared environment needs shared metabolite objects</li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>one shared metabolite represents the common pool version of
+something like glucose or butyrate</li>
+</ul>
+<h3 id="creating-new-reactions">Creating new reactions</h3>
+<p>It uses:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:224">shared
+exchange <code>Reaction(...)</code></a></li>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:234">connector
+<code>Reaction(...)</code></a></li>
+</ul>
+<p>Why:</p>
+<ul>
+<li>the script must create new shared exchange reactions and connector
+reactions</li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>these are not pre-existing in the SBML files</li>
+<li>they are new model structure added for the community design</li>
+</ul>
+<h3
+id="communityadd_metabolites"><code>community.add_metabolites(...)</code></h3>
+<p>Why used:</p>
+<ul>
+<li>to place the new shared metabolites into the community model</li>
+</ul>
+<p>Code:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:210"><code>community.add_metabolites(...)</code></a></li>
+</ul>
+<h3
+id="communityadd_reactions"><code>community.add_reactions(...)</code></h3>
+<p>Why used:</p>
+<ul>
+<li>to add the namespaced species reactions</li>
+<li>to add shared exchange reactions</li>
+<li>to add connector reactions</li>
+</ul>
+<p>Code:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:191">add
+namespaced species reactions</a></li>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:228">add
+shared exchange reaction</a></li>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:238">add
+connector reaction</a></li>
+</ul>
+<h3
+id="communityobjective--"><code>community.objective = {...}</code></h3>
+<p>Why used:</p>
+<ul>
+<li>to define the community objective as the sum of all species biomass
+reactions</li>
+</ul>
+<p>Code:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:249"><code>community.objective = {...}</code></a></li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>the optimization then tries to maximize total community biomass</li>
+</ul>
+<h2 id="what-you-should-learn-from-script-00">What You Should Learn From
+Script 00</h2>
+<p>When reading <code>00</code>, focus on:</p>
+<ul>
+<li>how the diet table is converted into usable data</li>
+<li>how exchange reactions are identified</li>
+<li>how IDs are renamed safely</li>
+<li>how a shared environment is physically created in the model</li>
+<li>how the community objective is built</li>
+</ul>
+<p>This file teaches the structure of the model, not just the simulation
+loop.</p>
+<h2 id="script-02-community-shared-environment">Script 02: Community
+Shared Environment</h2>
+<p>File:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/02_community_shared_environment.py:38">02_community_shared_environment.py</a></li>
+</ul>
+<h2 id="what-script-02-does">What Script 02 Does</h2>
+<p>Script <code>02</code> is the main community analysis script.</p>
+<p>It:</p>
+<ol type="1">
+<li>loads species models</li>
+<li>loads the diet table</li>
+<li>calls the helper that builds the full community model</li>
+<li>applies one diet at a time to the shared community exchanges</li>
+<li>optimizes the community</li>
+<li>records overall and per-species growth</li>
+<li>writes summary files</li>
+</ol>
+<h2 id="what-it-uses-from-cobrapy-2">What It Uses From COBRApy</h2>
+<p>Script <code>02</code> mostly uses COBRApy through the helpers built
+in <code>00</code>, but there are still a few direct concepts to
+understand.</p>
+<h3 id="shared-exchange-reactions">Shared exchange reactions</h3>
+<p>The community model contains exchange reactions for the shared
+environment.</p>
+<p>Why:</p>
+<ul>
+<li>this is where the whole community takes in nutrients from the
+diet</li>
+<li>this is also where metabolites can be secreted back out</li>
+</ul>
+<h3
+id="reactionlower_bound-and-reactionupper_bound"><code>reaction.lower_bound</code>
+and <code>reaction.upper_bound</code></h3>
+<p>Used in:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/02_community_shared_environment.py:82">script
+02 exchange bound setup</a></li>
+</ul>
+<p>What they do:</p>
+<ul>
+<li>directly control allowed flux through the shared exchange
+reaction</li>
+</ul>
+<p>Why used:</p>
+<ul>
+<li><code>lower_bound = 0.0</code> closes take in</li>
+<li><code>lower_bound = -bound</code> opens take in up to the diet
+limit</li>
+<li><code>upper_bound = 1000.0</code> leaves secretion broadly open</li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>this is how the diet gets translated into community-level take-in
+constraints</li>
+</ul>
+<h3 id="communityoptimize"><code>community.optimize()</code></h3>
+<p>Used in:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/02_community_shared_environment.py:94">script
+02 runs <code>community.optimize()</code></a></li>
+</ul>
+<p>What it does:</p>
+<ul>
+<li>solves the community FBA problem after the diet has been
+applied</li>
+</ul>
+<p>Why used:</p>
+<ul>
+<li>to find the best total biomass solution for all species
+together</li>
+</ul>
+<h3 id="reading-biomass-fluxes-from-solutionfluxes">Reading biomass
+fluxes from <code>solution.fluxes</code></h3>
+<p>Script <code>02</code> reads each species biomass reaction from the
+solved community model.</p>
+<p>Code:</p>
+<ul>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/02_community_shared_environment.py:101">read
+species biomass fluxes</a></li>
+</ul>
+<p>Why:</p>
+<ul>
+<li>this tells you which species actually grew in the combined
+optimization</li>
+</ul>
+<p>Big picture:</p>
+<ul>
+<li>this is the output that lets you compare single-species and
+community behaviour</li>
+</ul>
+<h2 id="what-you-should-learn-from-script-02">What You Should Learn From
+Script 02</h2>
+<p>When reading <code>02</code>, focus on:</p>
+<ul>
+<li>how the community helper is called</li>
+<li>how diet bounds are applied to the shared exchanges</li>
+<li>why take in is limited by the diet values</li>
+<li>why secretion is left broadly open</li>
+<li>how species growth is extracted from one combined solution</li>
+</ul>
+<p>This script teaches the simulation workflow for the already-built
+community model.</p>
+<h2
+id="the-most-important-big-picture-ideas-across-all-three-scripts">The
+Most Important Big-Picture Ideas Across All Three Scripts</h2>
+<h3 id="idea-1-a-model-is-a-constrained-network">Idea 1: A model is a
+constrained network</h3>
+<p>The scripts are not tracking concentrations over time.<br />
+They are defining what reactions are possible and how much flux is
+allowed through them.</p>
+<h3 id="idea-2-diet-values-are-take-in-limits">Idea 2: Diet values are
+take-in limits</h3>
+<p>The values in <code>diet.csv</code> are used as maximum allowed
+take-in bounds.</p>
+<p>They are not best interpreted as literal amounts sitting in a
+pool.</p>
+<h3 id="idea-3-secretion-is-kept-broadly-open">Idea 3: Secretion is kept
+broadly open</h3>
+<p>The <code>1000</code> bound is a practical large limit so the model
+can release metabolites if needed.</p>
+<h3 id="idea-4-community-modelling-needs-explicit-structure">Idea 4:
+Community modelling needs explicit structure</h3>
+<p>You cannot just place species models side by side and call that a
+community.<br />
+You need:</p>
+<ul>
+<li>safe namespacing</li>
+<li>a shared environment</li>
+<li>connector reactions</li>
+<li>a clear community objective</li>
+</ul>
+<h3 id="idea-5-optimization-decides-the-final-flux-pattern">Idea 5:
+Optimization decides the final flux pattern</h3>
+<p>Even if a metabolite can be taken in, the model may use none of
+it.<br />
+The final fluxes depend on the objective and all the constraints
+together.</p>
+<h2 id="a-good-way-to-study-these-scripts">A Good Way To Study These
+Scripts</h2>
+<p>Read them in this order:</p>
+<ol type="1">
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/01_single_species_growth_and_butyrate.py:39">01_single_species_growth_and_butyrate.py</a></li>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/00_baseline_modeling_utils.py:16">00_baseline_modeling_utils.py</a></li>
+<li><a
+href="/Users/taknev/Desktop/microbiome_butyrate_production_research/Modelling_scripts/02_community_shared_environment.py:38">02_community_shared_environment.py</a></li>
+</ol>
+<p>For each script, ask:</p>
+<ul>
+<li>what COBRApy object is being used here</li>
+<li>what biological idea does it represent</li>
+<li>what problem is this line solving</li>
+<li>how does this fit into the final optimization</li>
+</ul>
+<h2 id="if-you-want-to-learn-to-write-this-yourself">If You Want To
+Learn To Write This Yourself</h2>
+<p>The minimal set of COBRApy skills you need is:</p>
+<ol type="1">
+<li>load an SBML model</li>
+<li>inspect exchange reactions</li>
+<li>set a medium</li>
+<li>optimize a model</li>
+<li>read objective value and fluxes</li>
+<li>create a new reaction</li>
+<li>create a new metabolite</li>
+<li>merge model content into a bigger model</li>
+</ol>
+<p>Once those make sense, the community script stops looking mysterious
+and starts looking like a sequence of understandable design choices.</p>
+<h2 id="final-summary">Final Summary</h2>
+<p>The repository teaches community modelling in three layers:</p>
+<ul>
+<li><code>01</code> teaches basic single-species COBRApy use</li>
+<li><code>00</code> teaches the reusable mechanics and model
+construction logic</li>
+<li><code>02</code> teaches the final community simulation workflow</li>
+</ul>
+<p>The key COBRApy pieces to understand are:</p>
+<ul>
+<li><code>Model</code></li>
+<li><code>Reaction</code></li>
+<li><code>Metabolite</code></li>
+<li><code>read_sbml_model</code></li>
+<li><code>model.exchanges</code></li>
+<li><code>model.medium</code></li>
+<li><code>lower_bound</code> and <code>upper_bound</code></li>
+<li><code>model.optimize()</code></li>
+<li><code>solution.objective_value</code></li>
+<li><code>solution.fluxes</code></li>
+</ul>
+<p>If you understand why those are used, then you understand most of
+what the scripts are doing.</p>
+</body>
+</html>

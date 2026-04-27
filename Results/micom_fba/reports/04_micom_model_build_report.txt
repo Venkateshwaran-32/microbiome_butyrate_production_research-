@@ -1,0 +1,25 @@
+MICOM baseline community build report
+Community ID: micom_baseline_10_species
+Model count: 10
+Diet file: Medium_files/diet.csv
+Tradeoff fraction: 0.5
+
+Taxonomy table
+Alistipes_onderdonkii_DSM_19147: abundance=0.100000, file=Models/vmh_agora2_sbml/Alistipes_onderdonkii_DSM_19147.xml
+Alistipes_shahii_WAL_8301: abundance=0.100000, file=Models/vmh_agora2_sbml/Alistipes_shahii_WAL_8301.xml
+Bacteroides_dorei_DSM_17855: abundance=0.100000, file=Models/vmh_agora2_sbml/Bacteroides_dorei_DSM_17855.xml
+Bacteroides_xylanisolvens_XB1A: abundance=0.100000, file=Models/vmh_agora2_sbml/Bacteroides_xylanisolvens_XB1A.xml
+Bilophila_wadsworthia_3_1_6: abundance=0.100000, file=Models/vmh_agora2_sbml/Bilophila_wadsworthia_3_1_6.xml
+Escherichia_coli_UTI89_UPEC: abundance=0.100000, file=Models/vmh_agora2_sbml/Escherichia_coli_UTI89_UPEC.xml
+Faecalibacterium_prausnitzii_M21_2: abundance=0.100000, file=Models/vmh_agora2_sbml/Faecalibacterium_prausnitzii_M21_2.xml
+Klebsiella_pneumoniae_pneumoniae_MGH78578: abundance=0.100000, file=Models/vmh_agora2_sbml/Klebsiella_pneumoniae_pneumoniae_MGH78578.xml
+Parabacteroides_merdae_ATCC_43184: abundance=0.100000, file=Models/vmh_agora2_sbml/Parabacteroides_merdae_ATCC_43184.xml
+Ruminococcus_torques_ATCC_27756: abundance=0.100000, file=Models/vmh_agora2_sbml/Ruminococcus_torques_ATCC_27756.xml
+
+Diet mapping and solve summary
+western: solver_status=optimal, community_growth_rate=0.7793453095010943, matched_diet_metabolites=127, missing_diet_metabolites=37
+western missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
+
+high_fiber: solver_status=optimal, community_growth_rate=0.6954251726181823, matched_diet_metabolites=127, missing_diet_metabolites=37
+high_fiber missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
+

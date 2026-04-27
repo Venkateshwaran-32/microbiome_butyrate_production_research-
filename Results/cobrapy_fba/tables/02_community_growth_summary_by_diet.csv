@@ -1,0 +1,3 @@
+diet_name,solver_status,community_objective_value,sum_species_biomass_flux,num_species_with_nonzero_growth,community_ex_but_flux,matched_diet_metabolites,missing_diet_metabolites
+western,optimal,2.387362604479969,2.387362604479969,2,0.0,127,37
+high_fiber,optimal,2.3851441005328597,2.3851441005328597,2,0.0,127,37

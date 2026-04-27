@@ -1,0 +1,10 @@
+species_name,21_40_cobra_growing,21_40_cobra_flux,21_40_micom_growing,21_40_micom_growth,41_60_cobra_growing,41_60_cobra_flux,41_60_micom_growing,41_60_micom_growth,61_70_cobra_growing,61_70_cobra_flux,61_70_micom_growing,61_70_micom_growth,71_80_cobra_growing,71_80_cobra_flux,71_80_micom_growing,71_80_micom_growth,81_90_cobra_growing,81_90_cobra_flux,81_90_micom_growing,81_90_micom_growth
+Alistipes onderdonkii,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,True,0.27798883125523394,False,0.0,True,0.3569834825267929
+Alistipes shahii,False,0.0,True,0.020564365503397467,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,True,0.1367846080480598
+Bacteroides dorei,False,0.0,True,0.030509539064285156,False,0.0,True,0.020068622994309376,False,0.0,True,0.02541268214011973,False,0.0,True,0.22608297400049684,False,0.0,True,0.48807442795019745
+Bacteroides xylanisolvens,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,True,0.013762588075127653,False,0.0,True,0.1286882067724728
+Escherichia coli,False,0.0,True,0.037483319908676094,False,0.0,True,0.10371266051360395,False,0.0,True,0.03403006214525631,True,2.1881921069284638,True,0.9034459406069258,True,1.741746021629196,True,0.9373903122442451
+Faecalibacterium prausnitzii,True,1.0001850640793903,True,0.604748631484194,True,1.0001850640793748,True,0.657856982732738,True,1.0001850640793828,True,0.5791489253791029,False,0.0,True,0.47724777049966,True,0.49133132524398043,True,0.8980002637528547
+Klebsiella pneumoniae,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,False,0.0,True,0.027433325293073577,False,0.0,True,0.12436212511298861
+Parabacteroides merdae,False,0.0,True,0.027676984038509996,False,0.0,True,0.027897688088100864,False,0.0,True,0.019300636554082064,False,0.0,False,0.0,False,0.0,True,0.49776750320382357
+Ruminococcus torques,False,0.0,True,0.07315450294322616,False,0.0,True,0.12572721720888105,False,0.0,True,0.07387980503181688,False,0.0,True,0.08742553048869378,False,0.0,True,0.2216807311687984
