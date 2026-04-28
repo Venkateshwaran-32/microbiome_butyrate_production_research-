@@ -82,10 +82,13 @@ The project now also has an explicit operating standard in:
 - `Results/subject_level_fba/tables/06_sg90_subject_taxon_growth_by_diet.csv`: SG90 per-subject, per-taxon MICOM growth summary by diet.
 - `Results/subject_level_fba/tables/06_sg90_subject_taxon_growth_by_diet_wide.csv`: wide-format SG90 subject-level MICOM taxon growth table.
 - `Results/subject_level_fba/reports/06_sg90_subject_level_micom_build_report.txt`: SG90 subject-level MICOM build and solve report.
-- `Scripts/modelling/07_summarize_sg90_subject_level_micom_growth.py`: summarizes SG90 subject-level MICOM growth and dominance patterns by age group.
-- `Results/subject_level_fba/tables/07_sg90_subject_top_grower_summary.csv`: top-growing taxon per SG90 subject and diet.
-- `Results/subject_level_fba/tables/07_sg90_subject_growth_summary_by_agegroup.csv`: SG90 subject-level community growth summaries for `71_80`, `81_90`, and `91_100`.
-- `Results/subject_level_fba/tables/07_sg90_subject_species_prevalence_by_agegroup.csv`: SG90 taxon growth prevalence and central tendency by age group and diet.
+- `Scripts/modelling/06b_summarize_sg90_subject_level_micom_growth.py`: summarizes SG90 subject-level MICOM growth and dominance patterns by age group.
+- `Results/subject_level_fba/tables/06b_sg90_subject_top_grower_summary.csv`: top-growing taxon per SG90 subject and diet.
+- `Results/subject_level_fba/tables/06b_sg90_subject_growth_summary_by_agegroup.csv`: SG90 subject-level community growth summaries for `71_80`, `81_90`, and `91_100`.
+- `Results/subject_level_fba/tables/06b_sg90_subject_species_prevalence_by_agegroup.csv`: SG90 taxon growth prevalence and central tendency by age group and diet.
+- `Scripts/modelling/06c_review_sg90_subject_level_micom_abnormalities.py`: reviews sparse inputs, unusual growth patterns, diet-response inversions, and other SG90 subject-level MICOM abnormalities.
+- `Results/subject_level_fba/tables/06c_sg90_subject_abnormality_review.csv`: machine-readable SG90 subject-level abnormality review.
+- `Results/subject_level_fba/reports/06c_sg90_subject_abnormality_review.txt`: narrative SG90 subject-level abnormality review report.
 - `MD/`: project markdown notes and references except for this README.
 - `PDF/`: project PDF references.
 
@@ -102,6 +105,7 @@ The official workflow standard for this repository is:
 7. rebuild SG90 raw subject inputs
 8. run SG90 subject-level MICOM
 9. summarize SG90 subject-level growth and dominance outputs
+10. review SG90 subject-level abnormality flags
 
 The detailed SOP and MICOM-specific practice note live in:
 
@@ -226,7 +230,8 @@ The SG90 subject-level MICOM branch is implemented in:
 - `Scripts/modelling/00_subject_level_micom_utils.py`
 - `Scripts/data_processing/02_prepare_sg90_subject_level_micom_inputs.py`
 - `Scripts/modelling/06_micom_subject_level_sg90.py`
-- `Scripts/modelling/07_summarize_sg90_subject_level_micom_growth.py`
+- `Scripts/modelling/06b_summarize_sg90_subject_level_micom_growth.py`
+- `Scripts/modelling/06c_review_sg90_subject_level_micom_abnormalities.py`
 
 This branch:
 
@@ -234,7 +239,8 @@ This branch:
 - recovers SG90 subjects above age `90` into a `91_100` age bin,
 - keeps a QC and missing-subject audit for metadata-listed SG90 subjects absent from the abundance workbook,
 - builds one MICOM community per SG90 subject under both `western` and `high_fiber`,
-- summarizes per-subject community growth, per-taxon growth, top growers, and taxon growth prevalence by age group.
+- summarizes per-subject community growth, per-taxon growth, top growers, and taxon growth prevalence by age group,
+- reviews sparse inputs, unusual growth patterns, diet-response inversions, and subject-level abnormalities.
 
 The SG90 subject-level processed inputs live under:
 
@@ -248,15 +254,27 @@ The key SG90 subject-level outputs are:
 - `Results/subject_level_fba/tables/06_sg90_subject_taxon_growth_by_diet.csv`
 - `Results/subject_level_fba/tables/06_sg90_subject_taxon_growth_by_diet_wide.csv`
 - `Results/subject_level_fba/reports/06_sg90_subject_level_micom_build_report.txt`
-- `Results/subject_level_fba/tables/07_sg90_subject_top_grower_summary.csv`
-- `Results/subject_level_fba/tables/07_sg90_subject_growth_summary_by_agegroup.csv`
-- `Results/subject_level_fba/tables/07_sg90_subject_species_prevalence_by_agegroup.csv`
+- `Results/subject_level_fba/tables/06b_sg90_subject_top_grower_summary.csv`
+- `Results/subject_level_fba/tables/06b_sg90_subject_growth_summary_by_agegroup.csv`
+- `Results/subject_level_fba/tables/06b_sg90_subject_species_prevalence_by_agegroup.csv`
+- `Results/subject_level_fba/tables/06c_sg90_subject_abnormality_review.csv`
+- `Results/subject_level_fba/reports/06c_sg90_subject_abnormality_review.txt`
 
-## Next Step
+## Next Steps
 
-The next operational upgrades that would make this even stronger are:
-
-- add a pinned environment file for reproducible package versions
-- add one canonical run script for the full workflow
-- add a dated run log for official analyses
-- version output tables when protocol settings change
+- add an all-cohort high-fiber subject-flux analysis branch using the full `516` subjects in `Suplementary_Data/subject_level_taxonomic_relative_abundance_values.xlsx`
+- rebuild a subject-level all-cohort processed input table directly from the raw abundance workbook and raw metadata so the future workflow is not limited to the current `490`-subject processed table
+- build one subject-specific 10-species MICOM community model per subject using the `high_fiber` diet only
+- run the subject communities to extract full reaction-level flux vectors for each solved subject
+- assemble the resulting flux outputs into two matrix forms:
+  - a user-facing `reaction x subject` matrix
+  - a PCA-ready `subject x feature` matrix with columns such as `taxon__reaction`
+- keep the union of taxon-reaction features across the 10 modeled species so taxon-specific metabolic variance is preserved
+- remove zero-variance features and standardize retained features before PCA so variance-driving reactions are not dominated only by raw flux scale differences
+- run PCA / dimensionality reduction on the subject flux matrix
+- report the reactions that capture the major variance across subjects by summarizing:
+  - explained variance by principal component
+  - subject scores in PCA space
+  - top-loading reactions for the leading components
+  - cohort- and age-annotated PCA plots and summaries
+- record any subjects that fail model building or flux extraction in a QC or audit table and continue the PCA branch with the successfully solved subject set

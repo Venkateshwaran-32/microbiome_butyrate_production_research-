@@ -7,9 +7,9 @@ from pathlib import Path
 
 COMMUNITY_INPUT = Path("Results/subject_level_fba/tables/06_sg90_subject_community_growth_summary_by_diet.csv")
 TAXON_INPUT = Path("Results/subject_level_fba/tables/06_sg90_subject_taxon_growth_by_diet.csv")
-TOP_GROWER_OUTPUT = Path("Results/subject_level_fba/tables/07_sg90_subject_top_grower_summary.csv")
-GROWTH_SUMMARY_OUTPUT = Path("Results/subject_level_fba/tables/07_sg90_subject_growth_summary_by_agegroup.csv")
-PREVALENCE_OUTPUT = Path("Results/subject_level_fba/tables/07_sg90_subject_species_prevalence_by_agegroup.csv")
+TOP_GROWER_OUTPUT = Path("Results/subject_level_fba/tables/06b_sg90_subject_top_grower_summary.csv")
+GROWTH_SUMMARY_OUTPUT = Path("Results/subject_level_fba/tables/06b_sg90_subject_growth_summary_by_agegroup.csv")
+PREVALENCE_OUTPUT = Path("Results/subject_level_fba/tables/06b_sg90_subject_species_prevalence_by_agegroup.csv")
 
 
 def write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, object]]) -> None:

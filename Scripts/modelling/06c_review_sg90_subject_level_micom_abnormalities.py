@@ -10,8 +10,8 @@ COMMUNITY_INPUT = Path("Results/subject_level_fba/tables/06_sg90_subject_communi
 TAXON_INPUT = Path("Results/subject_level_fba/tables/06_sg90_subject_taxon_growth_by_diet.csv")
 QC_INPUT = Path("Suplementary_Data/processed_data/subject_level_micom_sg90/sg90_subject_input_qc_summary.csv")
 BUILD_REPORT_INPUT = Path("Results/subject_level_fba/reports/06_sg90_subject_level_micom_build_report.txt")
-FLAGGED_OUTPUT = Path("Results/subject_level_fba/tables/08_sg90_subject_abnormality_review.csv")
-REPORT_OUTPUT = Path("Results/subject_level_fba/reports/08_sg90_subject_abnormality_review.txt")
+FLAGGED_OUTPUT = Path("Results/subject_level_fba/tables/06c_sg90_subject_abnormality_review.csv")
+REPORT_OUTPUT = Path("Results/subject_level_fba/reports/06c_sg90_subject_abnormality_review.txt")
 
 EXPECTED_SUBJECTS = 215
 EXPECTED_ROWS = 430
