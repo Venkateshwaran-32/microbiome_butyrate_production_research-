@@ -13,6 +13,7 @@ PREP_MODULE = importlib.util.module_from_spec(PREP_SPEC)
 PREP_SPEC.loader.exec_module(PREP_MODULE)
 
 
+ALLCOHORT_AGE_GROUPS = ("21_40", "41_60", "61_70", "71_80", "81_90", "91_100")
 SUBJECT_LEVEL_TARGET_COHORT = "SG90"
 SUBJECT_LEVEL_AGE_GROUPS = ("71_80", "81_90", "91_100")
 METADATA_XLSX = Path("Suplementary_Data/Metadata_by_cohort.xlsx")
@@ -66,18 +67,31 @@ def group_rows_by_subject(rows: list[dict[str, str]]) -> dict[str, list[dict[str
     return dict(sorted(grouped.items()))
 
 
-def subject_level_age_group_from_years(age_value: str | float) -> str | None:
+def allcohort_age_group_from_years(age_value: str | float) -> str | None:
     try:
         age = float(age_value)
     except (TypeError, ValueError):
         return None
-    if age < 71 or age > 100:
+    if age < 21 or age > 100:
         return None
+    if age <= 40:
+        return "21_40"
+    if age <= 60:
+        return "41_60"
+    if age <= 70:
+        return "61_70"
     if age <= 80:
         return "71_80"
     if age <= 90:
         return "81_90"
     return "91_100"
+
+
+def subject_level_age_group_from_years(age_value: str | float) -> str | None:
+    age_group = allcohort_age_group_from_years(age_value)
+    if age_group not in SUBJECT_LEVEL_AGE_GROUPS:
+        return None
+    return age_group
 
 
 def _raw_abundance_from_row(row: dict[str, object]) -> float:
@@ -96,7 +110,12 @@ def _normalized_abundance_from_row(row: dict[str, object], total_abundance_raw: 
     return _raw_abundance_from_row(row) / total_abundance_raw
 
 
-def load_sg90_metadata(metadata_xlsx: Path = METADATA_XLSX) -> dict[str, dict[str, object]]:
+def load_allcohort_metadata(
+    metadata_xlsx: Path = METADATA_XLSX,
+    *,
+    cohort: str | None = None,
+    allowed_age_groups: tuple[str, ...] = ALLCOHORT_AGE_GROUPS,
+) -> dict[str, dict[str, object]]:
     rows = read_sheet_rows(metadata_xlsx, "xl/worksheets/sheet1.xml")
     header = rows[0]
     subject_idx = header.index("Subject ID")
@@ -114,20 +133,19 @@ def load_sg90_metadata(metadata_xlsx: Path = METADATA_XLSX) -> dict[str, dict[st
             continue
 
         sequencer = row[sequencer_idx].strip()
-        cohort = infer_cohort(subject_id, sequencer, age_value)
-        if cohort != SUBJECT_LEVEL_TARGET_COHORT:
+        inferred_cohort = infer_cohort(subject_id, sequencer, age_value)
+        if cohort is not None and inferred_cohort != cohort:
             continue
 
-        age_group = subject_level_age_group_from_years(age_value)
+        age_group = allcohort_age_group_from_years(age_value)
         if age_group is None:
-            raise ValueError(
-                f"SG90 subject {subject_id} has unsupported age value {age_value}. "
-                f"Expected ages to map into one of {SUBJECT_LEVEL_AGE_GROUPS}."
-            )
+            continue
+        if age_group not in allowed_age_groups:
+            continue
 
         metadata[subject_id] = {
             "subject_id": subject_id,
-            "cohort": cohort,
+            "cohort": inferred_cohort,
             "age_years": float(age_value),
             "age_group": age_group,
             "gender": row[gender_idx].strip(),
@@ -137,7 +155,22 @@ def load_sg90_metadata(metadata_xlsx: Path = METADATA_XLSX) -> dict[str, dict[st
     return dict(sorted(metadata.items()))
 
 
-def load_sg90_subject_rows_from_abundance_workbook(
+def load_sg90_metadata(metadata_xlsx: Path = METADATA_XLSX) -> dict[str, dict[str, object]]:
+    metadata = load_allcohort_metadata(
+        metadata_xlsx,
+        cohort=SUBJECT_LEVEL_TARGET_COHORT,
+        allowed_age_groups=SUBJECT_LEVEL_AGE_GROUPS,
+    )
+    for subject_id, subject_metadata in metadata.items():
+        if subject_metadata["age_group"] not in SUBJECT_LEVEL_AGE_GROUPS:
+            raise ValueError(
+                f"SG90 subject {subject_id} has unsupported age_group {subject_metadata['age_group']}. "
+                f"Expected one of {SUBJECT_LEVEL_AGE_GROUPS}."
+            )
+    return metadata
+
+
+def load_subject_rows_from_abundance_workbook(
     metadata_by_subject: dict[str, dict[str, object]],
     abundance_xlsx: Path = ABUNDANCE_XLSX,
 ) -> tuple[dict[str, list[dict[str, object]]], set[str]]:
@@ -190,6 +223,32 @@ def load_sg90_subject_rows_from_abundance_workbook(
         subject_rows_by_subject[subject_id] = subject_rows
 
     return dict(sorted(subject_rows_by_subject.items())), found_species
+
+
+def load_abundance_workbook_subject_ids(abundance_xlsx: Path = ABUNDANCE_XLSX) -> list[str]:
+    rows = read_sheet_rows(abundance_xlsx, "xl/worksheets/sheet1.xml")
+    subject_ids: list[str] = []
+    seen_subject_ids: set[str] = set()
+
+    for row in rows[1:]:
+        if not row:
+            continue
+        subject_id = row[0].strip()
+        if not subject_id:
+            continue
+        if subject_id in seen_subject_ids:
+            raise ValueError(f"Duplicate subject row found in abundance workbook: {subject_id}")
+        seen_subject_ids.add(subject_id)
+        subject_ids.append(subject_id)
+
+    return subject_ids
+
+
+def load_sg90_subject_rows_from_abundance_workbook(
+    metadata_by_subject: dict[str, dict[str, object]],
+    abundance_xlsx: Path = ABUNDANCE_XLSX,
+) -> tuple[dict[str, list[dict[str, object]]], set[str]]:
+    return load_subject_rows_from_abundance_workbook(metadata_by_subject, abundance_xlsx)
 
 
 def enrich_subject_rows(subject_rows: list[dict[str, object]]) -> list[dict[str, object]]:
@@ -364,6 +423,17 @@ def build_missing_subject_audit_row(
         "age_group": subject_metadata["age_group"],
         "gender": subject_metadata["gender"],
         "sequencer": subject_metadata["sequencer"],
+        "exclusion_reason": exclusion_reason,
+    }
+
+
+def build_abundance_subject_missing_metadata_row(
+    subject_id: str,
+    *,
+    exclusion_reason: str = "missing_from_metadata",
+) -> dict[str, object]:
+    return {
+        "subject_id": subject_id,
         "exclusion_reason": exclusion_reason,
     }
 

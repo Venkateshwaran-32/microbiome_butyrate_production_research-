@@ -5,3 +5,4 @@ __pycache__/
 .swift-module-cache/
 .DS_Store
 AGORA2_SBML.zip
+Results/subject_level_fba/tables/08_allcohort_subject_reaction_flux_nonzero_long_high_fiber_pfba.csv

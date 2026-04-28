@@ -1,0 +1,52 @@
+All-cohort subject-level MICOM high-fiber pFBA build report
+Subject input: Suplementary_Data/processed_data/subject_level_micom_allcohort/allcohort_subject_taxonomy_for_micom.csv
+QC input: Suplementary_Data/processed_data/subject_level_micom_allcohort/allcohort_subject_input_qc_summary.csv
+Diet file: Medium_files/diet.csv
+Tradeoff fraction: 0.5
+Selection filters: subject_id=ALL, cohort=ALL, age_group=ALL, limit=ALL
+Flux export enabled: True
+pFBA enabled: True
+
+Total subjects in QC table: 537
+Included abundance-matched subjects: 516
+Metadata-only excluded subjects: 21
+Abundance-only missing-metadata subjects: 0
+Included subjects with zero total modeled abundance: 0
+Selected subjects for this run: 516
+
+Selected subject counts by cohort
+CRE: 80
+SG90: 215
+SPMP: 50
+T2D: 171
+
+Selected subject counts by age group
+21_40: 91
+41_60: 140
+61_70: 57
+71_80: 33
+81_90: 169
+91_100: 26
+
+Selected subject nonzero modeled taxon distribution
+1 nonzero taxa: 3 subjects
+2 nonzero taxa: 12 subjects
+3 nonzero taxa: 44 subjects
+4 nonzero taxa: 54 subjects
+5 nonzero taxa: 90 subjects
+6 nonzero taxa: 112 subjects
+7 nonzero taxa: 108 subjects
+8 nonzero taxa: 65 subjects
+9 nonzero taxa: 28 subjects
+
+
+Subjects with community_growth_rate <= 1e-09: 101
+Community rows written: 516
+Taxon rows written: 3025
+Flux rows written: 1930299
+
+Output files
+Community table: Results/subject_level_fba/tables/08_allcohort_subject_community_growth_high_fiber_pfba.csv
+Taxon table: Results/subject_level_fba/tables/08_allcohort_subject_taxon_growth_high_fiber_pfba.csv
+Flux table: Results/subject_level_fba/tables/08_allcohort_subject_reaction_flux_nonzero_long_high_fiber_pfba.csv
+Build report: Results/subject_level_fba/reports/08_allcohort_subject_level_high_fiber_pfba_build_report.txt

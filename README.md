@@ -265,7 +265,8 @@ The key SG90 subject-level outputs are:
 - add an all-cohort high-fiber subject-flux analysis branch using the full `516` subjects in `Suplementary_Data/subject_level_taxonomic_relative_abundance_values.xlsx`
 - rebuild a subject-level all-cohort processed input table directly from the raw abundance workbook and raw metadata so the future workflow is not limited to the current `490`-subject processed table
 - build one subject-specific 10-species MICOM community model per subject using the `high_fiber` diet only
-- run the subject communities to extract full reaction-level flux vectors for each solved subject
+- run the subject communities with MICOM cooperative tradeoff using `fluxes=True` and `pfba=True`, as requested for the next flux-focused analysis branch
+- extract full pFBA reaction-level flux vectors for each solved subject
 - assemble the resulting flux outputs into two matrix forms:
   - a user-facing `reaction x subject` matrix
   - a PCA-ready `subject x feature` matrix with columns such as `taxon__reaction`

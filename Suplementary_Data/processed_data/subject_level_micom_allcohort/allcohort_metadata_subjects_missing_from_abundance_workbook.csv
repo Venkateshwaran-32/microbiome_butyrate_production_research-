@@ -1,0 +1,22 @@
+subject_id,cohort,age_years,age_group,gender,sequencer,exclusion_reason
+MBS1221,SG90,78.0,71_80,Male,Illumina HiSeq 2500,missing_from_abundance_workbook
+MBS1224,SG90,79.0,71_80,Male,Illumina HiSeq 2500,missing_from_abundance_workbook
+MBS1225,SG90,77.0,71_80,Female,Illumina HiSeq 2500,missing_from_abundance_workbook
+MBS1229,SG90,80.0,71_80,Male,Illumina HiSeq 2500,missing_from_abundance_workbook
+MBS1241,SG90,87.0,81_90,Female,Illumina HiSeq 2500,missing_from_abundance_workbook
+MBS1244,SG90,86.0,81_90,Male,Illumina HiSeq 2500,missing_from_abundance_workbook
+MBS1245,SG90,86.0,81_90,Female,Illumina HiSeq 2500,missing_from_abundance_workbook
+MBS1246,SG90,86.0,81_90,Male,Illumina HiSeq 2500,missing_from_abundance_workbook
+MBS1250,SG90,88.0,81_90,Female,Illumina HiSeq 2500,missing_from_abundance_workbook
+MBS1252,SG90,90.0,81_90,Female,Illumina HiSeq 2500,missing_from_abundance_workbook
+MBS1437,SG90,85.0,81_90,Female,Illumina HiSeq X,missing_from_abundance_workbook
+MBS1445,SG90,86.0,81_90,Male,Illumina HiSeq X,missing_from_abundance_workbook
+MBS1462,SG90,86.0,81_90,Female,Illumina HiSeq X,missing_from_abundance_workbook
+MBS1463,SG90,85.0,81_90,Female,Illumina HiSeq X,missing_from_abundance_workbook
+MBS1466,SG90,91.0,91_100,Female,Illumina HiSeq X,missing_from_abundance_workbook
+MBS1476,SG90,85.0,81_90,Male,Illumina HiSeq X,missing_from_abundance_workbook
+MBS1512,SG90,87.0,81_90,Female,Illumina HiSeq X,missing_from_abundance_workbook
+MBS1569,SG90,83.0,81_90,Female,Illumina HiSeq X,missing_from_abundance_workbook
+MBS1581,SG90,81.0,81_90,Male,Illumina HiSeq X,missing_from_abundance_workbook
+MBS1597,SG90,84.0,81_90,Male,Illumina HiSeq X,missing_from_abundance_workbook
+MBS1607,SG90,81.0,81_90,Male,Illumina HiSeq X,missing_from_abundance_workbook
