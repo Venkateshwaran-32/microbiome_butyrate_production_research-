@@ -1,178 +1,102 @@
 setwd("/Users/taknev/Desktop/microbiome_butyrate_production_research")
+pacman::p_load(tidyverse, janitor, broom, ggfortify, ggrepel)
+rm(list = ls())
 
-if (!requireNamespace("pacman", quietly = TRUE)) {
-  install.packages("pacman", repos = "https://cloud.r-project.org")
-}
+MICOM <- read_csv("Results/subject_level_fba/tables/08_allcohort_subject_reaction_flux_nonzero_long_high_fiber_pfba.csv")
+summary(MICOM)
 
-pacman::p_load(tidyverse)
+glimpse(MICOM) # much better to understand 
 
-input_csv <- file.path(
-  "Results",
-  "subject_level_fba",
-  "tables",
-  "08_allcohort_subject_reaction_flux_nonzero_long_high_fiber_pfba.csv"
-)
+MICOM %>%
+  select(subject_id, taxon_id, reaction_id, flux, abs_flux, is_medium) %>%
+  head(10)
 
-tables_dir <- file.path("Results", "subject_level_fba", "tables")
-figures_dir <- file.path("Results", "subject_level_fba", "figures")
-reports_dir <- file.path("Results", "subject_level_fba", "reports")
 
-dir.create(tables_dir, recursive = TRUE, showWarnings = FALSE)
-dir.create(figures_dir, recursive = TRUE, showWarnings = FALSE)
-dir.create(reports_dir, recursive = TRUE, showWarnings = FALSE)
+MICOM_no_medium <- MICOM %>%
+  filter(is_medium == FALSE)  # only internal reactions not the medium ones 
 
-scores_output <- file.path(tables_dir, "PCA_all_cohort_MICOM_scores.csv")
-variance_output <- file.path(tables_dir, "PCA_all_cohort_MICOM_explained_variance.csv")
-loadings_output <- file.path(tables_dir, "PCA_all_cohort_MICOM_loadings.csv")
-scree_plot_output <- file.path(figures_dir, "PCA_all_cohort_MICOM_scree.png")
-cohort_plot_output <- file.path(figures_dir, "PCA_all_cohort_MICOM_scores_by_cohort.png")
-age_plot_output <- file.path(figures_dir, "PCA_all_cohort_MICOM_scores_by_age_group.png")
-report_output <- file.path(reports_dir, "PCA_all_cohort_MICOM_report.txt")
+nrow(MICOM) #1930299
+nrow(MICOM_no_medium) # 1,847,120
 
-flux_long <- read_csv(input_csv, show_col_types = FALSE) %>%
-  mutate(is_medium = tolower(as.character(is_medium))) %>%
-  filter(is_medium != "true")
+MICOM_only_medium <- MICOM %>%
+  filter(is_medium == TRUE)  #  only reactions in the medium compartment 
 
-subject_metadata <- flux_long %>%
-  distinct(subject_id, cohort, age_years, age_group) %>%
-  arrange(subject_id)
+nrow(MICOM_only_medium) # 83179
 
-subject_reaction_matrix <- flux_long %>%
+rm(MICOM_only_medium, MICOM)
+
+
+# starting PCA here  ------------------------------------------------------
+
+reaction_flux <- MICOM_no_medium %>%
+  
   group_by(subject_id, reaction_id) %>%
-  summarise(flux = sum(flux, na.rm = TRUE), .groups = "drop") %>%
-  pivot_wider(
-    names_from = reaction_id,
-    values_from = flux,
-    values_fill = 0
-  ) %>%
-  arrange(subject_id)
+  
+  summarise(flux = sum(flux, na.rm = TRUE),  .groups = "drop") %>% 
+  
+  pivot_wider(names_from = reaction_id, values_from = flux, values_fill = 0) %>% 
+  
+  column_to_rownames("subject_id")
 
-subject_ids <- subject_reaction_matrix$subject_id
-flux_matrix <- subject_reaction_matrix %>%
-  select(-subject_id) %>%
+dim(reaction_flux)
+
+
+glimpse(subject_reaction_matrix)
+#    Rows: 516
+#    Columns: 4,565 
+#    516 * 4565 = 2355540
+
+# so now there is like 4564 features , which are the reactions , and the subjects with similar levels of the reactions can get clustered with each other
+# changing subject id to rownames----
+pca_matrix <- subject_reaction_matrix %>%
+  column_to_rownames("subject_id") %>%
   as.matrix()
 
-rownames(flux_matrix) <- subject_ids
-storage.mode(flux_matrix) <- "double"
+pca_matrix[1:5, 1:5]
 
-transformed_matrix <- asinh(flux_matrix)
-feature_sd <- apply(transformed_matrix, 2, sd)
-keep_features <- is.finite(feature_sd) & feature_sd > 0
-filtered_matrix <- transformed_matrix[, keep_features, drop = FALSE]
+dim(pca_matrix) #  516 4564
 
-if (ncol(filtered_matrix) < 2) {
-  stop("PCA needs at least two non-zero-variance reaction features.")
-}
 
-pca_fit <- prcomp(filtered_matrix, center = TRUE, scale. = TRUE)
+pc <- prcomp(pca_matrix, scale. = TRUE)
+pc$sdev
+pc$sdev^2
 
-score_pc_count <- min(10, ncol(pca_fit$x))
-scores_df <- as_tibble(
-  pca_fit$x[, seq_len(score_pc_count), drop = FALSE],
-  rownames = "subject_id"
-) %>%
-  left_join(subject_metadata, by = "subject_id") %>%
-  relocate(subject_id, cohort, age_years, age_group)
+pc_var <- pc$sdev^2
 
-variance_df <- tibble(
-  pc = paste0("PC", seq_along(pca_fit$sdev)),
-  explained_variance_fraction = (pca_fit$sdev^2) / sum(pca_fit$sdev^2)
-) %>%
-  mutate(cumulative_explained_variance = cumsum(explained_variance_fraction))
+pc_var_percent <- pc_var / sum(pc_var)
 
-loadings_df <- as.data.frame(pca_fit$rotation) %>%
-  rownames_to_column("reaction_id") %>%
-  pivot_longer(
-    cols = -reaction_id,
-    names_to = "pc",
-    values_to = "loading"
-  ) %>%
-  mutate(abs_loading = abs(loading)) %>%
-  arrange(pc, desc(abs_loading), reaction_id)
+head(pc_var)
+head(pc_var_percent)
 
-write_csv(scores_df, scores_output)
-write_csv(variance_df, variance_output)
-write_csv(loadings_df, loadings_output)
+summary(pc)
 
-scree_plot_df <- variance_df %>%
-  slice_head(n = 10) %>%
-  mutate(pc = factor(pc, levels = paste0("PC", seq_len(n()))))
+# scree plot of the variances  --------------------------------------------
+screeplot(pc, type = "barplot")
 
-scree_plot <- ggplot(
-  scree_plot_df,
-  aes(x = pc, y = explained_variance_fraction)
-) +
-  geom_col(fill = "#1F7A6D") +
-  labs(
-    title = "High-fiber reaction flux PCA scree plot",
-    x = NULL,
-    y = "Explained variance fraction"
+
+# ggplot of pc1 and pc2  --------------------------------------------------
+
+pc_scores <- as.data.frame(pc$x) %>%
+  rownames_to_column("subject_id")
+
+metadata <- MICOM %>%
+  distinct(subject_id, cohort, age_group)
+
+pc_scores <- pc_scores %>%
+  left_join(metadata, by = "subject_id")
+
+ggplot(pc_scores, aes(x = PC1, y = PC2, color = cohort)) +
+  geom_point() +
+  theme_minimal()
+# zoom in 
+
+ggplot(pc_scores, aes(x = PC1, y = PC2, color = cohort)) +
+  geom_point(alpha = 0.7) +
+  coord_cartesian(
+    xlim = quantile(pc_scores$PC1, c(0.02, 0.98)),
+    ylim = quantile(pc_scores$PC2, c(0.02, 0.98))
   ) +
   theme_minimal()
 
-score_plot_df <- scores_df %>%
-  filter(!is.na(PC1), !is.na(PC2))
 
-cohort_plot <- ggplot(
-  score_plot_df,
-  aes(x = PC1, y = PC2, color = cohort)
-) +
-  geom_point(alpha = 0.8, size = 1.8) +
-  labs(
-    title = "High-fiber reaction flux PCA scores by cohort",
-    x = "PC1",
-    y = "PC2"
-  ) +
-  theme_minimal()
 
-age_plot <- ggplot(
-  score_plot_df,
-  aes(x = PC1, y = PC2, color = age_group)
-) +
-  geom_point(alpha = 0.8, size = 1.8) +
-  labs(
-    title = "High-fiber reaction flux PCA scores by age group",
-    x = "PC1",
-    y = "PC2"
-  ) +
-  theme_minimal()
-
-ggsave(scree_plot_output, plot = scree_plot, width = 8, height = 5, dpi = 300)
-ggsave(cohort_plot_output, plot = cohort_plot, width = 8, height = 5.5, dpi = 300)
-ggsave(age_plot_output, plot = age_plot, width = 8, height = 5.5, dpi = 300)
-
-report_lines <- c(
-  "PCA_all_cohort_MICOM report",
-  paste("Working directory:", getwd()),
-  paste("Input CSV:", input_csv),
-  "",
-  "Preprocessing",
-  "- Rows with is_medium == TRUE were excluded.",
-  "- Flux was collapsed with a signed sum across taxa within subject_id + reaction_id.",
-  "- Missing subject-reaction pairs were filled with 0.",
-  "- A signed asinh transform was applied before centering and scaling.",
-  "- Zero-variance reactions were removed before PCA.",
-  "",
-  sprintf("Subjects: %d", nrow(flux_matrix)),
-  sprintf("Reactions before zero-variance filtering: %d", ncol(flux_matrix)),
-  sprintf("Zero-variance reactions removed: %d", sum(!keep_features)),
-  sprintf("Reactions used for PCA: %d", ncol(filtered_matrix)),
-  "",
-  "Output files",
-  paste("Scores:", scores_output),
-  paste("Explained variance:", variance_output),
-  paste("Loadings:", loadings_output),
-  paste("Scree plot:", scree_plot_output),
-  paste("Scores by cohort:", cohort_plot_output),
-  paste("Scores by age group:", age_plot_output)
-)
-
-write_lines(report_lines, report_output)
-
-cat("Wrote", scores_output, "\n")
-cat("Wrote", variance_output, "\n")
-cat("Wrote", loadings_output, "\n")
-cat("Wrote", scree_plot_output, "\n")
-cat("Wrote", cohort_plot_output, "\n")
-cat("Wrote", age_plot_output, "\n")
-cat("Wrote", report_output, "\n")

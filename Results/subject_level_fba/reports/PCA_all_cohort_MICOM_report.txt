@@ -2,17 +2,23 @@ PCA_all_cohort_MICOM report
 Working directory: /Users/taknev/Desktop/microbiome_butyrate_production_research
 Input CSV: Results/subject_level_fba/tables/08_allcohort_subject_reaction_flux_nonzero_long_high_fiber_pfba.csv
 
-Preprocessing
-- Rows with is_medium == TRUE were excluded.
-- Flux was collapsed with a signed sum across taxa within subject_id + reaction_id.
-- Missing subject-reaction pairs were filled with 0.
-- A signed asinh transform was applied before centering and scaling.
-- Zero-variance reactions were removed before PCA.
+PCA design
+- Rows are subjects.
+- Columns are reaction_id values.
+- Values are signed flux values.
+- Taxon-level rows are collapsed by summing flux within subject_id + reaction_id.
+- Medium exchange rows are excluded with is_medium == FALSE.
+- Missing subject-reaction pairs are filled with 0.
+- Flux values are transformed with asinh before PCA.
+- PCA uses prcomp with centering and scaling.
 
+Input rows: 1930299
 Subjects: 516
-Reactions before zero-variance filtering: 4564
+Reactions before filtering: 4564
 Zero-variance reactions removed: 0
 Reactions used for PCA: 4564
+PC1 explained variance: 0.1380
+PC2 explained variance: 0.0540
 
 Output files
 Scores: Results/subject_level_fba/tables/PCA_all_cohort_MICOM_scores.csv
