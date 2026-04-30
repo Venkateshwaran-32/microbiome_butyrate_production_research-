@@ -1,0 +1,156 @@
+All-cohort high-fiber reaction PCA report
+Subject-by-reaction matrix (all516): Results/subject_level_fba/tables/09_allcohort_high_fiber_subject_by_reaction_matrix_all516.csv
+Subject-by-reaction matrix (optimal414): Results/subject_level_fba/tables/09_allcohort_high_fiber_subject_by_reaction_matrix_optimal414.csv
+Contribution summary input: Results/subject_level_fba/tables/09_allcohort_high_fiber_reaction_taxon_contribution_by_subject_set.csv
+
+PCA preprocessing
+- Medium rows were excluded upstream.
+- Repeated subject_id + reaction_id fluxes were collapsed with a signed sum across taxa.
+- Missing subject-reaction pairs were filled with 0.0 before PCA.
+- A signed asinh transform was applied before centering and scaling.
+- Zero-variance reactions were removed separately for each subject set.
+
+all516: subjects=516, reactions_before=4564, zero_variance_removed=0, reactions_after=4564
+optimal414: subjects=414, reactions_before=1628, zero_variance_removed=0, reactions_after=1628
+
+Interpretation cautions
+- Primary biological interpretation should come from the optimal414 PCA.
+- The all516 PCA is a QC/exploratory comparison and may be influenced by infeasible subjects.
+- The main PCA is reaction-only, so species identity must be recovered from the taxon contribution tables.
+- The lysine/butyrate subset is token-based first-pass filtering on reaction IDs and should not be treated as a final curated provenance panel.
+
+Output files
+Scores table: Results/subject_level_fba/tables/10_allcohort_high_fiber_reaction_pca_scores.csv
+Explained variance table: Results/subject_level_fba/tables/10_allcohort_high_fiber_reaction_pca_explained_variance.csv
+Loadings table: Results/subject_level_fba/tables/10_allcohort_high_fiber_reaction_pca_loadings.csv
+Top-loading reaction summary: Results/subject_level_fba/tables/10_allcohort_high_fiber_reaction_top_loading_summary.csv
+Top-reaction taxon contribution summary: Results/subject_level_fba/tables/10_allcohort_high_fiber_taxon_contribution_top_loading_reactions.csv
+Lysine/butyrate taxon contribution summary: Results/subject_level_fba/tables/10_allcohort_high_fiber_taxon_contribution_lysine_butyrate_reactions.csv
+Scree plot: Results/subject_level_fba/figures/10_allcohort_high_fiber_reaction_pca_scree.png
+Scores by cohort: Results/subject_level_fba/figures/10_allcohort_high_fiber_reaction_pca_scores_by_cohort.png
+Scores by age group: Results/subject_level_fba/figures/10_allcohort_high_fiber_reaction_pca_scores_by_age_group.png
+Scores by solver status: Results/subject_level_fba/figures/10_allcohort_high_fiber_reaction_pca_scores_by_solver_status.png
+
+CSV Output Dictionary
+
+10_allcohort_high_fiber_reaction_pca_scores.csv
+Path: Results/subject_level_fba/tables/10_allcohort_high_fiber_reaction_pca_scores.csv
+Row grain: one row per subject_set x subject_id
+Columns:
+- subject_set: Subject-set label used for the PCA, either all516 or optimal414.
+- subject_id: Subject identifier carried through from the PCA input matrix.
+- PC1: Principal component 1 score for this subject.
+- PC2: Principal component 2 score for this subject.
+- PC3: Principal component 3 score for this subject.
+- PC4: Principal component 4 score for this subject.
+- PC5: Principal component 5 score for this subject.
+- PC6: Principal component 6 score for this subject.
+- PC7: Principal component 7 score for this subject.
+- PC8: Principal component 8 score for this subject.
+- PC9: Principal component 9 score for this subject.
+- PC10: Principal component 10 score for this subject.
+- cohort: Cohort label carried through from the subject metadata.
+- age_years: Subject age in years from the metadata table.
+- age_group: Age-bin label assigned from the metadata age.
+- solver_status: Solver status carried through from the 08 all-cohort MICOM summary table.
+- community_growth_rate: Community growth rate carried through from the 08 all-cohort MICOM summary
+    table.
+
+10_allcohort_high_fiber_reaction_pca_explained_variance.csv
+Path: Results/subject_level_fba/tables/10_allcohort_high_fiber_reaction_pca_explained_variance.csv
+Row grain: one row per subject_set x principal component
+Columns:
+- subject_set: Subject-set label used for the PCA, either all516 or optimal414.
+- pc: Principal component label.
+- explained_variance_fraction: Fraction of total PCA variance explained by this principal component.
+    Formula: explained_variance_fraction = sdev^2 / sum(sdev^2 across all PCs within subject_set)
+- cumulative_explained_variance: Cumulative explained variance through this principal component.
+    Formula: cumulative_explained_variance = cumulative sum of explained_variance_fraction ordered by
+    PC number within subject_set
+
+10_allcohort_high_fiber_reaction_pca_loadings.csv
+Path: Results/subject_level_fba/tables/10_allcohort_high_fiber_reaction_pca_loadings.csv
+Row grain: one row per subject_set x reaction_id x principal component
+Columns:
+- subject_set: Subject-set label used for the PCA, either all516 or optimal414.
+- reaction_id: Collapsed reaction identifier from the PCA feature matrix.
+- pc: Principal component label.
+- loading: Signed PCA loading for this reaction on the selected component.
+- abs_loading: Absolute PCA loading magnitude for this reaction on the selected component. Formula:
+    abs_loading = abs(loading)
+
+10_allcohort_high_fiber_reaction_top_loading_summary.csv
+Path: Results/subject_level_fba/tables/10_allcohort_high_fiber_reaction_top_loading_summary.csv
+Row grain: one row per subject_set x principal component x direction x rank_within_direction
+Columns:
+- subject_set: Subject-set label used for the PCA, either all516 or optimal414.
+- pc: Principal component label.
+- reaction_id: Collapsed reaction identifier selected as a top positive or top negative loading.
+- loading: Signed PCA loading for this reaction on the selected component.
+- abs_loading: Absolute PCA loading magnitude for this reaction. Formula: abs_loading = abs(loading)
+- explained_variance_fraction: Fraction of total PCA variance explained by this principal component.
+    Formula: explained_variance_fraction = sdev^2 / sum(sdev^2 across all PCs within subject_set)
+- direction: Whether the reaction was selected from the positive or negative loading tail.
+- rank_within_direction: Rank within the positive or negative loading tail for the selected principal
+    component. Formula: rank_within_direction = rank after sorting by loading descending for positive
+    rows or ascending for negative rows within subject_set + pc
+
+10_allcohort_high_fiber_taxon_contribution_top_loading_reactions.csv
+Path: Results/subject_level_fba/tables/10_allcohort_high_fiber_taxon_contribution_top_loading_reactions.csv
+Row grain: one row per subject_set x reaction_id x taxon_id for reactions selected from top PCA loadings
+Columns:
+- subject_set: Subject-set label used for the PCA, either all516 or optimal414.
+- reaction_id: Collapsed reaction identifier selected from the top-loading PCA reactions.
+- reaction_token_group: Semicolon-separated token groups matched from the reaction ID for convenience
+    filtering.
+- taxon_id: MICOM taxon/model identifier contributing flux to this reaction.
+- species_name: Species label mapped onto this model taxon.
+- paper_taxon: Original paper taxon label mapped onto this model species.
+- n_subjects_in_set: Total number of subjects in the selected subject set.
+- n_subjects_with_flux: Number of subjects in the set where this taxon carried nonzero flux for this
+    reaction.
+- fraction_subjects_with_flux: Prevalence of this taxon-reaction flux within the selected subject
+    set. Formula: fraction_subjects_with_flux = n_subjects_with_flux / n_subjects_in_set
+- median_signed_flux: Median signed taxon-level flux across the subjects with exported rows for this
+    taxon-reaction pair.
+- median_abs_flux: Median absolute taxon-level flux across the subjects with exported rows for this
+    taxon-reaction pair.
+- total_abs_flux: Total absolute flux contributed by this taxon across all subjects in the selected
+    set for this reaction. Formula: total_abs_flux = sum(abs(flux) across all exported subject rows
+    within subject_set + reaction_id + taxon_id)
+- fraction_of_total_abs_flux: Share of the total absolute reaction flux carried by this taxon within
+    the selected subject set. Formula: fraction_of_total_abs_flux = total_abs_flux /
+    sum(total_abs_flux across all taxon_id within subject_set + reaction_id)
+- selected_from_pcs: Semicolon-separated list of principal components that selected this reaction
+    into the top-loading set.
+- selected_directions: Semicolon-separated list of loading directions that selected this reaction
+    into the top-loading set.
+- max_abs_loading: Largest absolute loading observed for this reaction among the selected principal
+    components. Formula: max_abs_loading = max(abs_loading across selected PC rows for subject_set +
+    reaction_id)
+
+10_allcohort_high_fiber_taxon_contribution_lysine_butyrate_reactions.csv
+Path: Results/subject_level_fba/tables/10_allcohort_high_fiber_taxon_contribution_lysine_butyrate_reactions.csv
+Row grain: one row per subject_set x reaction_id x taxon_id for token-matched lysine or butyrate reactions
+Columns:
+- subject_set: Subject-set label used for the PCA, either all516 or optimal414.
+- reaction_id: Collapsed reaction identifier matched by the lysine/butyrate token filter.
+- reaction_token_group: Semicolon-separated token groups matched from the reaction ID.
+- taxon_id: MICOM taxon/model identifier contributing flux to this reaction.
+- species_name: Species label mapped onto this model taxon.
+- paper_taxon: Original paper taxon label mapped onto this model species.
+- n_subjects_in_set: Total number of subjects in the selected subject set.
+- n_subjects_with_flux: Number of subjects in the set where this taxon carried nonzero flux for this
+    reaction.
+- fraction_subjects_with_flux: Prevalence of this taxon-reaction flux within the selected subject
+    set. Formula: fraction_subjects_with_flux = n_subjects_with_flux / n_subjects_in_set
+- median_signed_flux: Median signed taxon-level flux across the subjects with exported rows for this
+    taxon-reaction pair.
+- median_abs_flux: Median absolute taxon-level flux across the subjects with exported rows for this
+    taxon-reaction pair.
+- total_abs_flux: Total absolute flux contributed by this taxon across all subjects in the selected
+    set for this reaction. Formula: total_abs_flux = sum(abs(flux) across all exported subject rows
+    within subject_set + reaction_id + taxon_id)
+- fraction_of_total_abs_flux: Share of the total absolute reaction flux carried by this taxon within
+    the selected subject set. Formula: fraction_of_total_abs_flux = total_abs_flux /
+    sum(total_abs_flux across all taxon_id within subject_set + reaction_id)

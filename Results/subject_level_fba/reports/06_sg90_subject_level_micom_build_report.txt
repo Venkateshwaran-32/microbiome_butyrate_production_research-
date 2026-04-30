@@ -31,3 +31,88 @@ Selected subject nonzero modeled taxon distribution
 Solve summary by diet
 high_fiber: successes=215, failures=0
 western: successes=215, failures=0
+
+CSV Output Dictionary
+
+06_sg90_subject_community_growth_summary_by_diet.csv
+Path: Results/subject_level_fba/tables/06_sg90_subject_community_growth_summary_by_diet.csv
+Row grain: one row per subject_id x diet_name
+Columns:
+- subject_id: Subject identifier from the SG90 subject-level MICOM input table.
+- cohort: Cohort label carried through from the subject metadata.
+- age_years: Subject age in years from the metadata table.
+- age_group: Age-bin label assigned from the metadata age.
+- diet_name: Diet scenario name from Medium_files/diet.csv.
+- solver_status: MICOM solver status returned for this subject-level solve.
+- community_growth_rate: MICOM-reported community growth rate for this subject and diet.
+- objective_value: Objective value returned by MICOM for this subject-level cooperative tradeoff
+  solve. Formula: objective_value = optimization objective reported by MICOM after
+  cooperative_tradeoff
+- tradeoff_fraction: Tradeoff fraction passed into MICOM cooperative tradeoff.
+- num_taxa_total: Number of modeled taxa carried into the subject-level MICOM community input.
+- num_taxa_with_nonzero_growth: Count of modeled taxa whose MICOM growth rate exceeded the growth
+  threshold. Formula: num_taxa_with_nonzero_growth = count(growth_rate > 1e-09)
+- matched_diet_metabolites: Count of diet metabolite IDs translated into MICOM medium entries.
+  Formula: matched_diet_metabolites = number of diet metabolite_ids with a MICOM medium mapping
+- missing_diet_metabolites: Count of diet metabolite IDs that could not be translated into MICOM
+  medium entries. Formula: missing_diet_metabolites = total diet metabolite_ids -
+  matched_diet_metabolites
+- total_input_abundance_raw: Sum of the raw abundances carried into the 10-taxon subject input for
+  this subject. Formula: total_input_abundance_raw = sum(abundance_raw across all taxon_id within
+  subject_id)
+- total_input_abundance_normalized: Sum of the normalized abundances carried into the 10-taxon
+  subject input for this subject. Formula: total_input_abundance_normalized =
+  sum(abundance_normalized across all taxon_id within subject_id)
+- error_message: Error text recorded for failed community-build or solve attempts; blank otherwise.
+
+06_sg90_subject_taxon_growth_by_diet.csv
+Path: Results/subject_level_fba/tables/06_sg90_subject_taxon_growth_by_diet.csv
+Row grain: one row per subject_id x diet_name x taxon_id
+Columns:
+- subject_id: Subject identifier from the SG90 subject-level MICOM input table.
+- cohort: Cohort label carried through from the subject metadata.
+- age_years: Subject age in years from the metadata table.
+- age_group: Age-bin label assigned from the metadata age.
+- diet_name: Diet scenario name from Medium_files/diet.csv.
+- taxon_id: MICOM taxon/model identifier.
+- species_name: Species label mapped onto this model taxon.
+- paper_taxon: Original paper taxon label mapped onto this model species.
+- abundance_raw: Raw subject-level abundance used for this taxon.
+- abundance_normalized: Normalized subject-level abundance used for the MICOM taxonomy. Formula:
+  abundance_normalized = abundance_raw / sum(abundance_raw across modeled taxa within subject_id)
+  when the within-subject total is positive
+- growth_rate: MICOM-reported taxon growth rate for this subject and diet.
+- is_growing: Boolean flag showing whether the MICOM taxon growth rate exceeded the growth
+  threshold. Formula: is_growing = growth_rate > 1e-09
+- reactions: Number of reactions present in the MICOM member model returned for this taxon.
+- metabolites: Number of metabolites present in the MICOM member model returned for this taxon.
+
+06_sg90_subject_taxon_growth_by_diet_wide.csv
+Path: Results/subject_level_fba/tables/06_sg90_subject_taxon_growth_by_diet_wide.csv
+Row grain: one row per subject_id x diet_name
+Columns:
+- subject_id: Subject identifier from the SG90 subject-level MICOM input table.
+- cohort: Cohort label carried through from the subject metadata.
+- age_years: Subject age in years from the metadata table.
+- age_group: Age-bin label assigned from the metadata age.
+- diet_name: Diet scenario name from Medium_files/diet.csv.
+- Alistipes_onderdonkii_DSM_19147: MICOM taxon growth rate for model taxon
+  Alistipes_onderdonkii_DSM_19147 in this subject and diet.
+- Alistipes_shahii_WAL_8301: MICOM taxon growth rate for model taxon Alistipes_shahii_WAL_8301 in
+  this subject and diet.
+- Bacteroides_dorei_DSM_17855: MICOM taxon growth rate for model taxon Bacteroides_dorei_DSM_17855
+  in this subject and diet.
+- Bacteroides_xylanisolvens_XB1A: MICOM taxon growth rate for model taxon
+  Bacteroides_xylanisolvens_XB1A in this subject and diet.
+- Bilophila_wadsworthia_3_1_6: MICOM taxon growth rate for model taxon Bilophila_wadsworthia_3_1_6
+  in this subject and diet.
+- Escherichia_coli_UTI89_UPEC: MICOM taxon growth rate for model taxon Escherichia_coli_UTI89_UPEC
+  in this subject and diet.
+- Faecalibacterium_prausnitzii_M21_2: MICOM taxon growth rate for model taxon
+  Faecalibacterium_prausnitzii_M21_2 in this subject and diet.
+- Klebsiella_pneumoniae_pneumoniae_MGH78578: MICOM taxon growth rate for model taxon
+  Klebsiella_pneumoniae_pneumoniae_MGH78578 in this subject and diet.
+- Parabacteroides_merdae_ATCC_43184: MICOM taxon growth rate for model taxon
+  Parabacteroides_merdae_ATCC_43184 in this subject and diet.
+- Ruminococcus_torques_ATCC_27756: MICOM taxon growth rate for model taxon
+  Ruminococcus_torques_ATCC_27756 in this subject and diet.

@@ -52,3 +52,71 @@ Klebsiella_pneumoniae_pneumoniae_MGH78578: extracellular metabolites without dir
   high_fiber: matched diet metabolites=127, missing diet metabolites=37
   high_fiber missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
 
+CSV Output Dictionary
+
+03_agebin_community_growth_summary_by_diet.csv
+Path: Results/cobrapy_fba/tables/03_agebin_community_growth_summary_by_diet.csv
+Row grain: one row per age_group x diet_name
+Columns:
+- age_group: Age-bin label for the median-abundance community input.
+- diet_name: Diet scenario name from Medium_files/diet.csv.
+- solver_status: COBRApy solver status returned for the age-bin community optimization.
+- community_objective_value: Objective value returned by the weighted age-bin community
+  optimization. Formula: community_objective_value = optimized weighted objective reported by
+  community.optimize()
+- sum_species_biomass_flux: Sum of biomass fluxes across all modeled species in this age-bin
+  community. Formula: sum_species_biomass_flux = sum(species_biomass_flux across all species_name
+  within age_group + diet_name)
+- num_species_with_nonzero_growth: Count of species whose biomass flux exceeded the growth
+  threshold. Formula: num_species_with_nonzero_growth = count(|species_biomass_flux| > 1e-09)
+- community_ex_but_flux: Flux through the shared butyrate exchange reaction when that exchange
+  exists.
+- matched_diet_metabolites: Count of diet metabolite IDs that could be mapped into the shared
+  community exchanges. Formula: matched_diet_metabolites = number of diet metabolite_ids with a
+  shared_exchange_ids match
+- missing_diet_metabolites: Count of diet metabolite IDs that could not be mapped into the shared
+  community exchanges. Formula: missing_diet_metabolites = total diet metabolite_ids -
+  matched_diet_metabolites
+- n_subjects: Number of subjects contributing to the median-abundance age-bin input.
+- total_input_median_abundance: Sum of the median abundances supplied for the 10 modeled species in
+  this age bin. Formula: total_input_median_abundance = sum(median_abundance across all
+  model_species_id within age_group)
+- total_input_normalized_weight: Sum of the normalized objective weights used for the age-bin
+  community objective. Formula: total_input_normalized_weight = sum(normalized_weight across all
+  model_species_id within age_group)
+
+03_agebin_community_species_growth_by_diet.csv
+Path: Results/cobrapy_fba/tables/03_agebin_community_species_growth_by_diet.csv
+Row grain: one row per age_group x diet_name x species_name
+Columns:
+- age_group: Age-bin label for the median-abundance community input.
+- diet_name: Diet scenario name from Medium_files/diet.csv.
+- species_name: Species label from the processed age-bin input table.
+- model_species_id: Model species identifier used in the community model.
+- objective_reaction_id: Biomass/objective reaction ID used for this species inside the combined
+  model.
+- median_abundance: Median abundance supplied for this species in the selected age bin.
+- normalized_weight: Normalized weight used in the weighted community objective for this species.
+  Formula: normalized_weight = median_abundance / sum(median_abundance within age_group)
+- n_subjects: Number of subjects contributing to the median-abundance value for this age bin.
+- species_biomass_flux: Solved biomass flux for this species under the selected age bin and diet.
+- is_growing: Boolean flag showing whether the species biomass flux exceeded the growth threshold.
+  Formula: is_growing = abs(species_biomass_flux) > 1e-09
+
+03_agebin_community_species_growth_by_diet_wide.csv
+Path: Results/cobrapy_fba/tables/03_agebin_community_species_growth_by_diet_wide.csv
+Row grain: one row per species_name x diet_name
+Columns:
+- species_name: Species label from the processed age-bin input table.
+- model_species_id: Model species identifier used in the community model.
+- diet_name: Diet scenario name from Medium_files/diet.csv.
+- 21_40: Solved biomass flux for this species in age group 21_40; blank means no row was written for
+  that age group.
+- 41_60: Solved biomass flux for this species in age group 41_60; blank means no row was written for
+  that age group.
+- 61_70: Solved biomass flux for this species in age group 61_70; blank means no row was written for
+  that age group.
+- 71_80: Solved biomass flux for this species in age group 71_80; blank means no row was written for
+  that age group.
+- 81_90: Solved biomass flux for this species in age group 81_90; blank means no row was written for
+  that age group.

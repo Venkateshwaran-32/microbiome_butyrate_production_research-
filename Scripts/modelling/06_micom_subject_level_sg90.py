@@ -30,6 +30,13 @@ if SUBJECT_UTILS_SPEC is None or SUBJECT_UTILS_SPEC.loader is None:
 SUBJECT_UTILS_MODULE = importlib.util.module_from_spec(SUBJECT_UTILS_SPEC)
 SUBJECT_UTILS_SPEC.loader.exec_module(SUBJECT_UTILS_MODULE)
 
+REPORT_UTILS_PATH = SCRIPT_DIR / "00_report_output_dictionary.py"
+REPORT_UTILS_SPEC = importlib.util.spec_from_file_location("report_output_dictionary", REPORT_UTILS_PATH)
+if REPORT_UTILS_SPEC is None or REPORT_UTILS_SPEC.loader is None:
+    raise ImportError(f"Could not load report utility module from {REPORT_UTILS_PATH}")
+REPORT_UTILS_MODULE = importlib.util.module_from_spec(REPORT_UTILS_SPEC)
+REPORT_UTILS_SPEC.loader.exec_module(REPORT_UTILS_MODULE)
+
 GROWTH_THRESHOLD = BASELINE_UTILS_MODULE.GROWTH_THRESHOLD
 load_diet_table = BASELINE_UTILS_MODULE.load_diet_table
 run_cooperative_tradeoff = MICOM_UTILS_MODULE.run_cooperative_tradeoff
@@ -41,6 +48,9 @@ group_rows_by_subject = SUBJECT_UTILS_MODULE.group_rows_by_subject
 load_subject_level_rows = SUBJECT_UTILS_MODULE.load_subject_level_rows
 target_model_species_ids_in_order = SUBJECT_UTILS_MODULE.target_model_species_ids_in_order
 validate_subject_rows = SUBJECT_UTILS_MODULE.validate_subject_rows
+build_report_text = REPORT_UTILS_MODULE.build_report_text
+col = REPORT_UTILS_MODULE.col
+csv_output_spec = REPORT_UTILS_MODULE.csv_output_spec
 
 
 SUBJECT_INPUT = Path("Suplementary_Data/processed_data/subject_level_micom_sg90/sg90_subject_taxonomy_for_micom.csv")
@@ -51,6 +61,40 @@ TAXON_OUTPUT = Path("Results/subject_level_fba/tables/06_sg90_subject_taxon_grow
 WIDE_OUTPUT = Path("Results/subject_level_fba/tables/06_sg90_subject_taxon_growth_by_diet_wide.csv")
 BUILD_REPORT = Path("Results/subject_level_fba/reports/06_sg90_subject_level_micom_build_report.txt")
 TRADEOFF_FRACTION = 0.5
+SUMMARY_FIELDNAMES = [
+    "subject_id",
+    "cohort",
+    "age_years",
+    "age_group",
+    "diet_name",
+    "solver_status",
+    "community_growth_rate",
+    "objective_value",
+    "tradeoff_fraction",
+    "num_taxa_total",
+    "num_taxa_with_nonzero_growth",
+    "matched_diet_metabolites",
+    "missing_diet_metabolites",
+    "total_input_abundance_raw",
+    "total_input_abundance_normalized",
+    "error_message",
+]
+TAXON_FIELDNAMES = [
+    "subject_id",
+    "cohort",
+    "age_years",
+    "age_group",
+    "diet_name",
+    "taxon_id",
+    "species_name",
+    "paper_taxon",
+    "abundance_raw",
+    "abundance_normalized",
+    "growth_rate",
+    "is_growing",
+    "reactions",
+    "metabolites",
+]
 
 
 def parse_args() -> argparse.Namespace:
@@ -106,6 +150,103 @@ def build_wide_rows(taxon_rows: list[dict[str, object]]) -> list[dict[str, objec
             row.setdefault(model_species_id, 0.0)
         wide_rows.append(row)
     return wide_rows
+
+
+def build_csv_output_specs(model_species_ids: list[str]) -> list[dict[str, object]]:
+    return [
+        csv_output_spec(
+            SUMMARY_OUTPUT,
+            "one row per subject_id x diet_name",
+            [
+                col("subject_id", "Subject identifier from the SG90 subject-level MICOM input table."),
+                col("cohort", "Cohort label carried through from the subject metadata."),
+                col("age_years", "Subject age in years from the metadata table."),
+                col("age_group", "Age-bin label assigned from the metadata age."),
+                col("diet_name", "Diet scenario name from Medium_files/diet.csv."),
+                col("solver_status", "MICOM solver status returned for this subject-level solve."),
+                col("community_growth_rate", "MICOM-reported community growth rate for this subject and diet."),
+                col(
+                    "objective_value",
+                    "Objective value returned by MICOM for this subject-level cooperative tradeoff solve.",
+                    "objective_value = optimization objective reported by MICOM after cooperative_tradeoff",
+                ),
+                col("tradeoff_fraction", "Tradeoff fraction passed into MICOM cooperative tradeoff."),
+                col("num_taxa_total", "Number of modeled taxa carried into the subject-level MICOM community input."),
+                col(
+                    "num_taxa_with_nonzero_growth",
+                    "Count of modeled taxa whose MICOM growth rate exceeded the growth threshold.",
+                    f"num_taxa_with_nonzero_growth = count(growth_rate > {GROWTH_THRESHOLD})",
+                ),
+                col(
+                    "matched_diet_metabolites",
+                    "Count of diet metabolite IDs translated into MICOM medium entries.",
+                    "matched_diet_metabolites = number of diet metabolite_ids with a MICOM medium mapping",
+                ),
+                col(
+                    "missing_diet_metabolites",
+                    "Count of diet metabolite IDs that could not be translated into MICOM medium entries.",
+                    "missing_diet_metabolites = total diet metabolite_ids - matched_diet_metabolites",
+                ),
+                col(
+                    "total_input_abundance_raw",
+                    "Sum of the raw abundances carried into the 10-taxon subject input for this subject.",
+                    "total_input_abundance_raw = sum(abundance_raw across all taxon_id within subject_id)",
+                ),
+                col(
+                    "total_input_abundance_normalized",
+                    "Sum of the normalized abundances carried into the 10-taxon subject input for this subject.",
+                    "total_input_abundance_normalized = sum(abundance_normalized across all taxon_id within subject_id)",
+                ),
+                col("error_message", "Error text recorded for failed community-build or solve attempts; blank otherwise."),
+            ],
+        ),
+        csv_output_spec(
+            TAXON_OUTPUT,
+            "one row per subject_id x diet_name x taxon_id",
+            [
+                col("subject_id", "Subject identifier from the SG90 subject-level MICOM input table."),
+                col("cohort", "Cohort label carried through from the subject metadata."),
+                col("age_years", "Subject age in years from the metadata table."),
+                col("age_group", "Age-bin label assigned from the metadata age."),
+                col("diet_name", "Diet scenario name from Medium_files/diet.csv."),
+                col("taxon_id", "MICOM taxon/model identifier."),
+                col("species_name", "Species label mapped onto this model taxon."),
+                col("paper_taxon", "Original paper taxon label mapped onto this model species."),
+                col("abundance_raw", "Raw subject-level abundance used for this taxon."),
+                col(
+                    "abundance_normalized",
+                    "Normalized subject-level abundance used for the MICOM taxonomy.",
+                    "abundance_normalized = abundance_raw / sum(abundance_raw across modeled taxa within subject_id) when the within-subject total is positive",
+                ),
+                col("growth_rate", "MICOM-reported taxon growth rate for this subject and diet."),
+                col(
+                    "is_growing",
+                    "Boolean flag showing whether the MICOM taxon growth rate exceeded the growth threshold.",
+                    f"is_growing = growth_rate > {GROWTH_THRESHOLD}",
+                ),
+                col("reactions", "Number of reactions present in the MICOM member model returned for this taxon."),
+                col("metabolites", "Number of metabolites present in the MICOM member model returned for this taxon."),
+            ],
+        ),
+        csv_output_spec(
+            WIDE_OUTPUT,
+            "one row per subject_id x diet_name",
+            [
+                col("subject_id", "Subject identifier from the SG90 subject-level MICOM input table."),
+                col("cohort", "Cohort label carried through from the subject metadata."),
+                col("age_years", "Subject age in years from the metadata table."),
+                col("age_group", "Age-bin label assigned from the metadata age."),
+                col("diet_name", "Diet scenario name from Medium_files/diet.csv."),
+                *[
+                    col(
+                        model_species_id,
+                        f"MICOM taxon growth rate for model taxon {model_species_id} in this subject and diet.",
+                    )
+                    for model_species_id in model_species_ids
+                ],
+            ],
+        ),
+    ]
 
 
 def main() -> None:
@@ -313,44 +454,12 @@ def main() -> None:
 
     write_csv(
         SUMMARY_OUTPUT,
-        [
-            "subject_id",
-            "cohort",
-            "age_years",
-            "age_group",
-            "diet_name",
-            "solver_status",
-            "community_growth_rate",
-            "objective_value",
-            "tradeoff_fraction",
-            "num_taxa_total",
-            "num_taxa_with_nonzero_growth",
-            "matched_diet_metabolites",
-            "missing_diet_metabolites",
-            "total_input_abundance_raw",
-            "total_input_abundance_normalized",
-            "error_message",
-        ],
+        SUMMARY_FIELDNAMES,
         summary_rows,
     )
     write_csv(
         TAXON_OUTPUT,
-        [
-            "subject_id",
-            "cohort",
-            "age_years",
-            "age_group",
-            "diet_name",
-            "taxon_id",
-            "species_name",
-            "paper_taxon",
-            "abundance_raw",
-            "abundance_normalized",
-            "growth_rate",
-            "is_growing",
-            "reactions",
-            "metabolites",
-        ],
+        TAXON_FIELDNAMES,
         taxon_rows,
     )
     write_csv(
@@ -359,7 +468,9 @@ def main() -> None:
         wide_rows,
     )
     BUILD_REPORT.parent.mkdir(parents=True, exist_ok=True)
-    BUILD_REPORT.write_text("\n".join(report_lines) + "\n")
+    BUILD_REPORT.write_text(
+        build_report_text(report_lines, build_csv_output_specs(target_model_species_ids_in_order()))
+    )
 
     print(f"Wrote {SUMMARY_OUTPUT}")
     print(f"Wrote {TAXON_OUTPUT}")

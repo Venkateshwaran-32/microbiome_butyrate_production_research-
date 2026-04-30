@@ -13,3 +13,38 @@ western missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose
 high_fiber: matched diet metabolites=127, missing diet metabolites=37, solver_status=optimal
 high_fiber missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
 
+CSV Output Dictionary
+
+02_community_growth_summary_by_diet.csv
+Path: Results/cobrapy_fba/tables/02_community_growth_summary_by_diet.csv
+Row grain: one row per diet_name
+Columns:
+- diet_name: Diet scenario name from Medium_files/diet.csv.
+- solver_status: COBRApy solver status returned for the community optimization.
+- community_objective_value: Objective value returned by the community optimization. Formula:
+  community_objective_value = optimized weighted objective reported by community.optimize()
+- sum_species_biomass_flux: Sum of the species biomass fluxes read from the combined solution.
+  Formula: sum_species_biomass_flux = sum(species_biomass_flux across all species_name within
+  diet_name)
+- num_species_with_nonzero_growth: Number of species whose biomass flux exceeded the growth
+  threshold. Formula: num_species_with_nonzero_growth = count(|species_biomass_flux| > 1e-09)
+- community_ex_but_flux: Flux through the shared butyrate exchange reaction when that exchange
+  exists in the community model.
+- matched_diet_metabolites: Count of diet metabolite IDs that could be mapped to shared-environment
+  exchange reactions. Formula: matched_diet_metabolites = number of diet metabolite_ids with a
+  shared_exchange_ids match
+- missing_diet_metabolites: Count of diet metabolite IDs that could not be mapped into the shared
+  community exchanges. Formula: missing_diet_metabolites = total diet metabolite_ids -
+  matched_diet_metabolites
+
+02_community_species_growth_by_diet.csv
+Path: Results/cobrapy_fba/tables/02_community_species_growth_by_diet.csv
+Row grain: one row per diet_name x species_name
+Columns:
+- diet_name: Diet scenario name from Medium_files/diet.csv.
+- species_name: Model species included in the shared-environment community.
+- objective_reaction_id: Biomass/objective reaction ID used for this species inside the combined
+  model.
+- species_biomass_flux: Solved biomass flux for this species under the selected diet.
+- is_growing: Boolean flag showing whether the species biomass flux exceeded the growth threshold.
+  Formula: is_growing = abs(species_biomass_flux) > 1e-09

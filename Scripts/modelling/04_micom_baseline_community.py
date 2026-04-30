@@ -11,6 +11,13 @@ if UTILS_SPEC is None or UTILS_SPEC.loader is None:
 UTILS_MODULE = importlib.util.module_from_spec(UTILS_SPEC)
 UTILS_SPEC.loader.exec_module(UTILS_MODULE)
 
+REPORT_UTILS_PATH = Path(__file__).with_name("00_report_output_dictionary.py")
+REPORT_UTILS_SPEC = importlib.util.spec_from_file_location("report_output_dictionary", REPORT_UTILS_PATH)
+if REPORT_UTILS_SPEC is None or REPORT_UTILS_SPEC.loader is None:
+    raise ImportError(f"Could not load report utility module from {REPORT_UTILS_PATH}")
+REPORT_UTILS_MODULE = importlib.util.module_from_spec(REPORT_UTILS_SPEC)
+REPORT_UTILS_SPEC.loader.exec_module(REPORT_UTILS_MODULE)
+
 GROWTH_THRESHOLD = UTILS_MODULE.GROWTH_THRESHOLD
 load_diet_table = UTILS_MODULE.load_diet_table
 load_species_model_paths = UTILS_MODULE.load_species_model_paths
@@ -26,6 +33,9 @@ MICOM_UTILS_SPEC.loader.exec_module(MICOM_UTILS_MODULE)
 build_equal_abundance_taxonomy = MICOM_UTILS_MODULE.build_equal_abundance_taxonomy
 run_cooperative_tradeoff = MICOM_UTILS_MODULE.run_cooperative_tradeoff
 write_csv = MICOM_UTILS_MODULE.write_csv
+build_report_text = REPORT_UTILS_MODULE.build_report_text
+col = REPORT_UTILS_MODULE.col
+csv_output_spec = REPORT_UTILS_MODULE.csv_output_spec
 
 MODELS_DIR = Path("Models/vmh_agora2_sbml")
 DIET_CSV = Path("Medium_files/diet.csv")
@@ -34,6 +44,80 @@ TAXON_OUTPUT = Path("Results/micom_fba/tables/04_micom_taxon_growth_by_diet.csv"
 BUILD_REPORT = Path("Results/micom_fba/reports/04_micom_model_build_report.txt")
 COMMUNITY_ID = "micom_baseline_10_species"
 TRADEOFF_FRACTION = 0.5
+SUMMARY_FIELDNAMES = [
+    "diet_name",
+    "solver_status",
+    "community_growth_rate",
+    "objective_value",
+    "tradeoff_fraction",
+    "num_taxa_total",
+    "num_taxa_with_nonzero_growth",
+    "matched_diet_metabolites",
+    "missing_diet_metabolites",
+]
+TAXON_FIELDNAMES = [
+    "diet_name",
+    "taxon_id",
+    "abundance",
+    "growth_rate",
+    "is_growing",
+    "reactions",
+    "metabolites",
+]
+CSV_OUTPUT_SPECS = [
+    csv_output_spec(
+        SUMMARY_OUTPUT,
+        "one row per diet_name",
+        [
+            col("diet_name", "Diet scenario name from Medium_files/diet.csv."),
+            col("solver_status", "MICOM solver status returned for the cooperative tradeoff solve."),
+            col("community_growth_rate", "MICOM-reported community growth rate for the solved diet."),
+            col(
+                "objective_value",
+                "Objective value returned by MICOM for this cooperative tradeoff solve.",
+                "objective_value = optimization objective reported by MICOM after cooperative_tradeoff",
+            ),
+            col("tradeoff_fraction", "Tradeoff fraction passed into MICOM cooperative tradeoff."),
+            col("num_taxa_total", "Number of taxa returned in the MICOM members table for this diet."),
+            col(
+                "num_taxa_with_nonzero_growth",
+                "Count of taxa whose growth rate exceeded the growth threshold.",
+                f"num_taxa_with_nonzero_growth = count(growth_rate > {GROWTH_THRESHOLD})",
+            ),
+            col(
+                "matched_diet_metabolites",
+                "Count of diet metabolite IDs translated into MICOM medium entries.",
+                "matched_diet_metabolites = number of diet metabolite_ids with a MICOM medium mapping",
+            ),
+            col(
+                "missing_diet_metabolites",
+                "Count of diet metabolite IDs that could not be translated into MICOM medium entries.",
+                "missing_diet_metabolites = total diet metabolite_ids - matched_diet_metabolites",
+            ),
+        ],
+    ),
+    csv_output_spec(
+        TAXON_OUTPUT,
+        "one row per diet_name x taxon_id",
+        [
+            col("diet_name", "Diet scenario name from Medium_files/diet.csv."),
+            col("taxon_id", "MICOM taxon/model identifier."),
+            col(
+                "abundance",
+                "Taxon abundance used in the equal-abundance baseline taxonomy table.",
+                "abundance = 1 / number of taxa in the baseline community",
+            ),
+            col("growth_rate", "MICOM-reported taxon growth rate for this diet."),
+            col(
+                "is_growing",
+                "Boolean flag showing whether the MICOM taxon growth rate exceeded the growth threshold.",
+                f"is_growing = growth_rate > {GROWTH_THRESHOLD}",
+            ),
+            col("reactions", "Number of reactions present in the MICOM member model returned for this taxon."),
+            col("metabolites", "Number of metabolites present in the MICOM member model returned for this taxon."),
+        ],
+    ),
+]
 
 
 def main() -> None:
@@ -118,34 +202,16 @@ def main() -> None:
 
     write_csv(
         SUMMARY_OUTPUT,
-        [
-            "diet_name",
-            "solver_status",
-            "community_growth_rate",
-            "objective_value",
-            "tradeoff_fraction",
-            "num_taxa_total",
-            "num_taxa_with_nonzero_growth",
-            "matched_diet_metabolites",
-            "missing_diet_metabolites",
-        ],
+        SUMMARY_FIELDNAMES,
         summary_rows,
     )
     write_csv(
         TAXON_OUTPUT,
-        [
-            "diet_name",
-            "taxon_id",
-            "abundance",
-            "growth_rate",
-            "is_growing",
-            "reactions",
-            "metabolites",
-        ],
+        TAXON_FIELDNAMES,
         taxon_rows,
     )
     BUILD_REPORT.parent.mkdir(parents=True, exist_ok=True)
-    BUILD_REPORT.write_text("\n".join(report_lines) + "\n")
+    BUILD_REPORT.write_text(build_report_text(report_lines, CSV_OUTPUT_SPECS))
 
     print(f"Wrote {SUMMARY_OUTPUT}")
     print(f"Wrote {TAXON_OUTPUT}")

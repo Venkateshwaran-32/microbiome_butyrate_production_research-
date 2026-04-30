@@ -23,3 +23,37 @@ western missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose
 high_fiber: solver_status=optimal, community_growth_rate=0.6954251726181823, matched_diet_metabolites=127, missing_diet_metabolites=37
 high_fiber missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
 
+CSV Output Dictionary
+
+04_micom_community_growth_summary_by_diet.csv
+Path: Results/micom_fba/tables/04_micom_community_growth_summary_by_diet.csv
+Row grain: one row per diet_name
+Columns:
+- diet_name: Diet scenario name from Medium_files/diet.csv.
+- solver_status: MICOM solver status returned for the cooperative tradeoff solve.
+- community_growth_rate: MICOM-reported community growth rate for the solved diet.
+- objective_value: Objective value returned by MICOM for this cooperative tradeoff solve. Formula:
+  objective_value = optimization objective reported by MICOM after cooperative_tradeoff
+- tradeoff_fraction: Tradeoff fraction passed into MICOM cooperative tradeoff.
+- num_taxa_total: Number of taxa returned in the MICOM members table for this diet.
+- num_taxa_with_nonzero_growth: Count of taxa whose growth rate exceeded the growth threshold.
+  Formula: num_taxa_with_nonzero_growth = count(growth_rate > 1e-09)
+- matched_diet_metabolites: Count of diet metabolite IDs translated into MICOM medium entries.
+  Formula: matched_diet_metabolites = number of diet metabolite_ids with a MICOM medium mapping
+- missing_diet_metabolites: Count of diet metabolite IDs that could not be translated into MICOM
+  medium entries. Formula: missing_diet_metabolites = total diet metabolite_ids -
+  matched_diet_metabolites
+
+04_micom_taxon_growth_by_diet.csv
+Path: Results/micom_fba/tables/04_micom_taxon_growth_by_diet.csv
+Row grain: one row per diet_name x taxon_id
+Columns:
+- diet_name: Diet scenario name from Medium_files/diet.csv.
+- taxon_id: MICOM taxon/model identifier.
+- abundance: Taxon abundance used in the equal-abundance baseline taxonomy table. Formula: abundance
+  = 1 / number of taxa in the baseline community
+- growth_rate: MICOM-reported taxon growth rate for this diet.
+- is_growing: Boolean flag showing whether the MICOM taxon growth rate exceeded the growth
+  threshold. Formula: is_growing = growth_rate > 1e-09
+- reactions: Number of reactions present in the MICOM member model returned for this taxon.
+- metabolites: Number of metabolites present in the MICOM member model returned for this taxon.

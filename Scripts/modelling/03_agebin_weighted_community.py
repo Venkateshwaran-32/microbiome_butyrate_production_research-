@@ -13,9 +13,19 @@ if UTILS_SPEC is None or UTILS_SPEC.loader is None:
 UTILS_MODULE = importlib.util.module_from_spec(UTILS_SPEC)
 UTILS_SPEC.loader.exec_module(UTILS_MODULE)
 
+REPORT_UTILS_PATH = Path(__file__).with_name("00_report_output_dictionary.py")
+REPORT_UTILS_SPEC = importlib.util.spec_from_file_location("report_output_dictionary", REPORT_UTILS_PATH)
+if REPORT_UTILS_SPEC is None or REPORT_UTILS_SPEC.loader is None:
+    raise ImportError(f"Could not load report utility module from {REPORT_UTILS_PATH}")
+REPORT_UTILS_MODULE = importlib.util.module_from_spec(REPORT_UTILS_SPEC)
+REPORT_UTILS_SPEC.loader.exec_module(REPORT_UTILS_MODULE)
+
 GROWTH_THRESHOLD = UTILS_MODULE.GROWTH_THRESHOLD
 build_shared_environment_community = UTILS_MODULE.build_shared_environment_community
 load_diet_table = UTILS_MODULE.load_diet_table
+build_report_text = REPORT_UTILS_MODULE.build_report_text
+col = REPORT_UTILS_MODULE.col
+csv_output_spec = REPORT_UTILS_MODULE.csv_output_spec
 
 
 AGEBIN_INPUT = Path("Suplementary_Data/processed_data/allcohort_agebin_median_abundance_10_species.csv")
@@ -25,6 +35,32 @@ SPECIES_OUTPUT = Path("Results/cobrapy_fba/tables/03_agebin_community_species_gr
 WIDE_OUTPUT = Path("Results/cobrapy_fba/tables/03_agebin_community_species_growth_by_diet_wide.csv")
 BUILD_REPORT = Path("Results/cobrapy_fba/reports/03_agebin_community_model_build_report.txt")
 EXPECTED_SPECIES_PER_AGE_BIN = 10
+SUMMARY_FIELDNAMES = [
+    "age_group",
+    "diet_name",
+    "solver_status",
+    "community_objective_value",
+    "sum_species_biomass_flux",
+    "num_species_with_nonzero_growth",
+    "community_ex_but_flux",
+    "matched_diet_metabolites",
+    "missing_diet_metabolites",
+    "n_subjects",
+    "total_input_median_abundance",
+    "total_input_normalized_weight",
+]
+SPECIES_FIELDNAMES = [
+    "age_group",
+    "diet_name",
+    "species_name",
+    "model_species_id",
+    "objective_reaction_id",
+    "median_abundance",
+    "normalized_weight",
+    "n_subjects",
+    "species_biomass_flux",
+    "is_growing",
+]
 
 
 def write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, object]]) -> None:
@@ -99,6 +135,97 @@ def build_wide_rows(species_rows: list[dict[str, object]], age_groups: list[str]
             row.setdefault(age_group, "")
         wide_rows.append(row)
     return wide_rows
+
+
+def build_csv_output_specs(age_groups: list[str]) -> list[dict[str, object]]:
+    return [
+        csv_output_spec(
+            SUMMARY_OUTPUT,
+            "one row per age_group x diet_name",
+            [
+                col("age_group", "Age-bin label for the median-abundance community input."),
+                col("diet_name", "Diet scenario name from Medium_files/diet.csv."),
+                col("solver_status", "COBRApy solver status returned for the age-bin community optimization."),
+                col(
+                    "community_objective_value",
+                    "Objective value returned by the weighted age-bin community optimization.",
+                    "community_objective_value = optimized weighted objective reported by community.optimize()",
+                ),
+                col(
+                    "sum_species_biomass_flux",
+                    "Sum of biomass fluxes across all modeled species in this age-bin community.",
+                    "sum_species_biomass_flux = sum(species_biomass_flux across all species_name within age_group + diet_name)",
+                ),
+                col(
+                    "num_species_with_nonzero_growth",
+                    "Count of species whose biomass flux exceeded the growth threshold.",
+                    f"num_species_with_nonzero_growth = count(|species_biomass_flux| > {GROWTH_THRESHOLD})",
+                ),
+                col("community_ex_but_flux", "Flux through the shared butyrate exchange reaction when that exchange exists."),
+                col(
+                    "matched_diet_metabolites",
+                    "Count of diet metabolite IDs that could be mapped into the shared community exchanges.",
+                    "matched_diet_metabolites = number of diet metabolite_ids with a shared_exchange_ids match",
+                ),
+                col(
+                    "missing_diet_metabolites",
+                    "Count of diet metabolite IDs that could not be mapped into the shared community exchanges.",
+                    "missing_diet_metabolites = total diet metabolite_ids - matched_diet_metabolites",
+                ),
+                col("n_subjects", "Number of subjects contributing to the median-abundance age-bin input."),
+                col(
+                    "total_input_median_abundance",
+                    "Sum of the median abundances supplied for the 10 modeled species in this age bin.",
+                    "total_input_median_abundance = sum(median_abundance across all model_species_id within age_group)",
+                ),
+                col(
+                    "total_input_normalized_weight",
+                    "Sum of the normalized objective weights used for the age-bin community objective.",
+                    "total_input_normalized_weight = sum(normalized_weight across all model_species_id within age_group)",
+                ),
+            ],
+        ),
+        csv_output_spec(
+            SPECIES_OUTPUT,
+            "one row per age_group x diet_name x species_name",
+            [
+                col("age_group", "Age-bin label for the median-abundance community input."),
+                col("diet_name", "Diet scenario name from Medium_files/diet.csv."),
+                col("species_name", "Species label from the processed age-bin input table."),
+                col("model_species_id", "Model species identifier used in the community model."),
+                col("objective_reaction_id", "Biomass/objective reaction ID used for this species inside the combined model."),
+                col("median_abundance", "Median abundance supplied for this species in the selected age bin."),
+                col(
+                    "normalized_weight",
+                    "Normalized weight used in the weighted community objective for this species.",
+                    "normalized_weight = median_abundance / sum(median_abundance within age_group)",
+                ),
+                col("n_subjects", "Number of subjects contributing to the median-abundance value for this age bin."),
+                col("species_biomass_flux", "Solved biomass flux for this species under the selected age bin and diet."),
+                col(
+                    "is_growing",
+                    "Boolean flag showing whether the species biomass flux exceeded the growth threshold.",
+                    f"is_growing = abs(species_biomass_flux) > {GROWTH_THRESHOLD}",
+                ),
+            ],
+        ),
+        csv_output_spec(
+            WIDE_OUTPUT,
+            "one row per species_name x diet_name",
+            [
+                col("species_name", "Species label from the processed age-bin input table."),
+                col("model_species_id", "Model species identifier used in the community model."),
+                col("diet_name", "Diet scenario name from Medium_files/diet.csv."),
+                *[
+                    col(
+                        age_group,
+                        f"Solved biomass flux for this species in age group {age_group}; blank means no row was written for that age group.",
+                    )
+                    for age_group in age_groups
+                ],
+            ],
+        ),
+    ]
 
 
 def main() -> None:
@@ -250,36 +377,12 @@ def main() -> None:
 
     write_csv(
         SUMMARY_OUTPUT,
-        [
-            "age_group",
-            "diet_name",
-            "solver_status",
-            "community_objective_value",
-            "sum_species_biomass_flux",
-            "num_species_with_nonzero_growth",
-            "community_ex_but_flux",
-            "matched_diet_metabolites",
-            "missing_diet_metabolites",
-            "n_subjects",
-            "total_input_median_abundance",
-            "total_input_normalized_weight",
-        ],
+        SUMMARY_FIELDNAMES,
         summary_rows,
     )
     write_csv(
         SPECIES_OUTPUT,
-        [
-            "age_group",
-            "diet_name",
-            "species_name",
-            "model_species_id",
-            "objective_reaction_id",
-            "median_abundance",
-            "normalized_weight",
-            "n_subjects",
-            "species_biomass_flux",
-            "is_growing",
-        ],
+        SPECIES_FIELDNAMES,
         species_rows,
     )
     write_csv(
@@ -288,7 +391,7 @@ def main() -> None:
         wide_rows,
     )
     BUILD_REPORT.parent.mkdir(parents=True, exist_ok=True)
-    BUILD_REPORT.write_text("\n".join(report_lines) + "\n")
+    BUILD_REPORT.write_text(build_report_text(report_lines, build_csv_output_specs(ordered_age_groups)))
 
     print(f"Wrote {SUMMARY_OUTPUT}")
     print(f"Wrote {SPECIES_OUTPUT}")

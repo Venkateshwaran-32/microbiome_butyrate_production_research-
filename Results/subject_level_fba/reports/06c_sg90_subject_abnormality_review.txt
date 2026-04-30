@@ -1,4 +1,4 @@
-SG90 subject-level MICOM abnormality review
+	SG90 subject-level MICOM abnormality review
 Community input: Results/subject_level_fba/tables/06_sg90_subject_community_growth_summary_by_diet.csv
 Taxon input: Results/subject_level_fba/tables/06_sg90_subject_taxon_growth_by_diet.csv
 QC input: Suplementary_Data/processed_data/subject_level_micom_sg90/sg90_subject_input_qc_summary.csv
@@ -66,3 +66,23 @@ Flagged subjects
 - MBS1585 [71_80] biologically interesting outlier | extreme high-growth outlier | high growth on western (0.899287), high_fiber (0.793706)
 - MBS1587 [81_90] biologically interesting outlier | extreme high-growth outlier | high growth on western (0.903005), high_fiber (0.792866)
 - MBS1615 [81_90] biologically interesting outlier | extreme high-growth outlier | high growth on western (0.962592), high_fiber (0.883107)
+
+CSV Output Dictionary
+
+06c_sg90_subject_abnormality_review.csv
+Path: Results/subject_level_fba/tables/06c_sg90_subject_abnormality_review.csv
+Row grain: one row per flagged SG90 subject
+Columns:
+- subject_id: Subject identifier from the SG90 subject-level MICOM run.
+- age_group: Age-bin label assigned from the subject metadata.
+- diets_affected: Comma-separated list of diets whose outputs contributed to the abnormality flag.
+- flag_category: Semicolon-separated list of abnormality categories assigned to this subject.
+- evidence_values: Compact evidence string summarizing the key numeric values that triggered the
+  flags.
+- driver_pattern: Diet-specific summary labels describing whether the subject showed sparse, broad,
+  or dominant taxon-growth structure.
+- short_interpretation: Plain-English interpretation combining the flagged evidence and driver
+  summaries.
+- overall_assessment: Top-level review classification for the flagged subject. Formula:
+  overall_assessment is assigned from the flag combination: technical issue takes precedence, then
+  sparse-but-valid case, then biologically interesting outlier

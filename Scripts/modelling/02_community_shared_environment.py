@@ -14,11 +14,21 @@ if UTILS_SPEC is None or UTILS_SPEC.loader is None:
 UTILS_MODULE = importlib.util.module_from_spec(UTILS_SPEC)
 UTILS_SPEC.loader.exec_module(UTILS_MODULE)
 
+REPORT_UTILS_PATH = Path(__file__).with_name("00_report_output_dictionary.py")
+REPORT_UTILS_SPEC = importlib.util.spec_from_file_location("report_output_dictionary", REPORT_UTILS_PATH)
+if REPORT_UTILS_SPEC is None or REPORT_UTILS_SPEC.loader is None:
+    raise ImportError(f"Could not load report utility module from {REPORT_UTILS_PATH}")
+REPORT_UTILS_MODULE = importlib.util.module_from_spec(REPORT_UTILS_SPEC)
+REPORT_UTILS_SPEC.loader.exec_module(REPORT_UTILS_MODULE)
+
 # Pull the specific helpers we need from `00_baseline_modeling_utils.py`.
 GROWTH_THRESHOLD = UTILS_MODULE.GROWTH_THRESHOLD
 build_shared_environment_community = UTILS_MODULE.build_shared_environment_community
 load_diet_table = UTILS_MODULE.load_diet_table
 load_species_model_paths = UTILS_MODULE.load_species_model_paths
+build_report_text = REPORT_UTILS_MODULE.build_report_text
+col = REPORT_UTILS_MODULE.col
+csv_output_spec = REPORT_UTILS_MODULE.csv_output_spec
 
 
 MODELS_DIR = Path("Models/vmh_agora2_sbml")
@@ -26,6 +36,77 @@ DIET_CSV = Path("Medium_files/diet.csv")
 SUMMARY_OUTPUT = Path("Results/cobrapy_fba/tables/02_community_growth_summary_by_diet.csv")
 SPECIES_OUTPUT = Path("Results/cobrapy_fba/tables/02_community_species_growth_by_diet.csv")
 BUILD_REPORT = Path("Results/cobrapy_fba/reports/02_community_model_build_report.txt")
+SUMMARY_FIELDNAMES = [
+    "diet_name",
+    "solver_status",
+    "community_objective_value",
+    "sum_species_biomass_flux",
+    "num_species_with_nonzero_growth",
+    "community_ex_but_flux",
+    "matched_diet_metabolites",
+    "missing_diet_metabolites",
+]
+SPECIES_FIELDNAMES = [
+    "diet_name",
+    "species_name",
+    "objective_reaction_id",
+    "species_biomass_flux",
+    "is_growing",
+]
+CSV_OUTPUT_SPECS = [
+    csv_output_spec(
+        SUMMARY_OUTPUT,
+        "one row per diet_name",
+        [
+            col("diet_name", "Diet scenario name from Medium_files/diet.csv."),
+            col("solver_status", "COBRApy solver status returned for the community optimization."),
+            col(
+                "community_objective_value",
+                "Objective value returned by the community optimization.",
+                "community_objective_value = optimized weighted objective reported by community.optimize()",
+            ),
+            col(
+                "sum_species_biomass_flux",
+                "Sum of the species biomass fluxes read from the combined solution.",
+                "sum_species_biomass_flux = sum(species_biomass_flux across all species_name within diet_name)",
+            ),
+            col(
+                "num_species_with_nonzero_growth",
+                "Number of species whose biomass flux exceeded the growth threshold.",
+                f"num_species_with_nonzero_growth = count(|species_biomass_flux| > {GROWTH_THRESHOLD})",
+            ),
+            col(
+                "community_ex_but_flux",
+                "Flux through the shared butyrate exchange reaction when that exchange exists in the community model.",
+            ),
+            col(
+                "matched_diet_metabolites",
+                "Count of diet metabolite IDs that could be mapped to shared-environment exchange reactions.",
+                "matched_diet_metabolites = number of diet metabolite_ids with a shared_exchange_ids match",
+            ),
+            col(
+                "missing_diet_metabolites",
+                "Count of diet metabolite IDs that could not be mapped into the shared community exchanges.",
+                "missing_diet_metabolites = total diet metabolite_ids - matched_diet_metabolites",
+            ),
+        ],
+    ),
+    csv_output_spec(
+        SPECIES_OUTPUT,
+        "one row per diet_name x species_name",
+        [
+            col("diet_name", "Diet scenario name from Medium_files/diet.csv."),
+            col("species_name", "Model species included in the shared-environment community."),
+            col("objective_reaction_id", "Biomass/objective reaction ID used for this species inside the combined model."),
+            col("species_biomass_flux", "Solved biomass flux for this species under the selected diet."),
+            col(
+                "is_growing",
+                "Boolean flag showing whether the species biomass flux exceeded the growth threshold.",
+                f"is_growing = abs(species_biomass_flux) > {GROWTH_THRESHOLD}",
+            ),
+        ],
+    ),
+]
 
 
 def write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, object]]) -> None:
@@ -141,31 +222,16 @@ def main() -> None:
     # Save the machine-readable outputs and the build report to disk.
     write_csv(
         SUMMARY_OUTPUT,
-        [
-            "diet_name",
-            "solver_status",
-            "community_objective_value",
-            "sum_species_biomass_flux",
-            "num_species_with_nonzero_growth",
-            "community_ex_but_flux",
-            "matched_diet_metabolites",
-            "missing_diet_metabolites",
-        ],
+        SUMMARY_FIELDNAMES,
         summary_rows,
     )
     write_csv(
         SPECIES_OUTPUT,
-        [
-            "diet_name",
-            "species_name",
-            "objective_reaction_id",
-            "species_biomass_flux",
-            "is_growing",
-        ],
+        SPECIES_FIELDNAMES,
         species_rows,
     )
     BUILD_REPORT.parent.mkdir(parents=True, exist_ok=True)
-    BUILD_REPORT.write_text("\n".join(report_lines) + "\n")
+    BUILD_REPORT.write_text(build_report_text(report_lines, CSV_OUTPUT_SPECS))
 
     print(f"Wrote {SUMMARY_OUTPUT}")
     print(f"Wrote {SPECIES_OUTPUT}")

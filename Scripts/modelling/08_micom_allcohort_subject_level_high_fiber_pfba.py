@@ -31,6 +31,13 @@ if SUBJECT_UTILS_SPEC is None or SUBJECT_UTILS_SPEC.loader is None:
 SUBJECT_UTILS_MODULE = importlib.util.module_from_spec(SUBJECT_UTILS_SPEC)
 SUBJECT_UTILS_SPEC.loader.exec_module(SUBJECT_UTILS_MODULE)
 
+REPORT_UTILS_PATH = SCRIPT_DIR / "00_report_output_dictionary.py"
+REPORT_UTILS_SPEC = importlib.util.spec_from_file_location("report_output_dictionary", REPORT_UTILS_PATH)
+if REPORT_UTILS_SPEC is None or REPORT_UTILS_SPEC.loader is None:
+    raise ImportError(f"Could not load report utility module from {REPORT_UTILS_PATH}")
+REPORT_UTILS_MODULE = importlib.util.module_from_spec(REPORT_UTILS_SPEC)
+REPORT_UTILS_SPEC.loader.exec_module(REPORT_UTILS_MODULE)
+
 ALLCOHORT_AGE_GROUPS = SUBJECT_UTILS_MODULE.ALLCOHORT_AGE_GROUPS
 build_subject_taxonomy = SUBJECT_UTILS_MODULE.build_subject_taxonomy
 build_subject_taxonomy_rows = SUBJECT_UTILS_MODULE.build_subject_taxonomy_rows
@@ -43,6 +50,9 @@ GROWTH_THRESHOLD = BASELINE_UTILS_MODULE.GROWTH_THRESHOLD
 load_diet_table = BASELINE_UTILS_MODULE.load_diet_table
 run_cooperative_tradeoff = MICOM_UTILS_MODULE.run_cooperative_tradeoff
 write_csv = MICOM_UTILS_MODULE.write_csv
+build_report_text = REPORT_UTILS_MODULE.build_report_text
+col = REPORT_UTILS_MODULE.col
+csv_output_spec = REPORT_UTILS_MODULE.csv_output_spec
 
 
 SUBJECT_INPUT = Path("Suplementary_Data/processed_data/subject_level_micom_allcohort/allcohort_subject_taxonomy_for_micom.csv")
@@ -109,6 +119,110 @@ FLUX_FIELDNAMES = [
     "flux",
     "abs_flux",
     "is_medium",
+]
+CSV_OUTPUT_SPECS = [
+    csv_output_spec(
+        SUMMARY_OUTPUT,
+        "one row per subject_id for the high_fiber diet",
+        [
+            col("subject_id", "Subject identifier from the all-cohort subject-level MICOM input table."),
+            col("cohort", "Cohort label carried through from the subject metadata."),
+            col("age_years", "Subject age in years from the metadata table."),
+            col("age_group", "Age-bin label assigned from the metadata age."),
+            col("diet_name", "Diet scenario name; this script writes high_fiber only."),
+            col("solver_status", "MICOM solver status returned for this subject-level solve."),
+            col("community_growth_rate", "MICOM-reported community growth rate for this subject under high_fiber."),
+            col(
+                "objective_value",
+                "Objective value returned by MICOM for this subject-level cooperative tradeoff plus pFBA solve.",
+                "objective_value = optimization objective reported by MICOM after cooperative_tradeoff with pfba=True",
+            ),
+            col("tradeoff_fraction", "Tradeoff fraction passed into MICOM cooperative tradeoff."),
+            col("num_taxa_total", "Number of modeled taxa carried into the subject-level MICOM community input."),
+            col(
+                "num_taxa_with_nonzero_growth",
+                "Count of returned taxa whose MICOM growth rate exceeded the growth threshold.",
+                f"num_taxa_with_nonzero_growth = count(growth_rate > {GROWTH_THRESHOLD})",
+            ),
+            col(
+                "matched_diet_metabolites",
+                "Count of diet metabolite IDs translated into MICOM medium entries.",
+                "matched_diet_metabolites = number of diet metabolite_ids with a MICOM medium mapping",
+            ),
+            col(
+                "missing_diet_metabolites",
+                "Count of diet metabolite IDs that could not be translated into MICOM medium entries.",
+                "missing_diet_metabolites = total diet metabolite_ids - matched_diet_metabolites",
+            ),
+            col(
+                "total_input_abundance_raw",
+                "Sum of the raw abundances carried into the 10-taxon subject input for this subject.",
+                "total_input_abundance_raw = sum(abundance_raw across all taxon_id within subject_id)",
+            ),
+            col(
+                "total_input_abundance_normalized",
+                "Sum of the normalized abundances carried into the 10-taxon subject input for this subject.",
+                "total_input_abundance_normalized = sum(abundance_normalized across all taxon_id within subject_id)",
+            ),
+            col("pfba", "Boolean flag showing that pFBA flux extraction was requested for this solve."),
+            col("fluxes", "Boolean flag showing that MICOM flux export was requested for this solve."),
+            col("error_message", "Error text recorded for failed community-build or solve attempts; blank otherwise."),
+        ],
+    ),
+    csv_output_spec(
+        TAXON_OUTPUT,
+        "one row per subject_id x taxon_id for the high_fiber diet",
+        [
+            col("subject_id", "Subject identifier from the all-cohort subject-level MICOM input table."),
+            col("cohort", "Cohort label carried through from the subject metadata."),
+            col("age_years", "Subject age in years from the metadata table."),
+            col("age_group", "Age-bin label assigned from the metadata age."),
+            col("diet_name", "Diet scenario name; this script writes high_fiber only."),
+            col("taxon_id", "MICOM taxon/model identifier."),
+            col("species_name", "Species label mapped onto this model taxon."),
+            col("paper_taxon", "Original paper taxon label mapped onto this model species."),
+            col("abundance_raw", "Raw subject-level abundance used for this taxon."),
+            col(
+                "abundance_normalized",
+                "Normalized subject-level abundance used for the MICOM taxonomy.",
+                "abundance_normalized = abundance_raw / sum(abundance_raw across modeled taxa within subject_id) when the within-subject total is positive",
+            ),
+            col("growth_rate", "MICOM-reported taxon growth rate for this subject under high_fiber."),
+            col(
+                "is_growing",
+                "Boolean flag showing whether the MICOM taxon growth rate exceeded the growth threshold.",
+                f"is_growing = growth_rate > {GROWTH_THRESHOLD}",
+            ),
+            col("reactions", "Number of reactions present in the MICOM member model returned for this taxon."),
+            col("metabolites", "Number of metabolites present in the MICOM member model returned for this taxon."),
+        ],
+    ),
+    csv_output_spec(
+        FLUX_OUTPUT,
+        "one row per subject_id x compartment x reaction_id with nonzero exported flux",
+        [
+            col("subject_id", "Subject identifier from the all-cohort subject-level MICOM input table."),
+            col("cohort", "Cohort label carried through from the subject metadata."),
+            col("age_years", "Subject age in years from the metadata table."),
+            col("age_group", "Age-bin label assigned from the metadata age."),
+            col("diet_name", "Diet scenario name; this script writes high_fiber only."),
+            col("compartment", "Flux compartment label from the MICOM flux table; either a taxon_id or the literal medium compartment."),
+            col("taxon_id", "Taxon identifier for organism-level flux rows; blank for medium rows."),
+            col("reaction_id", "Reaction identifier from the MICOM flux export."),
+            col(
+                "feature_id",
+                "Compact feature label combining compartment scope with the reaction ID.",
+                "feature_id = 'medium__' + reaction_id for medium rows, otherwise taxon_id + '__' + reaction_id",
+            ),
+            col("flux", "Signed flux value exported by MICOM for this subject, compartment, and reaction."),
+            col("abs_flux", "Absolute flux magnitude for this exported row.", "abs_flux = abs(flux)"),
+            col(
+                "is_medium",
+                "Boolean flag showing whether the exported flux row came from the shared medium compartment.",
+                "is_medium = (compartment == 'medium')",
+            ),
+        ],
+    ),
 ]
 
 
@@ -472,7 +586,7 @@ def main() -> None:
     write_csv(SUMMARY_OUTPUT, SUMMARY_FIELDNAMES, summary_rows)
     write_csv(TAXON_OUTPUT, TAXON_FIELDNAMES, taxon_rows)
     BUILD_REPORT.parent.mkdir(parents=True, exist_ok=True)
-    BUILD_REPORT.write_text("\n".join(report_lines) + "\n")
+    BUILD_REPORT.write_text(build_report_text(report_lines, CSV_OUTPUT_SPECS))
 
     print(f"Wrote {SUMMARY_OUTPUT}")
     print(f"Wrote {TAXON_OUTPUT}")

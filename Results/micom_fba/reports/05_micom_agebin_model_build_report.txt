@@ -66,3 +66,70 @@ high_fiber | Parabacteroides_merdae_ATCC_43184: observed_bins=21_40, 41_60, 61_7
 western | Parabacteroides_merdae_ATCC_43184: observed_bins=21_40, 41_60, 61_70, 81_90; trend=mixed_nonmonotonic; values -> 21_40=0.033154, 41_60=0.033244, 61_70=0.023209, 81_90=0.568815
 high_fiber | Ruminococcus_torques_ATCC_27756: observed_bins=21_40, 41_60, 61_70, 71_80, 81_90; trend=mixed_nonmonotonic; values -> 21_40=0.073160, 41_60=0.125727, 61_70=0.073880, 71_80=0.087426, 81_90=0.221683
 western | Ruminococcus_torques_ATCC_27756: observed_bins=21_40, 41_60, 61_70, 71_80, 81_90; trend=mixed_nonmonotonic; values -> 21_40=0.087613, 41_60=0.149734, 61_70=0.088752, 71_80=0.104002, 81_90=0.253322
+
+CSV Output Dictionary
+
+05_micom_agebin_community_growth_summary_by_diet.csv
+Path: Results/micom_fba/tables/05_micom_agebin_community_growth_summary_by_diet.csv
+Row grain: one row per age_group x diet_name
+Columns:
+- age_group: Age-bin label for the MICOM median-abundance community.
+- diet_name: Diet scenario name from Medium_files/diet.csv.
+- solver_status: MICOM solver status returned for the cooperative tradeoff solve.
+- community_growth_rate: MICOM-reported community growth rate for the selected age bin and diet.
+- objective_value: Objective value returned by MICOM for this age-bin cooperative tradeoff solve.
+  Formula: objective_value = optimization objective reported by MICOM after cooperative_tradeoff
+- tradeoff_fraction: Tradeoff fraction passed into MICOM cooperative tradeoff.
+- num_taxa_total: Number of taxa returned in the MICOM members table for this age bin and diet.
+- num_taxa_with_nonzero_growth: Count of taxa whose MICOM growth rate exceeded the growth threshold.
+  Formula: num_taxa_with_nonzero_growth = count(growth_rate > 1e-09)
+- matched_diet_metabolites: Count of diet metabolite IDs translated into MICOM medium entries.
+  Formula: matched_diet_metabolites = number of diet metabolite_ids with a MICOM medium mapping
+- missing_diet_metabolites: Count of diet metabolite IDs that could not be translated into MICOM
+  medium entries. Formula: missing_diet_metabolites = total diet metabolite_ids -
+  matched_diet_metabolites
+- n_subjects: Number of subjects contributing to the median-abundance age-bin input.
+- total_input_median_abundance: Sum of the median abundances supplied for the 10 modeled taxa in
+  this age bin. Formula: total_input_median_abundance = sum(median_abundance across all taxon_id
+  within age_group)
+- total_input_normalized_weight: Sum of the normalized abundances used for the age-bin MICOM
+  taxonomy. Formula: total_input_normalized_weight = sum(normalized_weight across all taxon_id
+  within age_group)
+
+05_micom_agebin_taxon_growth_by_diet.csv
+Path: Results/micom_fba/tables/05_micom_agebin_taxon_growth_by_diet.csv
+Row grain: one row per age_group x diet_name x taxon_id
+Columns:
+- age_group: Age-bin label for the MICOM median-abundance community.
+- diet_name: Diet scenario name from Medium_files/diet.csv.
+- taxon_id: MICOM taxon/model identifier.
+- species_name: Species label from the processed age-bin input table.
+- paper_taxon: Original paper taxon label mapped onto this model species.
+- median_abundance: Median abundance supplied for this taxon in the selected age bin.
+- normalized_weight: Normalized abundance used in the age-bin MICOM taxonomy table. Formula:
+  normalized_weight = median_abundance / sum(median_abundance within age_group)
+- n_subjects: Number of subjects contributing to the median-abundance value for this age bin.
+- growth_rate: MICOM-reported taxon growth rate for this age bin and diet.
+- is_growing: Boolean flag showing whether the MICOM taxon growth rate exceeded the growth
+  threshold. Formula: is_growing = growth_rate > 1e-09
+- reactions: Number of reactions present in the MICOM member model returned for this taxon.
+- metabolites: Number of metabolites present in the MICOM member model returned for this taxon.
+
+05_micom_agebin_taxon_growth_by_diet_wide.csv
+Path: Results/micom_fba/tables/05_micom_agebin_taxon_growth_by_diet_wide.csv
+Row grain: one row per taxon_id x diet_name
+Columns:
+- taxon_id: MICOM taxon/model identifier.
+- species_name: Species label from the processed age-bin input table.
+- paper_taxon: Original paper taxon label mapped onto this model species.
+- diet_name: Diet scenario name from Medium_files/diet.csv.
+- 21_40: MICOM taxon growth rate for age group 21_40; blank means no row was written for that age
+  group.
+- 41_60: MICOM taxon growth rate for age group 41_60; blank means no row was written for that age
+  group.
+- 61_70: MICOM taxon growth rate for age group 61_70; blank means no row was written for that age
+  group.
+- 71_80: MICOM taxon growth rate for age group 71_80; blank means no row was written for that age
+  group.
+- 81_90: MICOM taxon growth rate for age group 81_90; blank means no row was written for that age
+  group.

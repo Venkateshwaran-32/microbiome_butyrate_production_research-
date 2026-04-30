@@ -1,0 +1,23 @@
+PCA_all_cohort_MICOM report
+Working directory: /Users/taknev/Desktop/microbiome_butyrate_production_research
+Input CSV: Results/subject_level_fba/tables/08_allcohort_subject_reaction_flux_nonzero_long_high_fiber_pfba.csv
+
+Preprocessing
+- Rows with is_medium == TRUE were excluded.
+- Flux was collapsed with a signed sum across taxa within subject_id + reaction_id.
+- Missing subject-reaction pairs were filled with 0.
+- A signed asinh transform was applied before centering and scaling.
+- Zero-variance reactions were removed before PCA.
+
+Subjects: 516
+Reactions before zero-variance filtering: 4564
+Zero-variance reactions removed: 0
+Reactions used for PCA: 4564
+
+Output files
+Scores: Results/subject_level_fba/tables/PCA_all_cohort_MICOM_scores.csv
+Explained variance: Results/subject_level_fba/tables/PCA_all_cohort_MICOM_explained_variance.csv
+Loadings: Results/subject_level_fba/tables/PCA_all_cohort_MICOM_loadings.csv
+Scree plot: Results/subject_level_fba/figures/PCA_all_cohort_MICOM_scree.png
+Scores by cohort: Results/subject_level_fba/figures/PCA_all_cohort_MICOM_scores_by_cohort.png
+Scores by age group: Results/subject_level_fba/figures/PCA_all_cohort_MICOM_scores_by_age_group.png

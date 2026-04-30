@@ -37,6 +37,7 @@ This SOP does not claim that the current workflow proves in vivo butyrate produc
 - Missing diet-metabolite mappings must be reported, not silently ignored.
 - Age-bin abundance weights must sum to `1.0` within each age group before a community run is accepted.
 - Baseline and age-weighted runs must remain directly comparable by using the same model set and diet source unless a protocol change is explicitly documented.
+- Every canonical report must end with a `CSV Output Dictionary` section that records each CSV path, row grain, exact column names, and formulas for derived or non-obvious columns.
 
 ## Canonical Workflow Order
 
@@ -123,6 +124,8 @@ For each official run, keep:
 - a build report text file
 
 This is already the pattern used in the MICOM scripts and should remain the standard.
+
+The build report should also document those CSVs explicitly with a `CSV Output Dictionary` section so the table schema can be interpreted without opening the generating script.
 
 ## MICOM-Specific Standards
 

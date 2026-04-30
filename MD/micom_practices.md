@@ -117,6 +117,7 @@ Every official MICOM run should leave behind a plain-text build report that capt
 - solver status
 - matched diet metabolite count
 - missing diet metabolite count
+- a `CSV Output Dictionary` section documenting each generated CSV path, row grain, exact column names, and formulas for derived or non-obvious columns
 
 This practice is already in place and should become non-negotiable.
 

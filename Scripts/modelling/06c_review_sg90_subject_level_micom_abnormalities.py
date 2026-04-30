@@ -1,9 +1,24 @@
 from __future__ import annotations
 
 import csv
+import importlib.util
 import math
 from collections import Counter, defaultdict
 from pathlib import Path
+
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+
+REPORT_UTILS_PATH = SCRIPT_DIR / "00_report_output_dictionary.py"
+REPORT_UTILS_SPEC = importlib.util.spec_from_file_location("report_output_dictionary", REPORT_UTILS_PATH)
+if REPORT_UTILS_SPEC is None or REPORT_UTILS_SPEC.loader is None:
+    raise ImportError(f"Could not load report utility module from {REPORT_UTILS_PATH}")
+REPORT_UTILS_MODULE = importlib.util.module_from_spec(REPORT_UTILS_SPEC)
+REPORT_UTILS_SPEC.loader.exec_module(REPORT_UTILS_MODULE)
+
+build_report_text = REPORT_UTILS_MODULE.build_report_text
+col = REPORT_UTILS_MODULE.col
+csv_output_spec = REPORT_UTILS_MODULE.csv_output_spec
 
 
 COMMUNITY_INPUT = Path("Results/subject_level_fba/tables/06_sg90_subject_community_growth_summary_by_diet.csv")
@@ -12,6 +27,16 @@ QC_INPUT = Path("Suplementary_Data/processed_data/subject_level_micom_sg90/sg90_
 BUILD_REPORT_INPUT = Path("Results/subject_level_fba/reports/06_sg90_subject_level_micom_build_report.txt")
 FLAGGED_OUTPUT = Path("Results/subject_level_fba/tables/06c_sg90_subject_abnormality_review.csv")
 REPORT_OUTPUT = Path("Results/subject_level_fba/reports/06c_sg90_subject_abnormality_review.txt")
+FLAGGED_FIELDNAMES = [
+    "subject_id",
+    "age_group",
+    "diets_affected",
+    "flag_category",
+    "evidence_values",
+    "driver_pattern",
+    "short_interpretation",
+    "overall_assessment",
+]
 
 EXPECTED_SUBJECTS = 215
 EXPECTED_ROWS = 430
@@ -20,6 +45,26 @@ LOW_GROWING_TAXA_THRESHOLD = 2
 NEGATIVE_OBJECTIVE_TOLERANCE = -1e-9
 DOMINANCE_THRESHOLD = 0.9
 ROUND_DIGITS = 12
+CSV_OUTPUT_SPECS = [
+    csv_output_spec(
+        FLAGGED_OUTPUT,
+        "one row per flagged SG90 subject",
+        [
+            col("subject_id", "Subject identifier from the SG90 subject-level MICOM run."),
+            col("age_group", "Age-bin label assigned from the subject metadata."),
+            col("diets_affected", "Comma-separated list of diets whose outputs contributed to the abnormality flag."),
+            col("flag_category", "Semicolon-separated list of abnormality categories assigned to this subject."),
+            col("evidence_values", "Compact evidence string summarizing the key numeric values that triggered the flags."),
+            col("driver_pattern", "Diet-specific summary labels describing whether the subject showed sparse, broad, or dominant taxon-growth structure."),
+            col("short_interpretation", "Plain-English interpretation combining the flagged evidence and driver summaries."),
+            col(
+                "overall_assessment",
+                "Top-level review classification for the flagged subject.",
+                "overall_assessment is assigned from the flag combination: technical issue takes precedence, then sparse-but-valid case, then biologically interesting outlier",
+            ),
+        ],
+    )
+]
 
 
 def write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, object]]) -> None:
@@ -430,16 +475,7 @@ def main() -> None:
 
     write_csv(
         FLAGGED_OUTPUT,
-        [
-            "subject_id",
-            "age_group",
-            "diets_affected",
-            "flag_category",
-            "evidence_values",
-            "driver_pattern",
-            "short_interpretation",
-            "overall_assessment",
-        ],
+        FLAGGED_FIELDNAMES,
         output_rows,
     )
 
@@ -491,7 +527,7 @@ def main() -> None:
         )
 
     REPORT_OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    REPORT_OUTPUT.write_text("\n".join(report_lines) + "\n")
+    REPORT_OUTPUT.write_text(build_report_text(report_lines, CSV_OUTPUT_SPECS))
 
     print(f"Wrote {FLAGGED_OUTPUT}")
     print(f"Wrote {REPORT_OUTPUT}")
