@@ -1,0 +1,13 @@
+Inspection top 4 no-pFBA rerun
+Subject input: Suplementary_Data/processed_data/subject_level_micom_allcohort/allcohort_subject_taxonomy_for_micom.csv
+Diet file: Medium_files/diet.csv
+Diet: high_fiber
+Tradeoff fraction: 0.5
+Flux export enabled: True
+pFBA enabled: False
+Subjects: MBS1232, MBS1529, MBS1262, MBS1255
+
+MBS1232: solver_status=optimal, community_growth_rate=0.5327387259166994, num_taxa_with_nonzero_growth=8, flux_rows=3723
+MBS1529: solver_status=optimal, community_growth_rate=0.5487694757250786, num_taxa_with_nonzero_growth=9, flux_rows=4252
+MBS1262: solver_status=optimal, community_growth_rate=0.47637527872492297, num_taxa_with_nonzero_growth=6, flux_rows=2755
+MBS1255: solver_status=optimal, community_growth_rate=0.39281193978527673, num_taxa_with_nonzero_growth=7, flux_rows=3384

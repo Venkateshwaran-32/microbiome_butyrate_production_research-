@@ -1,0 +1,15 @@
+MICOM zero-bound subject QC
+Previous single-taxon zero-bound outputs were replaced by all-10-species zero-bound outputs.
+Subject input: Suplementary_Data/processed_data/subject_level_micom_sg90/sg90_subject_taxonomy_for_micom.csv
+Diet file: Medium_files/diet.csv
+Diet run: high_fiber
+Scenario: all_bounds_zero_all_taxa
+Tradeoff fraction: 0.5
+Subjects: MBS1232, MBS1255, MBS1478, MBS1515
+All 10 member models had every reaction bound set to (0, 0) before MICOM community construction.
+Per-taxon rows are omitted for any subject whose solve fails.
+
+MBS1232: solver_status=optimal, community_growth_rate=0.0, blocked_models=10, matched_diet_metabolites=126, missing_diet_metabolites=38
+MBS1255: solver_status=optimal, community_growth_rate=0.0, blocked_models=10, matched_diet_metabolites=124, missing_diet_metabolites=40
+MBS1478: solver_status=optimal, community_growth_rate=0.0, blocked_models=10, matched_diet_metabolites=103, missing_diet_metabolites=61
+MBS1515: solver_status=optimal, community_growth_rate=0.0, blocked_models=10, matched_diet_metabolites=118, missing_diet_metabolites=46

@@ -1,0 +1,9 @@
+Inspection top 4 flux review
+Subjects: MBS1232, MBS1529, MBS1262, MBS1255
+Extreme threshold: 1000
+
+Subject-level comparison
+MBS1232: pfba max_abs_flux=3949247.445433, no_pfba max_abs_flux=1000.000000, ratio=3949.247, pfba rxn_over_1k=413, no_pfba rxn_over_1k=0, pfba growth=0.000000, no_pfba growth=0.532739
+MBS1529: pfba max_abs_flux=1203716.203621, no_pfba max_abs_flux=1000.000000, ratio=1203.716, pfba rxn_over_1k=329, no_pfba rxn_over_1k=0, pfba growth=0.000000, no_pfba growth=0.548769
+MBS1262: pfba max_abs_flux=520448.224783, no_pfba max_abs_flux=1000.000000, ratio=520.448, pfba rxn_over_1k=362, no_pfba rxn_over_1k=0, pfba growth=0.000000, no_pfba growth=0.476375
+MBS1255: pfba max_abs_flux=317377.168909, no_pfba max_abs_flux=1000.000000, ratio=317.377, pfba rxn_over_1k=373, no_pfba rxn_over_1k=0, pfba growth=0.000000, no_pfba growth=0.392812

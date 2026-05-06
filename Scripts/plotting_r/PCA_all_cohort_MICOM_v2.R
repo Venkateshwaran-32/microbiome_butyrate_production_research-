@@ -40,7 +40,10 @@ reaction_flux <- MICOM %>%
 
 dim(reaction_flux) # 516 subjects and 4564 reactions
 
-openxlsx::write.xlsx()
+openxlsx::write.xlsx(reaction_flux %>% data.frame() %>% rownames_to_column("subject_id"), 
+                     file = "Results/reaction_flux.xlsx")
+
+
 
 # QC on the reaction flux matrix ------------------------------------------
 MASS::truehist( c(reaction_flux) )

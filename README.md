@@ -14,6 +14,7 @@ The project now also has an explicit operating standard in:
 
 - [MD/project_sop.md](/Users/taknev/Desktop/microbiome_butyrate_production_research/MD/project_sop.md:1)
 - [MD/micom_practices.md](/Users/taknev/Desktop/microbiome_butyrate_production_research/MD/micom_practices.md:1)
+- [MD/qc_and_charting_workflow.md](/Users/taknev/Desktop/microbiome_butyrate_production_research/MD/qc_and_charting_workflow.md:1)
 
 ## Core Research Questions
 
@@ -41,10 +42,12 @@ The project now also has an explicit operating standard in:
 - `Scripts/modelling/`: core COBRApy and MICOM analysis entrypoints plus reusable helper modules.
 - `Scripts/exploration/`: Python plotting and exploratory visualization scripts.
 - `Scripts/plotting_r/`: R plotting scripts for COBRApy and MICOM outputs.
+- `Scripts/qc/`: QC scripts and chart-preparation helpers that sit alongside, but outside, the numbered modelling pipeline.
 - `Results/`: top-level home for generated tables, figures, and build reports.
 - `Results/cobrapy_fba/`: COBRApy outputs grouped into `tables/`, `figures/`, and `reports/`.
 - `Results/micom_fba/`: MICOM outputs grouped into `tables/`, `figures/`, and `reports/`.
 - `Results/subject_level_fba/`: SG90 subject-level MICOM outputs grouped into `tables/`, `figures/`, and `reports/`.
+- `Results/qc/`: shared QC and charting workspace grouped into `tables/`, `figures/`, and `reports/`.
 - `Models/vmh_agora1.03_sbml/`: legacy AGORA 1.03 SBML XML models for the selected microbial species.
 - `Models/vmh_agora2_sbml/`: primary VMH AGORA2 SBML XML models for the selected microbial species.
 - `Medium_files/diet.csv`: diet or medium constraints used for modeling.
@@ -119,6 +122,13 @@ These documents define:
 - build-report expectations
 - interpretation guardrails
 - the MICOM-specific habits that should remain stable across future analyses
+
+For QC-heavy and charting-heavy work that is not itself a canonical modelling run, use:
+
+- `Scripts/qc/` for scripts
+- `Results/qc/tables/` for derived QC tables
+- `Results/qc/figures/` for draft or final QC charts
+- `Results/qc/reports/` for audit notes and run summaries
 
 ## COBRApy In This Project
 
@@ -262,20 +272,11 @@ The key SG90 subject-level outputs are:
 
 ## Next Steps
 
-- add an all-cohort high-fiber subject-flux analysis branch using the full `516` subjects in `Suplementary_Data/subject_level_taxonomic_relative_abundance_values.xlsx`
-- rebuild a subject-level all-cohort processed input table directly from the raw abundance workbook and raw metadata so the future workflow is not limited to the current `490`-subject processed table
-- build one subject-specific 10-species MICOM community model per subject using the `high_fiber` diet only
-- run the subject communities with MICOM cooperative tradeoff using `fluxes=True` and `pfba=True`, as requested for the next flux-focused analysis branch
-- extract full pFBA reaction-level flux vectors for each solved subject
-- assemble the resulting flux outputs into two matrix forms:
-  - a user-facing `reaction x subject` matrix
-  - a PCA-ready `subject x feature` matrix with columns such as `taxon__reaction`
-- keep the union of taxon-reaction features across the 10 modeled species so taxon-specific metabolic variance is preserved
-- remove zero-variance features and standardize retained features before PCA so variance-driving reactions are not dominated only by raw flux scale differences
-- run PCA / dimensionality reduction on the subject flux matrix
-- report the reactions that capture the major variance across subjects by summarizing:
-  - explained variance by principal component
-  - subject scores in PCA space
-  - top-loading reactions for the leading components
-  - cohort- and age-annotated PCA plots and summaries
-- record any subjects that fail model building or flux extraction in a QC or audit table and continue the PCA branch with the successfully solved subject set
+- validate the all-cohort high-fiber subject-level MICOM/pFBA run before doing any dimensionality reduction
+- keep using one subject-specific 10-species MICOM community model per subject with the `high_fiber` diet only
+- run MICOM `cooperative_tradeoff()` with `fluxes=True` and `pfba=True` for the flux-focused branch
+- treat non-optimal MICOM solver statuses as failed solves for downstream biology: keep the subject-level QC row, but do not use their taxon growth or reaction flux rows
+- summarize how many of the `516` abundance-matched subjects solve optimally by cohort and age group
+- inspect the failed/infeasible subject set before deciding whether to change the medium, tradeoff fraction, solver settings, or subject inclusion rules
+- extract pFBA reaction-level flux vectors only for subjects with `solver_status == "optimal"`
+- keep the union of taxon-reaction features across the 10 modeled species so taxon-specific metabolic behavior is preserved for later analysis

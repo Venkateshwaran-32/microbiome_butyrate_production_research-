@@ -131,7 +131,10 @@ CSV_OUTPUT_SPECS = [
             col("age_group", "Age-bin label assigned from the metadata age."),
             col("diet_name", "Diet scenario name; this script writes high_fiber only."),
             col("solver_status", "MICOM solver status returned for this subject-level solve."),
-            col("community_growth_rate", "MICOM-reported community growth rate for this subject under high_fiber."),
+            col(
+                "community_growth_rate",
+                "MICOM-reported community growth rate for this subject under high_fiber; blank for non-optimal solves.",
+            ),
             col(
                 "objective_value",
                 "Objective value returned by MICOM for this subject-level cooperative tradeoff plus pFBA solve.",
@@ -187,7 +190,10 @@ CSV_OUTPUT_SPECS = [
                 "Normalized subject-level abundance used for the MICOM taxonomy.",
                 "abundance_normalized = abundance_raw / sum(abundance_raw across modeled taxa within subject_id) when the within-subject total is positive",
             ),
-            col("growth_rate", "MICOM-reported taxon growth rate for this subject under high_fiber."),
+            col(
+                "growth_rate",
+                "MICOM-reported taxon growth rate for this subject under high_fiber. Taxon rows are written only for optimal solves.",
+            ),
             col(
                 "is_growing",
                 "Boolean flag showing whether the MICOM taxon growth rate exceeded the growth threshold.",
@@ -199,7 +205,7 @@ CSV_OUTPUT_SPECS = [
     ),
     csv_output_spec(
         FLUX_OUTPUT,
-        "one row per subject_id x compartment x reaction_id with nonzero exported flux",
+        "one row per subject_id x compartment x reaction_id with nonzero exported flux for optimal solves",
         [
             col("subject_id", "Subject identifier from the all-cohort subject-level MICOM input table."),
             col("cohort", "Cohort label carried through from the subject metadata."),
@@ -398,6 +404,7 @@ def main() -> None:
     taxon_rows_written = 0
     flux_rows_written = 0
     zero_growth_subjects = 0
+    nonoptimal_status_counts: Counter[str] = Counter()
 
     for subject_index, subject_id in enumerate(selected_subject_ids, start=1):
         subject_rows = subject_rows_by_subject.get(subject_id)
@@ -488,6 +495,37 @@ def main() -> None:
             community_rows_written += 1
             continue
 
+        solver_status = str(solution.status)
+        if solver_status != "optimal":
+            nonoptimal_status_counts[solver_status] += 1
+            error_message = f"non_optimal_solution_status:{solver_status}"
+            failures.append(f"{subject_id} | {HIGH_FIBER_DIET}: {error_message}")
+            report_lines.append(f"{subject_id} | {HIGH_FIBER_DIET}: {error_message}")
+            summary_rows.append(
+                {
+                    "subject_id": subject_metadata["subject_id"],
+                    "cohort": subject_metadata["cohort"],
+                    "age_years": subject_metadata["age_years"],
+                    "age_group": subject_metadata["age_group"],
+                    "diet_name": HIGH_FIBER_DIET,
+                    "solver_status": solver_status,
+                    "community_growth_rate": "",
+                    "objective_value": "",
+                    "tradeoff_fraction": TRADEOFF_FRACTION,
+                    "num_taxa_total": len(full_subject_rows),
+                    "num_taxa_with_nonzero_growth": "",
+                    "matched_diet_metabolites": len(medium),
+                    "missing_diet_metabolites": len(missing_metabolites),
+                    "total_input_abundance_raw": total_input_abundance_raw,
+                    "total_input_abundance_normalized": total_input_abundance_normalized,
+                    "pfba": True,
+                    "fluxes": True,
+                    "error_message": error_message,
+                }
+            )
+            community_rows_written += 1
+            continue
+
         input_rows_by_taxon = {str(row["model_species_id"]): row for row in full_subject_rows}
         num_taxa_growing = 0
         subject_taxon_rows: list[dict[str, object]] = []
@@ -530,7 +568,7 @@ def main() -> None:
                 "age_years": subject_metadata["age_years"],
                 "age_group": subject_metadata["age_group"],
                 "diet_name": HIGH_FIBER_DIET,
-                "solver_status": solution.status,
+                "solver_status": solver_status,
                 "community_growth_rate": growth_rate,
                 "objective_value": solution.objective_value,
                 "tradeoff_fraction": TRADEOFF_FRACTION,
@@ -568,7 +606,13 @@ def main() -> None:
             )
 
     report_lines.append("")
-    report_lines.append(f"Subjects with community_growth_rate <= {GROWTH_THRESHOLD}: {zero_growth_subjects}")
+    if nonoptimal_status_counts:
+        report_lines.append("Non-optimal solver statuses")
+        report_lines.extend(
+            f"{status}: {count}" for status, count in sorted(nonoptimal_status_counts.items())
+        )
+        report_lines.append("")
+    report_lines.append(f"Optimal subjects with community_growth_rate <= {GROWTH_THRESHOLD}: {zero_growth_subjects}")
     report_lines.append(f"Community rows written: {community_rows_written}")
     report_lines.append(f"Taxon rows written: {taxon_rows_written}")
     report_lines.append(f"Flux rows written: {flux_rows_written}")

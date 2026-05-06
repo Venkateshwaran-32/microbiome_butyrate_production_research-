@@ -1,0 +1,5 @@
+subject_id,cohort,age_years,age_group,diet_name,solver_status,community_growth_rate,objective_value,tradeoff_fraction,num_taxa_total,num_taxa_with_nonzero_growth,matched_diet_metabolites,missing_diet_metabolites,total_input_abundance_raw,total_input_abundance_normalized,pfba,fluxes,error_message
+MBS1232,SG90,88.0,81_90,high_fiber,optimal,0.5327387259166994,0.5327387259166992,0.5,10,8,126,38,15.530523022349199,1.0,False,True,
+MBS1529,SG90,89.0,81_90,high_fiber,optimal,0.5487694757250786,0.5487694757250787,0.5,10,9,127,37,19.02642654514741,1.0,False,True,
+MBS1262,SG90,87.0,81_90,high_fiber,optimal,0.47637527872492297,0.47637527872492297,0.5,10,6,125,39,19.544974121471,1.0,False,True,
+MBS1255,SG90,86.0,81_90,high_fiber,optimal,0.39281193978527673,0.39281193978527673,0.5,10,7,124,40,14.574170906323973,1.0,False,True,

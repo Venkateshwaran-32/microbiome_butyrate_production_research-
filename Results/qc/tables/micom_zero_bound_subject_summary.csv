@@ -1,0 +1,5 @@
+subject_id,diet_name,scenario,solver_status,community_growth_rate,objective_value,matched_diet_metabolites,missing_diet_metabolites,error_message
+MBS1232,high_fiber,all_bounds_zero_all_taxa,optimal,0.0,0.0,126,38,
+MBS1255,high_fiber,all_bounds_zero_all_taxa,optimal,0.0,0.0,124,40,
+MBS1478,high_fiber,all_bounds_zero_all_taxa,optimal,0.0,0.0,103,61,
+MBS1515,high_fiber,all_bounds_zero_all_taxa,optimal,0.0,0.0,118,46,
