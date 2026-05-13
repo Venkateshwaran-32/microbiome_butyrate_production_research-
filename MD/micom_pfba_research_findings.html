@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>MICOM pFBA Stage-3 Infeasibility — Research Findings</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="print_style.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">MICOM pFBA Stage-3 Infeasibility — Research
+Findings</h1>
+</header>
+<h1
+id="micom-pfbatrue-stage-3-infeasibility--research-findings-and-recommended-approach">MICOM
+<code>pfba=True</code> Stage-3 Infeasibility — Research Findings and
+Recommended Approach</h1>
+<p><strong>Compiled:</strong> 2026-05-11 <strong>Scope:</strong>
+All-cohort subject-level MICOM under the <code>high_fiber</code> diet
+(516 subjects, 10 AGORA2 species per community,
+<code>cooperative_tradeoff(fraction=0.5)</code>).
+<strong>Trigger:</strong> 11 of 516 subjects produced reaction-flux
+values up to 3.95 million in
+<code>Results/subject_level_fba/tables/08_allcohort_subject_reaction_flux_nonzero_long_high_fiber_pfba.csv</code>,
+despite every AGORA2 reaction being bounded to ±1000 mmol/gDW/h. The
+investigation asks (a) whether this is a known MICOM issue, (b) what
+published cohort studies do, and (c) what approach the project should
+take.</p>
+<h2 id="executive-summary">Executive Summary</h2>
+<p>The <code>pfba=True</code> stage-3 infeasibility is a <strong>known
+issue acknowledged by the MICOM maintainer</strong> (Christian Diener)
+in 2020 (<a
+href="https://github.com/micom-dev/micom/issues/11">micom-dev/micom#11</a>).
+The maintainer's own recommended workaround is exactly what this project
+did in script 09: re-run with <code>pfba=False</code>. Furthermore,
+<strong><code>pfba=True</code> is not the published default for at-scale
+cohort work</strong> — the official <a
+href="https://github.com/micom-dev/micom/blob/main/micom/workflows/grow.py"><code>micom.workflows.grow</code></a>
+workflow defaults to <code>pfba=False</code>, and neither the original
+<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6977071/">Diener 2020
+MICOM paper</a> nor the <a
+href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11841136/">Quinn-Bohmann
+2024 SCFA paper</a> used a pFBA polish in their cohort runs. The
+project's decision to switch to script 09 is therefore consistent with
+both the MICOM maintainer's guidance and the published cohort
+literature.</p>
+<p>A separate library-level defect compounds the problem: MICOM's
+<code>solve()</code> function in <a
+href="https://github.com/micom-dev/micom/blob/main/micom/solution.py"><code>micom/solution.py</code></a>
+does not re-validate <code>community.solver.status</code> after the pFBA
+<code>optimize()</code> call, so <code>solution.fluxes</code> is
+populated from leftover LP variables when stage 3 fails. This is the
+root cause of the &gt;1000 garbage values that appeared in script 08's
+flux table. The defect is documented in MICOM's GitHub issues (<a
+href="https://github.com/micom-dev/micom/issues/11">#11</a>, <a
+href="https://github.com/micom-dev/micom/issues/29">#29</a>, <a
+href="https://github.com/micom-dev/micom/issues/225">#225</a>) but no
+upstream fix has been merged.</p>
+<h2 id="1-the-technical-issue-recap">1. The Technical Issue Recap</h2>
+<p><code>community.cooperative_tradeoff(fraction=0.5, fluxes=True, pfba=True)</code>
+runs three LP stages internally:</p>
+<ol type="1">
+<li><strong>Stage 1</strong> — maximize community growth, producing
+<code>G_max</code>.</li>
+<li><strong>Stage 2</strong> — re-solve at <code>0.5 × G_max</code> with
+L2 regularization on per-taxon growth rates, producing per-taxon primals
+<code>r_sp</code>.</li>
+<li><strong>Stage 3 (pFBA polish)</strong> —
+<code>add_pfba_objective</code> pins each <code>r_sp</code> as a
+near-equality constraint via
+<code>obj.lb = (1 − rtol) · r_sp − atol</code> (defaults
+<code>atol = rtol = 1e-6</code>), then minimizes Σ|flux|.</li>
+</ol>
+<p>For 11 of 516 subjects, stage 2 sat on a degenerate LP vertex
+(objective values from 66,408 up to 43,949,989, against a cohort norm
+below 100). Stage 3's near-equality pinning then made the joint
+constraints unsatisfiable within solver tolerance, returning
+<code>infeasible</code>. MICOM's <code>solve()</code> proceeded to
+construct <code>CommunitySolution</code> from leftover LP variable
+values regardless, yielding fluxes that violated the SBML ±1000 reaction
+bounds.</p>
+<p>The 11 affected subjects (audit-stable list):
+<code>MBS1232, MBS1529, MBS1262, MBS1255, MBS1539, MHS276, MBS1535, MBS1438, CON079, MBS1576, MBS1439</code></p>
+<p>Under script 09 (<code>pfba=False</code>), all 11 solve optimally
+with community growth in the 0.24–0.65 range, in line with the rest of
+the cohort.</p>
+<h2 id="2-section-a--is-this-a-known-issue">2. Section A — Is This a
+Known Issue?</h2>
+<p><strong>Yes, and the maintainer recommends the same fix the project
+adopted.</strong></p>
+<h3
+id="micom-issue-11--cooperative_tradeoff-with-fluxestrue-not-feasible">MICOM
+Issue #11 — <code>cooperative_tradeoff</code> with
+<code>fluxes=True</code> not feasible</h3>
+<ul>
+<li>Source: <a
+href="https://github.com/micom-dev/micom/issues/11">micom-dev/micom#11</a>
+(closed, labelled <code>numeric</code> and <code>done</code>)</li>
+<li>Reporter (<code>ychoi6</code>) hit
+<code>OptimizationError: crossover could not converge (status = infeasible)</code>
+from <code>cooperative_tradeoff(..., fluxes=True, pfba=True)</code> on a
+roughly 50-member community, while <code>pfba=False</code> worked.</li>
+<li>Christian Diener (MICOM author) replied:
+<blockquote>
+<p>"Just to confirm: that only occurs with <code>pfba=True</code>,
+right? This is related to numerical accuracy issues when changing from
+QP to LP problems and back. … One workaround is to set the minimal
+medium and resolving with <code>pfba=False</code> — this is faster and
+usually still gives a parsimonious solution."</p>
+</blockquote></li>
+<li>Reporter confirmed <code>pfba=False</code> resolved it. Diener later
+noted: "PFBA now uses the solver tolerance and allows setting tolerances
+as well which should help work around that."</li>
+</ul>
+<h3 id="micom-issue-29--fraction-variation-influences-status">MICOM
+Issue #29 — fraction variation influences <code>status</code></h3>
+<ul>
+<li>Source: <a
+href="https://github.com/micom-dev/micom/issues/29">micom-dev/micom#29</a></li>
+<li>Diener clarifies that <code>cooperative_tradeoff</code> returning
+the <code>numeric</code> status typically reflects "tolerance-relaxation
+issues in large/unstable models," and that "models that large can easily
+become unstable, mostly when either including taxa in very small
+abundances (relative abundances &lt; 1e-4) or when having medium
+components with very small flux bounds."</li>
+<li>Recommends loosening tolerance from the default <code>1e-6</code> to
+<code>1e-5</code> or <code>1e-4</code>.</li>
+</ul>
+<h3
+id="micom-devpaper-issue-5--all-numerical-optimizations-failed">micom-dev/paper
+Issue #5 — "All numerical optimizations failed"</h3>
+<ul>
+<li>Source: <a
+href="https://github.com/micom-dev/paper/issues/5">micom-dev/paper#5</a></li>
+<li>Diener's diagnostic recipe: load the failing model and run
+<code>cooperative_tradeoff(fraction=0.5)</code> to see the underlying
+solver error. The reporter's root cause turned out to be a stale diet
+file.</li>
+</ul>
+<h3
+id="micom-issue-225--exchange-metabolites-showing-very-high-flux">MICOM
+Issue #225 — "Exchange metabolites showing very high flux"</h3>
+<ul>
+<li>Source: <a
+href="https://github.com/micom-dev/micom/issues/225">micom-dev/micom#225</a></li>
+<li>No clean resolution, but confirms that bound-violating fluxes have
+been observed by other MICOM users.</li>
+</ul>
+<h3
+id="upstream-library-defect--solve-does-not-re-check-status-after-pfba">Upstream
+library defect — <code>solve()</code> does not re-check status after
+pFBA</h3>
+<ul>
+<li>Source file: <a
+href="https://github.com/micom-dev/micom/blob/main/micom/solution.py"><code>micom/solution.py</code>
+on <code>main</code></a></li>
+<li>The <code>solve()</code> function (the one called inside
+<code>cooperative_tradeoff</code>) checks the solver status once,
+<em>before</em> the pFBA <code>optimize()</code>. After
+<code>add_pfba_objective(...)</code> and the second
+<code>optimize()</code>, no second status check happens.
+<code>CommunitySolution(community)</code> then reads
+<code>solver.primal_values</code> directly, regardless of whether the
+post-pFBA LP is feasible.</li>
+<li>No PR has been merged that adds a status gate after the pFBA stage.
+This is the upstream-level reason that script 08 (in its original commit
+<code>371cf94</code>) silently exported &gt;1000 fluxes.</li>
+</ul>
+<h2 id="3-section-b--what-do-published-micom-papers-actually-use">3.
+Section B — What Do Published MICOM Papers Actually Use?</h2>
+<h3 id="diener-et-al-2020--original-micom-paper">Diener et al. 2020 —
+original MICOM paper</h3>
+<ul>
+<li>Citation: Diener C, Gibbons SM, Resendis-Antonio O. <em>MICOM:
+Metagenome-Scale Modeling To Infer Metabolic Interactions in the Gut
+Microbiota.</em> mSystems 5(1) (2020). DOI: <a
+href="https://doi.org/10.1128/msystems.00606-19">10.1128/msystems.00606-19</a>.
+Open-access copy: <a
+href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6977071/">PMC6977071</a>.</li>
+<li>Tradeoff fraction: <strong>0.5</strong> ("the best agreement with
+the observed replication rates… was observed at a trade-off value of
+0.5").</li>
+<li>pFBA polish: <strong>not used.</strong> The paper instead relies on
+the L2 cooperative-tradeoff QP plus an explicit crossover step "where we
+took the solution of the numerically ill-conditioned quadratic interior
+point method as a candidate solution set."</li>
+<li>No per-subject infeasibility QC reported.</li>
+</ul>
+<h3
+id="quinn-bohmann-et-al-2024--personalized-scfa--mcmm-paper">Quinn-Bohmann
+et al. 2024 — personalized SCFA / MCMM paper</h3>
+<ul>
+<li>Open-access copies: <a
+href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11841136/">PMC11841136</a>
+and <a
+href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10002715/">PMC10002715</a>.</li>
+<li>Tradeoff fraction: <strong>0.7</strong>, chosen as "the highest
+parameter value … that allowed most (&gt;90%) of taxa to grow."</li>
+<li>pFBA polish: <strong>not mentioned.</strong> The method is described
+as "cooperative tradeoff flux balance analysis (ctFBA)" without a pFBA
+polish step.</li>
+<li>QC gate: every model had to grow at minimum community growth ≥ 0.3
+h⁻¹.</li>
+</ul>
+<h3 id="vrmarcelinometamodels-reference-script">vrmarcelino/MetaModels
+reference script</h3>
+<ul>
+<li>Source: <a
+href="https://github.com/vrmarcelino/MetaModels/blob/main/MICOM_coop_tradeoff.py"><code>MICOM_coop_tradeoff.py</code></a></li>
+<li>Calls
+<code>com.cooperative_tradeoff(fraction=0.5, fluxes=True, pfba=False)</code>
+with the inline comment <em>"uses the 'classic' FBA instead of the
+parsimonious FBA."</em> The <code>pfba=True</code> line is left
+commented out.</li>
+</ul>
+<h3 id="gibbons-lab-isb_course_2020-teaching-notebook">Gibbons Lab
+<code>isb_course_2020</code> teaching notebook</h3>
+<ul>
+<li>Repository: <a
+href="https://github.com/Gibbons-Lab/isb_course_2020">Gibbons-Lab/isb_course_2020</a>.</li>
+<li>Uses <code>cooperative_tradeoff</code> at the tutorial defaults;
+pFBA is not enabled.</li>
+</ul>
+<h2 id="4-section-c--what-does-micoms-documentation-recommend">4.
+Section C — What Does MICOM's Documentation Recommend?</h2>
+<h3 id="method-level-docstring">Method-level docstring</h3>
+<ul>
+<li>Reference: <a
+href="https://micom-dev.github.io/micom/autoapi/micom/community/index.html"><code>micom.community</code>
+API docs</a>.</li>
+<li>The <code>cooperative_tradeoff</code> docstring describes pFBA as
+"highly recommended."</li>
+<li>Default value of the <code>pfba</code> argument is
+<code>False</code>.</li>
+</ul>
+<h3
+id="micomworkflowsgrow--official-at-scale-entry-point"><code>micom.workflows.grow</code>
+— official at-scale entry point</h3>
+<ul>
+<li>Source: <a
+href="https://github.com/micom-dev/micom/blob/main/micom/workflows/grow.py"><code>grow.py</code>
+on <code>main</code></a>.</li>
+<li>The <code>strategy</code> argument defaults to
+<code>"minimal imports"</code>, which internally calls
+<code>cooperative_tradeoff(fluxes=False, pfba=False)</code>. Only the
+explicitly opt-in <code>strategy="pFBA"</code> sets
+<code>pfba=True</code>.</li>
+<li>Tradeoff guidance: <em>"Tradeoff values of 0.5 for metagenomics data
+and 0.3 for 16S data seem to work well."</em></li>
+</ul>
+<h3 id="micom-logic-page"><code>micom</code> Logic page</h3>
+<ul>
+<li>Reference: <a
+href="https://micom-dev.github.io/micom/logic.html">MICOM Logic
+documentation</a>.</li>
+<li>Documents the QP→crossover strategy for the cooperative tradeoff QP
+step. pFBA is not described as part of the documented core
+algorithm.</li>
+</ul>
+<p><strong>Net effect:</strong> The docstring's "highly recommended"
+wording is technically accurate for individual
+<code>cooperative_tradeoff</code> calls but is contradicted by the
+at-scale workflow's own defaults. Cohort-style work follows the workflow
+defaults; per-community work can opt in to pFBA case by case.</p>
+<h2 id="5-section-d--documented-mitigations-short-of-dropping-pfba">5.
+Section D — Documented Mitigations Short of Dropping pFBA</h2>
+<p>If at any future point the project decides to retry
+<code>pfba=True</code> for a subset (for example, only the 11 affected
+subjects), the documented mitigations are:</p>
+<ul>
+<li><strong>Loosen <code>atol</code>/<code>rtol</code></strong> from the
+default <code>1e-6</code> to <code>1e-5</code> or <code>1e-4</code>.
+Diener in <a href="https://github.com/micom-dev/micom/issues/29">Issue
+#29</a>: "still a fairly accurate solution up to a tolerance of 1e-5 or
+1e-4." Exposed since <a
+href="https://github.com/micom-dev/micom/blob/main/NEWS.md">MICOM
+v0.22.1</a>.</li>
+<li><strong>Enable <code>presolve=True</code></strong> in the workflow
+path for additional numerical stability.</li>
+<li><strong>Drop taxa with relative abundance below
+<code>1e-4</code></strong>, per Diener's diagnosis in <a
+href="https://github.com/micom-dev/micom/issues/29">Issue #29</a> (very
+low abundance is one of the two main destabilizers).</li>
+<li><strong>Add a <code>solution.status == "optimal"</code>
+gate</strong> before exporting fluxes. This is currently the script-side
+defense and is what
+<code>Scripts/modelling/09_micom_allcohort_subject_level_high_fiber_no_pfba.py</code>
+already does at line 506 — and what the current revision of
+<code>Scripts/modelling/08_micom_allcohort_subject_level_high_fiber_pfba.py</code>
+already does at line 498 (added in commit <code>9b4ede4</code>).</li>
+<li><strong>No published wrapper</strong> automatically falls back from
+<code>pfba=True</code> to <code>pfba=False</code> on per-subject
+failure. The "fall back to no-pFBA" choice the project made is therefore
+a reasonable original mitigation rather than an established
+pattern.</li>
+</ul>
+<h2 id="6-section-e--recommended-approach-for-this-project">6. Section E
+— Recommended Approach for This Project</h2>
+<h3
+id="primary-action-keep-pfbafalse-as-the-canonical-flux-branch">Primary
+action: keep <code>pfba=False</code> as the canonical flux branch</h3>
+<p>The script 09 outputs
+(<code>Results/subject_level_fba/tables/09_…no_pfba.csv</code>) are
+already the canonical flux/growth tables for downstream PCA and
+dimensionality reduction. Nothing about the upstream evidence calls that
+decision into question. On the contrary:</p>
+<ul>
+<li>It matches the MICOM maintainer's own recommended workaround for the
+exact failure mode encountered (<a
+href="https://github.com/micom-dev/micom/issues/11">Issue #11</a>).</li>
+<li>It matches the official at-scale workflow's default
+(<code>strategy="minimal imports"</code> in <a
+href="https://github.com/micom-dev/micom/blob/main/micom/workflows/grow.py"><code>grow.py</code></a>).</li>
+<li>It matches both <a
+href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6977071/">Diener 2020</a>
+and <a
+href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11841136/">Quinn-Bohmann
+2024</a> cohort practice.</li>
+</ul>
+<h3 id="defensible-scripting-standard">Defensible scripting
+standard</h3>
+<p>Whether or not the project re-enables pFBA in the future, the
+script-level standard is non-negotiable:</p>
+<ul>
+<li>Always gate <code>solution.fluxes</code> and
+<code>solution.growth_rate</code> writes on
+<code>solver.status == "optimal"</code>.</li>
+<li>Treat the combination <code>solver_status == "infeasible"</code> and
+<code>community_growth_rate == 0.0</code> as the bug signature, not a
+biological zero.</li>
+<li>Keep <code>Scripts/modelling/08_…py</code> outputs on disk as
+audit-only; do not consume them downstream. (Already documented in
+<code>MD/micom_practices.md</code> Practice 10.)</li>
+</ul>
+<h3 id="how-to-phrase-the-supervisor-conversation">How to phrase the
+supervisor conversation</h3>
+<p>A literature-supported single-sentence answer to "why didn't you use
+pFBA":</p>
+<blockquote>
+<p>The MICOM maintainer's own recommendation in <a
+href="https://github.com/micom-dev/micom/issues/11">issue #11</a> is to
+use <code>pfba=False</code> when stage-3 polishing is infeasible, and
+that is also what the official <a
+href="https://github.com/micom-dev/micom/blob/main/micom/workflows/grow.py"><code>micom.workflows.grow</code></a>
+workflow defaults to and what the <a
+href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6977071/">Diener 2020</a>
+and <a
+href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11841136/">Quinn-Bohmann
+2024</a> cohort papers used.</p>
+</blockquote>
+<p>If the supervisor still wants pFBA flux for those 11 subjects
+specifically, the honest answer is that the documented mitigations
+(relax <code>atol</code>/<code>rtol</code>, <code>presolve=True</code>,
+drop sub-1e-4 taxa) may help but are not guaranteed to recover the 11,
+and any successful pFBA values would still need a clear flag column
+distinguishing them from the no-pFBA mainline.</p>
+<h3 id="trade-off-to-acknowledge-openly">Trade-off to acknowledge
+openly</h3>
+<p>Without pFBA, the LP returns <em>some</em> optimal vertex rather than
+the parsimonious one. A reaction value sitting at exactly ±1000 in the
+script 09 flux table is saturated against the SBML reaction bound, not a
+measure of metabolic intensity. This caveat is already documented in
+<code>MD/micom_practices.md</code> Practice 10 and should be applied
+during interpretation.</p>
+<h2 id="7-reference-urls">7. Reference URLs</h2>
+<ul>
+<li>MICOM Issue #11 (the canonical match): <a
+href="https://github.com/micom-dev/micom/issues/11">https://github.com/micom-dev/micom/issues/11</a></li>
+<li>MICOM Issue #29 (numerical/status guidance): <a
+href="https://github.com/micom-dev/micom/issues/29">https://github.com/micom-dev/micom/issues/29</a></li>
+<li>micom-dev/paper Issue #5 (cohort failure handling): <a
+href="https://github.com/micom-dev/paper/issues/5">https://github.com/micom-dev/paper/issues/5</a></li>
+<li>MICOM Issue #225 (high exchange flux): <a
+href="https://github.com/micom-dev/micom/issues/225">https://github.com/micom-dev/micom/issues/225</a></li>
+<li>MICOM <code>solution.py</code> source (the unfixed
+<code>solve()</code> defect): <a
+href="https://github.com/micom-dev/micom/blob/main/micom/solution.py">https://github.com/micom-dev/micom/blob/main/micom/solution.py</a></li>
+<li>MICOM <code>grow</code> workflow defaults (<code>pfba=False</code>):
+<a
+href="https://github.com/micom-dev/micom/blob/main/micom/workflows/grow.py">https://github.com/micom-dev/micom/blob/main/micom/workflows/grow.py</a></li>
+<li>MICOM <code>cooperative_tradeoff</code> API docs: <a
+href="https://micom-dev.github.io/micom/autoapi/micom/community/index.html">https://micom-dev.github.io/micom/autoapi/micom/community/index.html</a></li>
+<li>MICOM Logic page: <a
+href="https://micom-dev.github.io/micom/logic.html">https://micom-dev.github.io/micom/logic.html</a></li>
+<li>MICOM NEWS / changelog: <a
+href="https://github.com/micom-dev/micom/blob/main/NEWS.md">https://github.com/micom-dev/micom/blob/main/NEWS.md</a></li>
+<li>Diener 2020 MICOM paper: <a
+href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6977071/">https://pmc.ncbi.nlm.nih.gov/articles/PMC6977071/</a></li>
+<li>Quinn-Bohmann 2024 SCFA paper: <a
+href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11841136/">https://pmc.ncbi.nlm.nih.gov/articles/PMC11841136/</a></li>
+<li>Marcelino MetaModels reference script: <a
+href="https://github.com/vrmarcelino/MetaModels/blob/main/MICOM_coop_tradeoff.py">https://github.com/vrmarcelino/MetaModels/blob/main/MICOM_coop_tradeoff.py</a></li>
+</ul>
+<h2 id="8-internal-project-cross-references">8. Internal Project
+Cross-References</h2>
+<ul>
+<li><code>MD/micom_practices.md</code> Practice 10 — full
+project-internal write-up of the pFBA stage-3 infeasibility and the
+<code>pfba=False</code> decision.</li>
+<li><code>Scripts/modelling/08_micom_allcohort_subject_level_high_fiber_pfba.py</code>
+— original pFBA branch; current code has the status gate but those 11
+subjects will still appear as <code>infeasible</code>.</li>
+<li><code>Scripts/modelling/09_micom_allcohort_subject_level_high_fiber_no_pfba.py</code>
+— canonical no-pFBA branch; produces clean flux outputs for all 516
+subjects.</li>
+<li><code>Results/subject_level_fba/tables/08_…_pfba.csv</code> files —
+kept as audit-only artifacts, not for downstream use.</li>
+<li><code>Results/subject_level_fba/tables/09_…_no_pfba.csv</code> files
+— canonical flux/growth tables.</li>
+</ul>
+</body>
+</html>

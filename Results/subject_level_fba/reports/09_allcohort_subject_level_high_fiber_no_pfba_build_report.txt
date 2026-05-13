@@ -1,0 +1,132 @@
+All-cohort subject-level MICOM high-fiber no-pFBA build report
+Subject input: Suplementary_Data/processed_data/subject_level_micom_allcohort/allcohort_subject_taxonomy_for_micom.csv
+QC input: Suplementary_Data/processed_data/subject_level_micom_allcohort/allcohort_subject_input_qc_summary.csv
+Diet file: Medium_files/diet.csv
+Tradeoff fraction: 0.5
+Selection filters: subject_id=ALL, cohort=ALL, age_group=ALL, limit=ALL
+Flux export enabled: True
+pFBA enabled: False
+
+Total subjects in QC table: 537
+Included abundance-matched subjects: 516
+Metadata-only excluded subjects: 21
+Abundance-only missing-metadata subjects: 0
+Included subjects with zero total modeled abundance: 0
+Selected subjects for this run: 516
+
+Selected subject counts by cohort
+CRE: 80
+SG90: 215
+SPMP: 50
+T2D: 171
+
+Selected subject counts by age group
+21_40: 91
+41_60: 140
+61_70: 57
+71_80: 33
+81_90: 169
+91_100: 26
+
+Selected subject nonzero modeled taxon distribution
+1 nonzero taxa: 3 subjects
+2 nonzero taxa: 12 subjects
+3 nonzero taxa: 44 subjects
+4 nonzero taxa: 54 subjects
+5 nonzero taxa: 90 subjects
+6 nonzero taxa: 112 subjects
+7 nonzero taxa: 108 subjects
+8 nonzero taxa: 65 subjects
+9 nonzero taxa: 28 subjects
+
+
+Optimal subjects with community_growth_rate <= 1e-09: 0
+Community rows written: 516
+Taxon rows written: 3025
+Flux rows written: 1718680
+
+Output files
+Community table: Results/subject_level_fba/tables/09_allcohort_subject_community_growth_high_fiber_no_pfba.csv
+Taxon table: Results/subject_level_fba/tables/09_allcohort_subject_taxon_growth_high_fiber_no_pfba.csv
+Flux table: Results/subject_level_fba/tables/09_allcohort_subject_reaction_flux_nonzero_long_high_fiber_no_pfba.csv
+Build report: Results/subject_level_fba/reports/09_allcohort_subject_level_high_fiber_no_pfba_build_report.txt
+
+CSV Output Dictionary
+
+09_allcohort_subject_community_growth_high_fiber_no_pfba.csv
+Path: Results/subject_level_fba/tables/09_allcohort_subject_community_growth_high_fiber_no_pfba.csv
+Row grain: one row per subject_id for the high_fiber diet, MICOM cooperative tradeoff without pFBA
+Columns:
+- subject_id: Subject identifier from the all-cohort subject-level MICOM input table.
+- cohort: Cohort label carried through from the subject metadata.
+- age_years: Subject age in years from the metadata table.
+- age_group: Age-bin label assigned from the metadata age.
+- diet_name: Diet scenario name; this script writes high_fiber only.
+- solver_status: MICOM solver status returned for this subject-level solve.
+- community_growth_rate: MICOM-reported community growth rate for this subject under high_fiber;
+  blank for non-optimal solves.
+- objective_value: Objective value returned by MICOM for this subject-level cooperative tradeoff
+  solve without pFBA. Formula: objective_value = optimization objective reported by MICOM after
+  cooperative_tradeoff with pfba=False
+- tradeoff_fraction: Tradeoff fraction passed into MICOM cooperative tradeoff.
+- num_taxa_total: Number of modeled taxa carried into the subject-level MICOM community input.
+- num_taxa_with_nonzero_growth: Count of returned taxa whose MICOM growth rate exceeded the growth
+  threshold. Formula: num_taxa_with_nonzero_growth = count(growth_rate > 1e-09)
+- matched_diet_metabolites: Count of diet metabolite IDs translated into MICOM medium entries.
+  Formula: matched_diet_metabolites = number of diet metabolite_ids with a MICOM medium mapping
+- missing_diet_metabolites: Count of diet metabolite IDs that could not be translated into MICOM
+  medium entries. Formula: missing_diet_metabolites = total diet metabolite_ids -
+  matched_diet_metabolites
+- total_input_abundance_raw: Sum of the raw abundances carried into the 10-taxon subject input for
+  this subject. Formula: total_input_abundance_raw = sum(abundance_raw across all taxon_id within
+  subject_id)
+- total_input_abundance_normalized: Sum of the normalized abundances carried into the 10-taxon
+  subject input for this subject. Formula: total_input_abundance_normalized =
+  sum(abundance_normalized across all taxon_id within subject_id)
+- pfba: Boolean flag showing whether pFBA flux extraction was requested; always False in this
+  script.
+- fluxes: Boolean flag showing that MICOM flux export was requested for this solve.
+- error_message: Error text recorded for failed community-build or solve attempts; blank otherwise.
+
+09_allcohort_subject_taxon_growth_high_fiber_no_pfba.csv
+Path: Results/subject_level_fba/tables/09_allcohort_subject_taxon_growth_high_fiber_no_pfba.csv
+Row grain: one row per subject_id x taxon_id for the high_fiber diet without pFBA
+Columns:
+- subject_id: Subject identifier from the all-cohort subject-level MICOM input table.
+- cohort: Cohort label carried through from the subject metadata.
+- age_years: Subject age in years from the metadata table.
+- age_group: Age-bin label assigned from the metadata age.
+- diet_name: Diet scenario name; this script writes high_fiber only.
+- taxon_id: MICOM taxon/model identifier.
+- species_name: Species label mapped onto this model taxon.
+- paper_taxon: Original paper taxon label mapped onto this model species.
+- abundance_raw: Raw subject-level abundance used for this taxon.
+- abundance_normalized: Normalized subject-level abundance used for the MICOM taxonomy. Formula:
+  abundance_normalized = abundance_raw / sum(abundance_raw across modeled taxa within subject_id)
+  when the within-subject total is positive
+- growth_rate: MICOM-reported taxon growth rate for this subject under high_fiber. Taxon rows are
+  written only for optimal solves.
+- is_growing: Boolean flag showing whether the MICOM taxon growth rate exceeded the growth
+  threshold. Formula: is_growing = growth_rate > 1e-09
+- reactions: Number of reactions present in the MICOM member model returned for this taxon.
+- metabolites: Number of metabolites present in the MICOM member model returned for this taxon.
+
+09_allcohort_subject_reaction_flux_nonzero_long_high_fiber_no_pfba.csv
+Path: Results/subject_level_fba/tables/09_allcohort_subject_reaction_flux_nonzero_long_high_fiber_no_pfba.csv
+Row grain: one row per subject_id x compartment x reaction_id with nonzero exported flux for optimal solves (no pFBA)
+Columns:
+- subject_id: Subject identifier from the all-cohort subject-level MICOM input table.
+- cohort: Cohort label carried through from the subject metadata.
+- age_years: Subject age in years from the metadata table.
+- age_group: Age-bin label assigned from the metadata age.
+- diet_name: Diet scenario name; this script writes high_fiber only.
+- compartment: Flux compartment label from the MICOM flux table; either a taxon_id or the literal
+  medium compartment.
+- taxon_id: Taxon identifier for organism-level flux rows; blank for medium rows.
+- reaction_id: Reaction identifier from the MICOM flux export.
+- feature_id: Compact feature label combining compartment scope with the reaction ID. Formula:
+  feature_id = 'medium__' + reaction_id for medium rows, otherwise taxon_id + '__' + reaction_id
+- flux: Signed flux value exported by MICOM for this subject, compartment, and reaction.
+- abs_flux: Absolute flux magnitude for this exported row. Formula: abs_flux = abs(flux)
+- is_medium: Boolean flag showing whether the exported flux row came from the shared medium
+  compartment. Formula: is_medium = (compartment == 'medium')

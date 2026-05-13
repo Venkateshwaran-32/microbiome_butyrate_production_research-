@@ -92,6 +92,13 @@ The project now also has an explicit operating standard in:
 - `Scripts/modelling/06c_review_sg90_subject_level_micom_abnormalities.py`: reviews sparse inputs, unusual growth patterns, diet-response inversions, and other SG90 subject-level MICOM abnormalities.
 - `Results/subject_level_fba/tables/06c_sg90_subject_abnormality_review.csv`: machine-readable SG90 subject-level abnormality review.
 - `Results/subject_level_fba/reports/06c_sg90_subject_abnormality_review.txt`: narrative SG90 subject-level abnormality review report.
+- `Scripts/data_processing/03_prepare_allcohort_subject_level_micom_inputs.py`: prepares all-cohort subject-level MICOM input tables aggregating CRE, SG90, SPMP, and T2D cohorts.
+- `Suplementary_Data/processed_data/subject_level_micom_allcohort/`: all-cohort subject-level MICOM input tables, QC tables, and missing-subject audit files.
+- `Scripts/modelling/09_micom_allcohort_subject_level_high_fiber_no_pfba.py`: canonical all-cohort subject-level MICOM runner for the `high_fiber` diet with `fluxes=True` and `pfba=False`. Replaces the earlier pFBA-based script 08 because pFBA stage 3 was infeasible for ~2% of subjects (see [MD/micom_practices.md](/Users/taknev/Desktop/microbiome_butyrate_production_research/MD/micom_practices.md:1) Practice 10).
+- `Results/subject_level_fba/tables/09_allcohort_subject_community_growth_high_fiber_no_pfba.csv`: all-cohort subject-level MICOM community growth summary under `high_fiber` without pFBA.
+- `Results/subject_level_fba/tables/09_allcohort_subject_taxon_growth_high_fiber_no_pfba.csv`: all-cohort subject-level MICOM per-taxon growth summary under `high_fiber` without pFBA.
+- `Results/subject_level_fba/tables/09_allcohort_subject_reaction_flux_nonzero_long_high_fiber_no_pfba.csv`: long-format nonzero reaction flux table for all-cohort subject-level MICOM under `high_fiber` without pFBA.
+- `Results/subject_level_fba/reports/09_allcohort_subject_level_high_fiber_no_pfba_build_report.txt`: all-cohort subject-level MICOM no-pFBA build and solve report.
 - `MD/`: project markdown notes and references except for this README.
 - `PDF/`: project PDF references.
 
@@ -272,11 +279,11 @@ The key SG90 subject-level outputs are:
 
 ## Next Steps
 
-- validate the all-cohort high-fiber subject-level MICOM/pFBA run before doing any dimensionality reduction
+- validation of the all-cohort high-fiber subject-level MICOM run is complete; the pFBA branch (script 08) was found to fail at LP stage 3 for 11 of 516 subjects, returning `infeasible` with off-LP flux artifacts (see [MD/micom_practices.md](/Users/taknev/Desktop/microbiome_butyrate_production_research/MD/micom_practices.md:1) Practice 10)
+- the canonical flux/growth table for downstream PCA and dimensionality reduction is now `Scripts/modelling/09_micom_allcohort_subject_level_high_fiber_no_pfba.py` outputs (`pfba=False`, `fluxes=True`)
 - keep using one subject-specific 10-species MICOM community model per subject with the `high_fiber` diet only
-- run MICOM `cooperative_tradeoff()` with `fluxes=True` and `pfba=True` for the flux-focused branch
+- run MICOM `cooperative_tradeoff()` with `fluxes=True` and `pfba=False` for the flux-focused branch — pFBA polish is not used for this project
 - treat non-optimal MICOM solver statuses as failed solves for downstream biology: keep the subject-level QC row, but do not use their taxon growth or reaction flux rows
-- summarize how many of the `516` abundance-matched subjects solve optimally by cohort and age group
-- inspect the failed/infeasible subject set before deciding whether to change the medium, tradeoff fraction, solver settings, or subject inclusion rules
-- extract pFBA reaction-level flux vectors only for subjects with `solver_status == "optimal"`
+- summarize how many of the `516` abundance-matched subjects solve optimally by cohort and age group under script 09
+- when interpreting reaction-level flux vectors, distinguish reactions saturated at the ±1000 AGORA bound from reactions running below the bound — saturation reflects LP flexibility under no-pFBA, not biological maximum
 - keep the union of taxon-reaction features across the 10 modeled species so taxon-specific metabolic behavior is preserved for later analysis

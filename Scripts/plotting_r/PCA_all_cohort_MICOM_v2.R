@@ -1,13 +1,10 @@
 setwd("/Users/taknev/Desktop/microbiome_butyrate_production_research")
 pacman::p_load(tidyverse, janitor, broom, ggfortify, ggrepel)
 rm(list = ls())
-
 options(max.print = 10000)
 
-
-
 # Data input and exploration ----------------------------------------------
-MICOM <- read_csv("Results/subject_level_fba/tables/08_allcohort_subject_reaction_flux_nonzero_long_high_fiber_pfba.csv")
+MICOM <- read_csv("Results/subject_level_fba/tables/09_allcohort_subject_reaction_flux_nonzero_long_high_fiber_no_pfba.csv")
 summary(MICOM)
 
 glimpse(MICOM) # much better to understand 

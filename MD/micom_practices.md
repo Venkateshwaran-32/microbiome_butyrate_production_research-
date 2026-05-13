@@ -135,6 +135,46 @@ Do not use the MICOM branch by itself to overclaim:
 - in vivo dominance
 - causal age biology
 
+## Practice 10: pFBA Stage 3 Infeasibility Under `cooperative_tradeoff`
+
+`MICOM.cooperative_tradeoff(fraction=..., fluxes=True, pfba=True)` runs as a 3-stage LP:
+
+1. **Stage 1** — maximize community growth (with L2 regularization on member growths).
+2. **Stage 2** — re-solve at `fraction × max_growth`, balanced via L2.
+3. **Stage 3 (pFBA polish)** — `add_pfba_objective(community, atol, rtol)` reads the *primal* member growth rates from stage 2 and pins them as lower bounds via `obj.lb = (1.0 - rtol) * rate - atol` (default `atol = rtol = 1e-6`), then minimizes Σ|flux|.
+
+For the all-cohort high-fiber subject-level branch (script 08), stage 3 was infeasible for ~2% of subjects (11 of 516) with 8 of those 11 in SG90 `81_90`. Their stage-2 `objective_value` ranged from 66,408 to 43,949,989 — orders of magnitude above the cohort norm (<100), indicating that stage 2 sat near a degenerate vertex with tightly coupled species. When stage 3 then asked the LP to hold those member-growth rates almost-exactly while also minimizing Σ|flux|, the constraints became jointly unsatisfiable within solver tolerance.
+
+Two trap behaviors compound the issue and must be remembered:
+
+- When stage 3 is infeasible, MICOM does not erase `solution.fluxes`. The DataFrame holds whatever simplex-tableau values were sitting in memory — for these subjects, magnitudes up to 3.95M, not a valid flux distribution. Off-LP numerical artifacts.
+- COBRApy's `solution.growth_rate` returns `0.0` for an infeasible LP. If a script does an unconditional `float(solution.growth_rate)`, the summary CSV will misleadingly show `0.0` instead of an empty cell. Always gate flux export and growth rate writing on `solver.status == "optimal"`.
+
+### Project decision
+
+For subject-level all-cohort high-fiber flux work, use `pfba=False` (script 09 — `Scripts/modelling/09_micom_allcohort_subject_level_high_fiber_no_pfba.py`). pFBA is unsuitable for this community/diet combination because the failure mode produces zero growth plus off-LP fluxes for a non-trivial fraction of subjects.
+
+The 11 subjects that exposed this failure mode (stable list, useful for audit cross-references):
+
+`MBS1232, MBS1529, MBS1262, MBS1255, MBS1539, MHS276, MBS1535, MBS1438, CON079, MBS1576, MBS1439`
+
+These are not "outliers" in the no-pFBA results — under script 09 they solve optimally with community growth in the 0.24–0.65 range, in line with the rest of the cohort.
+
+### Flux interpretation under no-pFBA
+
+Without pFBA the LP returns *some* optimal vertex rather than the parsimonious one. A reaction at exactly ±1000 means it is saturated against the AGORA SBML reaction bound, not that biology demanded that magnitude. When interpreting flux tables from script 09 outputs, distinguish "saturated at bound" from "actively chosen below bound" — saturated values reflect LP flexibility, not metabolic intensity.
+
+### Status of on-disk script 08 outputs
+
+The 08 result tables and build report are retained on disk as audit-trail artifacts of the pFBA failure investigation:
+
+- `Results/subject_level_fba/tables/08_allcohort_subject_community_growth_high_fiber_pfba.csv`
+- `Results/subject_level_fba/tables/08_allcohort_subject_taxon_growth_high_fiber_pfba.csv`
+- `Results/subject_level_fba/tables/08_allcohort_subject_reaction_flux_nonzero_long_high_fiber_pfba.csv`
+- `Results/subject_level_fba/reports/08_allcohort_subject_level_high_fiber_pfba_build_report.txt`
+
+These files were written by commit `371cf94`, which lacked the `solver_status != "optimal"` gate before flux export. They contain `solver_status = infeasible` rows with `community_growth_rate = 0.0` and ~17k flux rows of off-LP simplex artifacts for the 11 subjects above. **Do not consume them in any downstream analysis** — use the script 09 outputs (`*_no_pfba.csv`) instead. The 08 files are kept for the writeup audit trail only.
+
 ## Short Review Standard
 
 If a MICOM result is about to be used in a figure, slide, or write-up, ask:
