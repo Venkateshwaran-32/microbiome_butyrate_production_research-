@@ -1,32 +1,16 @@
 setwd("/Users/taknev/Desktop/microbiome_butyrate_production_research")
-pacman::p_load(tidyverse, readxl, janitor)
+pacman::p_load(tidyverse, readxl, janitor, ggtext)
+library(ggtext)
 rm(list = ls())
+source("Scripts/plotting_r/00_taxon_utils.R")
 
 micom_taxon_growth <- read_csv(
   "Results/micom_fba/tables/04_micom_taxon_growth_by_diet.csv",
   show_col_types = FALSE
 )
 
-short_species_name <- function(taxon_id) {
-  case_when(
-    taxon_id == "Escherichia_coli_UTI89_UPEC" ~ "E coli",
-    taxon_id == "Faecalibacterium_prausnitzii_M21_2" ~ "Faecalibac P",
-    taxon_id == "Parabacteroides_merdae_ATCC_43184" ~ "Parabacteroides M",
-    taxon_id == "Ruminococcus_torques_ATCC_27756" ~ "Ruminococcus T",
-    taxon_id == "Alistipes_onderdonkii_DSM_19147" ~ "Alistipes O",
-    taxon_id == "Alistipes_shahii_WAL_8301" ~ "Alistipes S",
-    taxon_id == "Bacteroides_dorei_DSM_17855" ~ "Bacteroides D",
-    taxon_id == "Bacteroides_xylanisolvens_XB1A" ~ "Bacteroides X",
-    taxon_id == "Bilophila_wadsworthia_3_1_6" ~ "Bilophila W",
-    taxon_id == "Klebsiella_pneumoniae_pneumoniae_MGH78578" ~ "Klebsiella P",
-    TRUE ~ taxon_id %>%
-      str_replace_all("_", " ") %>%
-      str_replace("^([A-Za-z]+\\s+[A-Za-z]+).*", "\\1")
-  )
-}
-
 species_summary <- micom_taxon_growth %>%
-  mutate(species_short = short_species_name(taxon_id)) %>%
+  mutate(species_short = italicize_taxon(strip_strain(taxon_id))) %>%
   group_by(taxon_id, species_short) %>%
   summarise(
     max_growth = max(growth_rate, na.rm = TRUE),
@@ -44,7 +28,7 @@ species_short_order <- species_summary %>%
 plot_data <- micom_taxon_growth %>%
   mutate(
     diet_name = factor(diet_name, levels = c("western", "high_fiber")),
-    species_short = short_species_name(taxon_id),
+    species_short = italicize_taxon(strip_strain(taxon_id)),
     taxon_id = factor(taxon_id, levels = species_order),
     species_short = factor(species_short, levels = species_short_order)
   )
@@ -67,7 +51,7 @@ micom_growth_plot <- ggplot(
   ), guide = "none") +
   theme_minimal() +
   theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, color = "#2B2B2B"),
+    axis.text.x = ggtext::element_markdown(angle = 45, hjust = 1, color = "#2B2B2B"),
     axis.text.y = element_text(color = "#2B2B2B"),
     axis.title.y = element_text(color = "#2B2B2B"),
     plot.title = element_text(face = "bold", color = "#1F1F1F"),

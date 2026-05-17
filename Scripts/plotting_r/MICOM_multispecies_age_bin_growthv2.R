@@ -1,32 +1,20 @@
 setwd("/Users/taknev/Desktop/microbiome_butyrate_production_research")
-pacman::p_load(tidyverse, readxl, janitor)
+pacman::p_load(tidyverse, readxl, janitor, ggtext, patchwork)
+library(ggtext)
+library(patchwork)
 rm(list = ls())
+source("Scripts/plotting_r/00_taxon_utils.R")
 
-age_bin_levels <- c("21_40", "41_60", "61_70", "71_80", "81_90")
+age_bin_levels <- c("21_40", "41_60", "61_70", "71_80", "81_90", "91_100")
 diet_levels <- c("western", "high_fiber")
-age_midpoints <- c("21_40" = 30.5, "41_60" = 50.5, "61_70" = 65.5, "71_80" = 75.5, "81_90" = 85.5)
+age_midpoints <- c("21_40" = 30.5, "41_60" = 50.5, "61_70" = 65.5, "71_80" = 75.5, "81_90" = 85.5, "91_100" = 95.5)
 
-short_species_name <- function(species_name) {
+species_family <- function(species_name) {
   case_when(
-    species_name == "Escherichia coli" ~ "E coli",
-    species_name == "Faecalibacterium prausnitzii" ~ "Faecalibac P",
-    species_name == "Parabacteroides merdae" ~ "Parabacteroides M",
-    species_name == "Ruminococcus torques" ~ "Ruminococcus T",
-    species_name == "Alistipes onderdonkii" ~ "Alistipes O",
-    species_name == "Alistipes shahii" ~ "Alistipes S",
-    species_name == "Bacteroides dorei" ~ "Bacteroides D",
-    species_name == "Bacteroides xylanisolvens" ~ "Bacteroides X",
-    species_name == "Klebsiella pneumoniae" ~ "Klebsiella P",
-    TRUE ~ species_name
-  )
-}
-
-species_family <- function(species_short) {
-  case_when(
-    str_detect(species_short, "^Alistipes") ~ "Alistipes",
-    str_detect(species_short, "^Bacteroides") ~ "Bacteroides",
-    species_short == "Faecalibac P" ~ "Faecalibacterium",
-    species_short == "E coli" ~ "Escherichia",
+    str_detect(species_name, "^Alistipes") ~ "Alistipes",
+    str_detect(species_name, "^Bacteroides") ~ "Bacteroides",
+    str_detect(species_name, "^Faecalibacterium") ~ "Faecalibacterium",
+    str_detect(species_name, "^Escherichia") ~ "Escherichia",
     TRUE ~ "Other"
   )
 }
@@ -47,8 +35,8 @@ micom_growth <- read_csv(
     age_group = factor(age_group, levels = age_bin_levels),
     diet_name = factor(diet_name, levels = diet_levels),
     age_mid = unname(age_midpoints[as.character(age_group)]),
-    species_short = short_species_name(species_name),
-    family = species_family(species_short)
+    species_short = italicize_taxon(species_name),
+    family = species_family(species_name)
   )
 
 species_lookup <- micom_growth %>%
@@ -115,12 +103,12 @@ heatmap_plot <- ggplot(
     x = NULL,
     y = NULL,
     title = "MICOM taxon growth trends across age bins",
-    subtitle = "Heatmap shows predicted growth rate; missing taxon-age combinations are displayed as zero growth"
+    subtitle = "Includes 91_100 bin (n=26). Heatmap shows predicted growth rate; missing taxon-age combinations are displayed as zero growth."
   ) +
   theme_minimal() +
   theme(
     axis.text.x = element_text(angle = 45, hjust = 1, color = "#2B2B2B"),
-    axis.text.y = element_text(color = "#2B2B2B"),
+    axis.text.y = ggtext::element_markdown(color = "#2B2B2B"),
     plot.title = element_text(face = "bold", color = "#1F1F1F"),
     plot.subtitle = element_text(color = "#4A4A4A"),
     panel.grid.major = element_blank(),
@@ -154,7 +142,7 @@ slope_plot <- ggplot(
   theme_minimal() +
   theme(
     axis.text.x = element_text(color = "#2B2B2B"),
-    axis.text.y = element_text(color = "#2B2B2B"),
+    axis.text.y = ggtext::element_markdown(color = "#2B2B2B"),
     axis.title.x = element_text(color = "#2B2B2B"),
     plot.subtitle = element_text(color = "#4A4A4A"),
     panel.grid.major.y = element_blank(),
@@ -167,36 +155,14 @@ slope_plot <- ggplot(
     legend.position = "right"
   )
 
-heatmap_grob <- ggplotGrob(heatmap_plot)
-slope_grob <- ggplotGrob(slope_plot)
+combined_v2_plot <- heatmap_plot / slope_plot + plot_layout(heights = c(3, 2.4))
 
-draw_v2_plot <- function() {
-  grid::grid.newpage()
-  grid::pushViewport(
-    grid::viewport(
-      layout = grid::grid.layout(
-        nrow = 2,
-        ncol = 1,
-        heights = grid::unit(c(3, 2.4), "null")
-      )
-    )
-  )
-  grid::pushViewport(grid::viewport(layout.pos.row = 1, layout.pos.col = 1))
-  grid::grid.draw(heatmap_grob)
-  grid::popViewport()
-  grid::pushViewport(grid::viewport(layout.pos.row = 2, layout.pos.col = 1))
-  grid::grid.draw(slope_grob)
-  grid::popViewport(2)
-}
+print(combined_v2_plot)
 
-draw_v2_plot()
-
-png(
+ggsave(
   filename = "Results/micom_fba/figures/micom_multispecies_agebin_growth_v2.png",
+  plot = combined_v2_plot,
   width = 15,
   height = 10,
-  units = "in",
-  res = 300
+  dpi = 300
 )
-draw_v2_plot()
-dev.off()

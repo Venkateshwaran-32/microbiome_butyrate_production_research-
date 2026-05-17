@@ -1,24 +1,11 @@
 setwd("/Users/taknev/Desktop/microbiome_butyrate_production_research")
-pacman::p_load(tidyverse, readxl, janitor)
+pacman::p_load(tidyverse, readxl, janitor, ggtext, patchwork)
+library(ggtext)
+library(patchwork)
 rm(list = ls())
+source("Scripts/plotting_r/00_taxon_utils.R")
 
 zero_threshold <- 1e-9
-
-short_species_name <- function(species_id) {
-  case_when(
-    species_id %in% c("Escherichia_coli_UTI89_UPEC", "Escherichia coli") ~ "E coli",
-    species_id %in% c("Faecalibacterium_prausnitzii_M21_2", "Faecalibacterium prausnitzii") ~ "Faecalibac P",
-    species_id %in% c("Parabacteroides_merdae_ATCC_43184", "Parabacteroides merdae") ~ "Parabacteroides M",
-    species_id %in% c("Ruminococcus_torques_ATCC_27756", "Ruminococcus torques") ~ "Ruminococcus T",
-    species_id %in% c("Alistipes_onderdonkii_DSM_19147", "Alistipes onderdonkii") ~ "Alistipes O",
-    species_id %in% c("Alistipes_shahii_WAL_8301", "Alistipes shahii") ~ "Alistipes S",
-    species_id %in% c("Bacteroides_dorei_DSM_17855", "Bacteroides dorei") ~ "Bacteroides D",
-    species_id %in% c("Bacteroides_xylanisolvens_XB1A", "Bacteroides xylanisolvens") ~ "Bacteroides X",
-    species_id %in% c("Bilophila_wadsworthia_3_1_6", "Bilophila wadsworthia") ~ "Bilophila W",
-    species_id %in% c("Klebsiella_pneumoniae_pneumoniae_MGH78578", "Klebsiella pneumoniae") ~ "Klebsiella P",
-    TRUE ~ species_id
-  )
-}
 
 micom_growth <- read_csv(
   "Results/micom_fba/tables/04_micom_taxon_growth_by_diet.csv",
@@ -46,7 +33,7 @@ cobrapy_growth <- read_csv(
 
 combined_growth <- bind_rows(micom_growth, cobrapy_growth) %>%
   mutate(
-    species_short = short_species_name(species_id),
+    species_short = italicize_taxon(strip_strain(species_id)),
     diet_name = factor(diet_name, levels = c("western", "high_fiber")),
     method = factor(method, levels = c("COBRApy", "MICOM"))
   )
@@ -96,7 +83,7 @@ growth_plot <- ggplot(
   ) +
   theme_minimal() +
   theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, color = "#2B2B2B"),
+    axis.text.x = ggtext::element_markdown(angle = 45, hjust = 1, color = "#2B2B2B"),
     axis.text.y = element_text(color = "#2B2B2B"),
     strip.text = element_text(face = "bold", color = "#1F1F1F"),
     strip.background = element_rect(fill = "white", color = "#2B2B2B", linewidth = 0.8),
@@ -131,7 +118,7 @@ status_plot <- ggplot(
   ) +
   theme_minimal() +
   theme(
-    axis.text.x = element_text(angle = 45, hjust = 1, color = "#2B2B2B"),
+    axis.text.x = ggtext::element_markdown(angle = 45, hjust = 1, color = "#2B2B2B"),
     axis.text.y = element_text(color = "#2B2B2B"),
     strip.text = element_text(face = "bold", color = "#1F1F1F"),
     strip.background = element_rect(fill = "white", color = "#2B2B2B", linewidth = 0.8),
@@ -143,37 +130,15 @@ status_plot <- ggplot(
     legend.position = "none"
   )
 
-growth_grob <- ggplotGrob(growth_plot)
-status_grob <- ggplotGrob(status_plot)
+comparison_plot <- growth_plot / status_plot + plot_layout(heights = c(3.6, 1.4))
 
-draw_comparison_plot <- function() {
-  grid::grid.newpage()
-  grid::pushViewport(
-    grid::viewport(
-      layout = grid::grid.layout(
-        nrow = 2,
-        ncol = 1,
-        heights = grid::unit(c(3.6, 1.4), "null")
-      )
-    )
-  )
-  grid::pushViewport(grid::viewport(layout.pos.row = 1, layout.pos.col = 1))
-  grid::grid.draw(growth_grob)
-  grid::popViewport()
-  grid::pushViewport(grid::viewport(layout.pos.row = 2, layout.pos.col = 1))
-  grid::grid.draw(status_grob)
-  grid::popViewport(2)
-}
+print(comparison_plot)
 
-draw_comparison_plot()
-
-png(
+ggsave(
   filename = "Results/micom_fba/figures/cobrapy_vs_micom_baseline_growth_comparison.png",
+  plot = comparison_plot,
   width = 15,
   height = 8,
-  units = "in",
-  res = 300
+  dpi = 300
 )
-draw_comparison_plot()
-dev.off()
 

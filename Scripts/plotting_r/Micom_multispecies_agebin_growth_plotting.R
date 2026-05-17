@@ -1,48 +1,55 @@
 setwd("/Users/taknev/Desktop/microbiome_butyrate_production_research")
-pacman::p_load(tidyverse, readxl, janitor)
+pacman::p_load(tidyverse, readxl, janitor, ggtext, ggrepel)
+library(ggtext)
+library(ggrepel)
 rm(list = ls())
+source("Scripts/plotting_r/00_taxon_utils.R")
 
-age_bin_levels <- c("21_40", "41_60", "61_70", "71_80", "81_90")
+age_bin_levels <- c("21_40", "41_60", "61_70", "71_80", "81_90", "91_100")
 diet_levels <- c("western", "high_fiber")
 trend_threshold <- 0.05
 direct_label_species <- c(
-  "Faecalibac P",
-  "E coli",
-  "Alistipes O",
-  "Alistipes S",
-  "Bacteroides D",
-  "Bacteroides X"
+  "F. prausnitzii",
+  "E. coli",
+  "A. onderdonkii",
+  "A. shahii",
+  "B. dorei",
+  "B. xylanisolvens"
 )
-
-short_species_name <- function(species_name) {
-  case_when(
-    species_name == "Escherichia coli" ~ "E coli",
-    species_name == "Faecalibacterium prausnitzii" ~ "Faecalibac P",
-    species_name == "Parabacteroides merdae" ~ "Parabacteroides M",
-    species_name == "Ruminococcus torques" ~ "Ruminococcus T",
-    species_name == "Alistipes onderdonkii" ~ "Alistipes O",
-    species_name == "Alistipes shahii" ~ "Alistipes S",
-    species_name == "Bacteroides dorei" ~ "Bacteroides D",
-    species_name == "Bacteroides xylanisolvens" ~ "Bacteroides X",
-    species_name == "Klebsiella pneumoniae" ~ "Klebsiella P",
-    TRUE ~ species_name
-  )
-}
 
 micom_agebin_growth <- read_csv(
   "Results/micom_fba/tables/05_micom_agebin_taxon_growth_by_diet.csv",
   show_col_types = FALSE
 )
 
+bilophila_stub <- tidyr::crossing(
+  age_group = age_bin_levels,
+  diet_name = diet_levels
+) %>%
+  mutate(
+    taxon_id = "Bilophila_wadsworthia_3_1_6",
+    species_name = "Bilophila wadsworthia",
+    paper_taxon = "Bilophila unclassified",
+    median_abundance = 0,
+    normalized_weight = 0,
+    n_subjects = NA_integer_,
+    growth_rate = 0,
+    is_growing = FALSE,
+    reactions = NA_integer_,
+    metabolites = NA_integer_
+  )
+
+micom_agebin_growth <- bind_rows(micom_agebin_growth, bilophila_stub)
+
 species_lookup <- micom_agebin_growth %>%
   distinct(taxon_id, species_name, paper_taxon) %>%
-  mutate(species_short = short_species_name(species_name))
+  mutate(species_short = italicize_taxon(species_name))
 
 plot_data <- micom_agebin_growth %>%
   mutate(
     age_group = factor(age_group, levels = age_bin_levels),
     diet_name = factor(diet_name, levels = diet_levels),
-    species_short = short_species_name(species_name)
+    species_short = italicize_taxon(species_name)
   ) %>%
   complete(
     taxon_id,
@@ -67,7 +74,7 @@ species_trends <- plot_data %>%
   group_by(species_short) %>%
   summarise(
     youngest_growth = mean(growth_rate[age_group == "21_40"], na.rm = TRUE),
-    oldest_growth = mean(growth_rate[age_group == "81_90"], na.rm = TRUE),
+    oldest_growth = mean(growth_rate[age_group == "91_100"], na.rm = TRUE),
     growth_shift = oldest_growth - youngest_growth,
     max_growth = max(growth_rate, na.rm = TRUE),
     .groups = "drop"
@@ -85,37 +92,44 @@ species_order <- species_trends %>%
   pull(species_short)
 
 species_colors <- c(
-  "Alistipes O" = "#1B7837",
-  "Alistipes S" = "#4A8F45",
-  "Bacteroides D" = "#7A4A24",
-  "Bacteroides X" = "#9B6532",
-  "Faecalibac P" = "#5B2A86",
-  "E coli" = "#1F4E5F",
-  "Klebsiella P" = "#2F6C8F",
-  "Parabacteroides M" = "#6A3D2A",
-  "Ruminococcus T" = "#4A4A4A"
+  "F. prausnitzii"   = "#9467BD",
+  "E. coli"          = "#1F77B4",
+  "R. torques"       = "#2CA02C",
+  "B. dorei"         = "#8C564B",
+  "B. xylanisolvens" = "#FF7F0E",
+  "B. wadsworthia"   = "#7F7F7F",
+  "A. onderdonkii"   = "#BCBD22",
+  "A. shahii"        = "#17BECF",
+  "K. pneumoniae"    = "#E377C2",
+  "P. merdae"        = "#D62728"
 )
 
 plot_data <- plot_data %>%
   mutate(species_short = factor(species_short, levels = species_order))
 
 endpoint_labels <- plot_data %>%
-  filter(
-    age_group == "81_90",
-    species_short %in% direct_label_species
-  )
+  filter(age_group == "91_100")
 
 micom_agebin_growth_plot <- ggplot(
   plot_data,
   aes(x = age_group, y = growth_rate, color = species_short, group = species_short)
 ) +
-  geom_line(linewidth = 1.05, alpha = 0.9) +
-  geom_point(aes(shape = is_growing), size = 2.4, stroke = 0.7) +
-  geom_text(
+  geom_line(linewidth = 0.55, alpha = 0.9) +
+  geom_point(aes(shape = is_growing), size = 1.6, stroke = 0.55) +
+  ggrepel::geom_text_repel(
     data = endpoint_labels,
     aes(label = species_short),
-    hjust = -0.08,
+    direction = "y",
+    nudge_x = 0.45,
+    hjust = 0,
     size = 3,
+    segment.size = 0.3,
+    segment.color = "gray60",
+    segment.alpha = 0.7,
+    box.padding = 0.18,
+    point.padding = 0.15,
+    min.segment.length = 0,
+    max.overlaps = Inf,
     show.legend = FALSE
   ) +
   facet_wrap(~ diet_name, nrow = 1) +
@@ -130,7 +144,7 @@ micom_agebin_growth_plot <- ggplot(
     x = NULL,
     y = "MICOM taxon growth rate",
     title = "MICOM age-bin taxon growth by diet",
-    subtitle = "Alistipes species use green shades, Bacteroides use brown shades, and Faecalibac P uses purple"
+    subtitle = "Species weighted by median relative abundance per age bin, pooled across the four cohorts (T2D, CRE, SPMP, SG90; n=516)."
   ) +
   theme_minimal() +
   theme(
@@ -148,7 +162,7 @@ micom_agebin_growth_plot <- ggplot(
     strip.text = element_text(face = "bold", color = "#1F1F1F"),
     legend.position = "right",
     legend.title = element_text(face = "bold", color = "#1F1F1F"),
-    legend.text = element_text(color = "#2B2B2B")
+    legend.text = ggtext::element_markdown(color = "#2B2B2B")
   ) +
   coord_cartesian(clip = "off")
 
@@ -159,5 +173,5 @@ ggsave(
   plot = micom_agebin_growth_plot,
   width = 15,
   height = 6.5,
-  dpi = 300
+  dpi = 600
 )
