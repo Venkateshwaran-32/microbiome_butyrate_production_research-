@@ -127,7 +127,7 @@ def age_group_from_years(age_value: str) -> str | None:
         age = float(age_value)
     except (TypeError, ValueError):
         return None
-    if age < 21 or age > 90:
+    if age < 21 or age > 100:
         return None
     if age <= 40:
         return "21_40"
@@ -137,7 +137,9 @@ def age_group_from_years(age_value: str) -> str | None:
         return "61_70"
     if age <= 80:
         return "71_80"
-    return "81_90"
+    if age <= 90:
+        return "81_90"
+    return "91_100"
 
 
 def infer_cohort(subject_id: str, sequencer: str, age_value: str) -> str:
@@ -183,7 +185,7 @@ def write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, object]]) 
 
 
 def build_wide_rows(allcohort_rows: list[dict[str, object]]) -> list[dict[str, object]]:
-    age_order = ["21_40", "41_60", "61_70", "71_80", "81_90"]
+    age_order = ["21_40", "41_60", "61_70", "71_80", "81_90", "91_100"]
     by_species: dict[str, dict[str, object]] = {}
     for row in allcohort_rows:
         species_name = str(row["species_name"])
@@ -292,7 +294,7 @@ def build_aggregated_rows(
     aggregated_rows: list[dict[str, object]] = []
     qc_rows: list[dict[str, object]] = []
 
-    age_order = ["21_40", "41_60", "61_70", "71_80", "81_90"]
+    age_order = ["21_40", "41_60", "61_70", "71_80", "81_90", "91_100"]
     group_keys = sorted(by_group, key=lambda item: ((item[0] != "all_cohort"), age_order.index(item[1]), item[0]))
 
     for cohort, age_group in group_keys:
@@ -367,6 +369,11 @@ def main() -> None:
     allcohort_input_rows = [dict(row, cohort="all_cohort") for row in subject_level_rows]
     allcohort_rows, allcohort_qc_rows = build_aggregated_rows(allcohort_input_rows, cohort_value="all_cohort")
 
+    allcohort_bin_sizes = [int(row["n_subjects_matched"]) for row in allcohort_qc_rows]
+    low_n_threshold = median(allcohort_bin_sizes) if allcohort_bin_sizes else 0
+    for qc_row in cohort_qc_rows + allcohort_qc_rows:
+        qc_row["low_n_bin"] = int(qc_row["n_subjects_matched"]) < low_n_threshold
+
     write_csv(
         SUBJECT_LEVEL_OUT,
         ["subject_id", "cohort", "age_years", "age_group", "species_name", "paper_taxon", "abundance"],
@@ -414,6 +421,7 @@ def main() -> None:
             "61_70",
             "71_80",
             "81_90",
+            "91_100",
         ],
         build_wide_rows(allcohort_rows),
     )
@@ -426,6 +434,7 @@ def main() -> None:
             "n_species_nonzero",
             "total_median_abundance_pre_norm",
             "used_equal_weight_fallback",
+            "low_n_bin",
         ],
         sort_qc_rows(cohort_qc_rows + allcohort_qc_rows),
     )

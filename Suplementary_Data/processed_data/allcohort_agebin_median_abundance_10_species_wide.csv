@@ -1,11 +1,11 @@
-species_name,paper_taxon,model_file,model_species_id,21_40,41_60,61_70,71_80,81_90
-Alistipes onderdonkii,Alistipes onderdonkii,Models/vmh_agora2_sbml/Alistipes_onderdonkii_DSM_19147.xml,Alistipes_onderdonkii_DSM_19147,0.0,0.0,0.0,2.32999720316183,0.494620476895701
-Alistipes shahii,Alistipes shahii,Models/vmh_agora2_sbml/Alistipes_shahii_WAL_8301.xml,Alistipes_shahii_WAL_8301,0.198909349388292,0.0,0.0,0.0,0.227743557500775
-Bacteroides dorei,Bacteroides dorei,Models/vmh_agora2_sbml/Bacteroides_dorei_DSM_17855.xml,Bacteroides_dorei_DSM_17855,0.368117543859829,0.1387340455642995,0.263239371095264,1.89494343772994,0.676254329876683
-Bacteroides xylanisolvens,Bacteroides xylanisolvens,Models/vmh_agora2_sbml/Bacteroides_xylanisolvens_XB1A.xml,Bacteroides_xylanisolvens_XB1A,0.0,0.0,0.0,0.115359973618099,0.178305668362581
-Bilophila wadsworthia,Bilophila unclassified,Models/vmh_agora2_sbml/Bilophila_wadsworthia_3_1_6.xml,Bilophila_wadsworthia_3_1_6,0.0,0.0,0.0,0.0,0.0
-Escherichia coli,Escherichia coli,Models/vmh_agora2_sbml/Escherichia_coli_UTI89_UPEC.xml,Escherichia_coli_UTI89_UPEC,0.452260832550609,0.7169455062014275,0.352563332013605,7.57234820821766,1.29880647859491
-Faecalibacterium prausnitzii,Faecalibacterium prausnitzii,Models/vmh_agora2_sbml/Faecalibacterium_prausnitzii_M21_2.xml,Faecalibacterium_prausnitzii_M21_2,7.29668501804707,4.54764743652073,6.00005160880284,4.00011319308113,1.24423225168371
-Klebsiella pneumoniae,Klebsiella pneumoniae,Models/vmh_agora2_sbml/Klebsiella_pneumoniae_pneumoniae_MGH78578.xml,Klebsiella_pneumoniae_pneumoniae_MGH78578,0.0,0.0,0.0,0.226810889703115,0.17231064142578
-Parabacteroides merdae,Parabacteroides merdae,Models/vmh_agora2_sbml/Parabacteroides_merdae_ATCC_43184.xml,Parabacteroides_merdae_ATCC_43184,0.333979971528481,0.1929094748151095,0.200210536899317,0.0,0.68968469388354
-Ruminococcus torques,Ruminococcus torques,Models/vmh_agora2_sbml/Ruminococcus_torques_ATCC_27756.xml,Ruminococcus_torques_ATCC_27756,0.882656541610264,0.8691279378083465,0.765405482461402,0.732768298962431,0.307151004155264
+species_name,paper_taxon,model_file,model_species_id,21_40,41_60,61_70,71_80,81_90,91_100
+Alistipes onderdonkii,Alistipes onderdonkii,Models/vmh_agora2_sbml/Alistipes_onderdonkii_DSM_19147.xml,Alistipes_onderdonkii_DSM_19147,0.0,0.0,0.0,2.32999720316183,0.494620476895701,0.1029047610133115
+Alistipes shahii,Alistipes shahii,Models/vmh_agora2_sbml/Alistipes_shahii_WAL_8301.xml,Alistipes_shahii_WAL_8301,0.198909349388292,0.0,0.0,0.0,0.227743557500775,0.0
+Bacteroides dorei,Bacteroides dorei,Models/vmh_agora2_sbml/Bacteroides_dorei_DSM_17855.xml,Bacteroides_dorei_DSM_17855,0.368117543859829,0.1387340455642995,0.263239371095264,1.89494343772994,0.676254329876683,0.3844120975124675
+Bacteroides xylanisolvens,Bacteroides xylanisolvens,Models/vmh_agora2_sbml/Bacteroides_xylanisolvens_XB1A.xml,Bacteroides_xylanisolvens_XB1A,0.0,0.0,0.0,0.115359973618099,0.178305668362581,0.1419470553660855
+Bilophila wadsworthia,Bilophila unclassified,Models/vmh_agora2_sbml/Bilophila_wadsworthia_3_1_6.xml,Bilophila_wadsworthia_3_1_6,0.0,0.0,0.0,0.0,0.0,0.0
+Escherichia coli,Escherichia coli,Models/vmh_agora2_sbml/Escherichia_coli_UTI89_UPEC.xml,Escherichia_coli_UTI89_UPEC,0.452260832550609,0.7169455062014275,0.352563332013605,7.57234820821766,1.29880647859491,2.9925055309205
+Faecalibacterium prausnitzii,Faecalibacterium prausnitzii,Models/vmh_agora2_sbml/Faecalibacterium_prausnitzii_M21_2.xml,Faecalibacterium_prausnitzii_M21_2,7.29668501804707,4.54764743652073,6.00005160880284,4.00011319308113,1.24423225168371,0.4734858460316575
+Klebsiella pneumoniae,Klebsiella pneumoniae,Models/vmh_agora2_sbml/Klebsiella_pneumoniae_pneumoniae_MGH78578.xml,Klebsiella_pneumoniae_pneumoniae_MGH78578,0.0,0.0,0.0,0.226810889703115,0.17231064142578,0.0
+Parabacteroides merdae,Parabacteroides merdae,Models/vmh_agora2_sbml/Parabacteroides_merdae_ATCC_43184.xml,Parabacteroides_merdae_ATCC_43184,0.333979971528481,0.1929094748151095,0.200210536899317,0.0,0.68968469388354,0.5053778563122384
+Ruminococcus torques,Ruminococcus torques,Models/vmh_agora2_sbml/Ruminococcus_torques_ATCC_27756.xml,Ruminococcus_torques_ATCC_27756,0.882656541610264,0.8691279378083465,0.765405482461402,0.732768298962431,0.307151004155264,0.19462465526523798
