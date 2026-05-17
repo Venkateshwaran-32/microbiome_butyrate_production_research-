@@ -1,0 +1,121 @@
+species_name,age_group,diet_name,median_abundance_input,normalized_weight_input,growth_rate_plotted,is_growing,row_in_05_csv,reason_if_missing
+Alistipes onderdonkii,21_40,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Alistipes onderdonkii,41_60,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Alistipes onderdonkii,61_70,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Alistipes onderdonkii,71_80,western,2.32999720316183,0.13809566644752075,0.33069449496027614,True,True,
+Alistipes onderdonkii,81_90,western,0.494620476895701,0.0935167846458735,0.40796956438158094,True,True,
+Alistipes onderdonkii,91_100,western,0.1029047610133115,0.021459693149625217,0.031572627759787246,True,True,
+Alistipes onderdonkii,21_40,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Alistipes onderdonkii,41_60,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Alistipes onderdonkii,61_70,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Alistipes onderdonkii,71_80,high_fiber,2.32999720316183,0.13809566644752075,0.2779895085454671,True,True,
+Alistipes onderdonkii,81_90,high_fiber,0.494620476895701,0.0935167846458735,0.3570115403272018,True,True,
+Alistipes onderdonkii,91_100,high_fiber,0.1029047610133115,0.021459693149625217,0.027448648701895274,True,True,
+Alistipes shahii,21_40,western,0.198909349388292,0.020866201899815737,0.02272314254623133,True,True,
+Alistipes shahii,41_60,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Alistipes shahii,61_70,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Alistipes shahii,71_80,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Alistipes shahii,81_90,western,0.227743557500775,0.04305896382404744,0.19401000006741348,True,True,
+Alistipes shahii,91_100,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Alistipes shahii,21_40,high_fiber,0.198909349388292,0.020866201899815737,0.020472317137430224,True,True,
+Alistipes shahii,41_60,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Alistipes shahii,61_70,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Alistipes shahii,71_80,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Alistipes shahii,81_90,high_fiber,0.227743557500775,0.04305896382404744,0.13678460804805986,True,True,
+Alistipes shahii,91_100,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Bacteroides dorei,21_40,western,0.368117543859829,0.03861666139206421,0.03653538626894905,True,True,
+Bacteroides dorei,41_60,western,0.1387340455642995,0.02145803963420446,0.023902314349691145,True,True,
+Bacteroides dorei,61_70,western,0.263239371095264,0.03472141413116676,0.03052284815325051,True,True,
+Bacteroides dorei,71_80,western,1.89494343772994,0.11231063992633336,0.2689494543064408,True,True,
+Bacteroides dorei,81_90,western,0.676254329876683,0.12785789001261408,0.5577825917086925,True,True,
+Bacteroides dorei,91_100,western,0.3844120975124675,0.08016505334047899,0.11794304237719705,True,True,
+Bacteroides dorei,21_40,high_fiber,0.368117543859829,0.03861666139206421,0.03050960493604938,True,True,
+Bacteroides dorei,41_60,high_fiber,0.1387340455642995,0.02145803963420446,0.020069126076312546,True,True,
+Bacteroides dorei,61_70,high_fiber,0.263239371095264,0.03472141413116676,0.025392856517683107,True,True,
+Bacteroides dorei,71_80,high_fiber,1.89494343772994,0.11231063992633336,0.22608367382295952,True,True,
+Bacteroides dorei,81_90,high_fiber,0.676254329876683,0.12785789001261408,0.48811278700306343,True,True,
+Bacteroides dorei,91_100,high_fiber,0.3844120975124675,0.08016505334047899,0.10253682867489608,True,True,
+Bacteroides xylanisolvens,21_40,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Bacteroides xylanisolvens,41_60,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Bacteroides xylanisolvens,61_70,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Bacteroides xylanisolvens,71_80,western,0.115359973618099,0.006837223845823357,0.016422334745494135,True,True,
+Bacteroides xylanisolvens,81_90,western,0.178305668362581,0.03371185296260619,0.14706926524483055,True,True,
+Bacteroides xylanisolvens,91_100,western,0.1419470553660855,0.029601548282639865,0.04355184097685706,True,True,
+Bacteroides xylanisolvens,21_40,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Bacteroides xylanisolvens,41_60,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Bacteroides xylanisolvens,61_70,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Bacteroides xylanisolvens,71_80,high_fiber,0.115359973618099,0.006837223845823357,0.01376393279575505,True,True,
+Bacteroides xylanisolvens,81_90,high_fiber,0.178305668362581,0.03371185296260619,0.12869857973393273,True,True,
+Bacteroides xylanisolvens,91_100,high_fiber,0.1419470553660855,0.029601548282639865,0.03786673755428067,True,True,
+Bilophila wadsworthia,21_40,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Bilophila wadsworthia,41_60,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Bilophila wadsworthia,61_70,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Bilophila wadsworthia,71_80,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Bilophila wadsworthia,81_90,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Bilophila wadsworthia,91_100,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Bilophila wadsworthia,21_40,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Bilophila wadsworthia,41_60,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Bilophila wadsworthia,61_70,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Bilophila wadsworthia,71_80,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Bilophila wadsworthia,81_90,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Bilophila wadsworthia,91_100,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Escherichia coli,21_40,western,0.452260832550609,0.047443550905984885,0.044886463137961595,True,True,
+Escherichia coli,41_60,western,0.7169455062014275,0.11089019299523582,0.12351612684469503,True,True,
+Escherichia coli,61_70,western,0.352563332013605,0.04650329244966298,0.04088030171451361,True,True,
+Escherichia coli,71_80,western,7.57234820821766,0.44880245820358505,1.074741161226784,True,True,
+Escherichia coli,81_90,western,1.29880647859491,0.24556242903190081,1.0712676356776056,True,True,
+Escherichia coli,91_100,western,2.9925055309205,0.6240551924881601,0.9181426752530082,True,True,
+Escherichia coli,21_40,high_fiber,0.452260832550609,0.047443550905984885,0.03748331175618176,True,True,
+Escherichia coli,41_60,high_fiber,0.7169455062014275,0.11089019299523582,0.10371260329631331,True,True,
+Escherichia coli,61_70,high_fiber,0.352563332013605,0.04650329244966298,0.034029497921293686,True,True,
+Escherichia coli,71_80,high_fiber,7.57234820821766,0.44880245820358505,0.9034487840843749,True,True,
+Escherichia coli,81_90,high_fiber,1.29880647859491,0.24556242903190081,0.9374639686320118,True,True,
+Escherichia coli,91_100,high_fiber,2.9925055309205,0.6240551924881601,0.7982126102983604,True,True,
+Faecalibacterium prausnitzii,21_40,western,7.29668501804707,0.7654446774581458,0.7241859628725356,True,True,
+Faecalibacterium prausnitzii,41_60,western,4.54764743652073,0.7033860977550948,0.7834762843581898,True,True,
+Faecalibacterium prausnitzii,61_70,western,6.00005160880284,0.7914100229415298,0.6957106839644228,True,True,
+Faecalibacterium prausnitzii,71_80,western,4.00011319308113,0.23708109885902381,0.567735274581238,True,True,
+Faecalibacterium prausnitzii,81_90,western,1.24423225168371,0.23524420230319645,1.026287353994707,True,True,
+Faecalibacterium prausnitzii,91_100,western,0.4734858460316575,0.09874043597667631,0.14527233974330794,True,True,
+Faecalibacterium prausnitzii,21_40,high_fiber,7.29668501804707,0.7654446774581458,0.6047510475102749,True,True,
+Faecalibacterium prausnitzii,41_60,high_fiber,4.54764743652073,0.7033860977550948,0.6578570717161996,True,True,
+Faecalibacterium prausnitzii,61_70,high_fiber,6.00005160880284,0.7914100229415298,0.579165356067747,True,True,
+Faecalibacterium prausnitzii,71_80,high_fiber,4.00011319308113,0.23708109885902381,0.47724916445034327,True,True,
+Faecalibacterium prausnitzii,81_90,high_fiber,1.24423225168371,0.23524420230319645,0.8980705138209796,True,True,
+Faecalibacterium prausnitzii,91_100,high_fiber,0.4734858460316575,0.09874043597667631,0.12629495457546913,True,True,
+Klebsiella pneumoniae,21_40,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Klebsiella pneumoniae,41_60,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Klebsiella pneumoniae,61_70,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Klebsiella pneumoniae,71_80,western,0.226810889703115,0.01344276333405167,0.032677103884216734,True,True,
+Klebsiella pneumoniae,81_90,western,0.17231064142578,0.03257838666029367,0.14212392807841878,True,True,
+Klebsiella pneumoniae,91_100,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Klebsiella pneumoniae,21_40,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Klebsiella pneumoniae,41_60,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Klebsiella pneumoniae,61_70,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Klebsiella pneumoniae,71_80,high_fiber,0.226810889703115,0.01344276333405167,0.027291805160428492,True,True,
+Klebsiella pneumoniae,81_90,high_fiber,0.17231064142578,0.03257838666029367,0.12437189775042638,True,True,
+Klebsiella pneumoniae,91_100,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Parabacteroides merdae,21_40,western,0.333979971528481,0.035035525166813464,0.03312676904638151,True,True,
+Parabacteroides merdae,41_60,western,0.1929094748151095,0.02983737077340298,0.03324032461868582,True,True,
+Parabacteroides merdae,61_70,western,0.200210536899317,0.026407877120283457,0.023213382419131127,True,True,
+Parabacteroides merdae,71_80,western,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Parabacteroides merdae,81_90,western,0.68968469388354,0.13039713882501167,0.5688300862361187,True,True,
+Parabacteroides merdae,91_100,western,0.5053778563122384,0.10539117543524643,0.1550611071761169,True,True,
+Parabacteroides merdae,21_40,high_fiber,0.333979971528481,0.035035525166813464,0.027679067288950837,True,True,
+Parabacteroides merdae,41_60,high_fiber,0.1929094748151095,0.02983737077340298,0.027902609454921047,True,True,
+Parabacteroides merdae,61_70,high_fiber,0.200210536899317,0.026407877120283457,0.019237667818084444,True,True,
+Parabacteroides merdae,71_80,high_fiber,,,,,False,zero median abundance -> dropped by MICOM Community(taxonomy=...) constructor
+Parabacteroides merdae,81_90,high_fiber,0.68968469388354,0.13039713882501167,0.4978066723709309,True,True,
+Parabacteroides merdae,91_100,high_fiber,0.5053778563122384,0.10539117543524643,0.13480355602718974,True,True,
+Ruminococcus torques,21_40,western,0.882656541610264,0.0925933831771759,0.08760270955960887,True,True,
+Ruminococcus torques,41_60,western,0.8691279378083465,0.13442829884206192,0.1497342865279333,True,True,
+Ruminococcus torques,61_70,western,0.765405482461402,0.10095739335735697,0.0887496202883365,True,True,
+Ruminococcus torques,71_80,western,0.732768298962431,0.04343014938366204,0.10400159041457123,True,True,
+Ruminococcus torques,81_90,western,0.307151004155264,0.058072351734456205,0.2533419925943485,True,True,
+Ruminococcus torques,91_100,western,0.19462465526523798,0.04058690132717304,0.05971358514335276,True,True,
+Ruminococcus torques,21_40,high_fiber,0.882656541610264,0.0925933831771759,0.07315474515343205,True,True,
+Ruminococcus torques,41_60,high_fiber,0.8691279378083465,0.13442829884206192,0.12572715384285935,True,True,
+Ruminococcus torques,61_70,high_fiber,0.765405482461402,0.10095739335735697,0.0738834621019139,True,True,
+Ruminococcus torques,71_80,high_fiber,0.732768298962431,0.04343014938366204,0.08742580912516529,True,True,
+Ruminococcus torques,81_90,high_fiber,0.307151004155264,0.058072351734456205,0.22169815146104277,True,True,
+Ruminococcus torques,91_100,high_fiber,0.19462465526523798,0.04058690132717304,0.05191365561444837,True,True,
