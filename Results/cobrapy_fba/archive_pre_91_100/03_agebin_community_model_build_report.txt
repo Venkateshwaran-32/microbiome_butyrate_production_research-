@@ -1,6 +1,6 @@
 Age-bin weighted community build report
 Input table: Suplementary_Data/processed_data/allcohort_agebin_median_abundance_10_species.csv
-Age bins: 21_40, 41_60, 61_70, 71_80, 81_90, 91_100
+Age bins: 21_40, 41_60, 61_70, 71_80, 81_90
 
 Input validation
 21_40: rows=10, total_normalized_weight=1.0, n_subjects=91
@@ -8,7 +8,6 @@ Input validation
 61_70: rows=10, total_normalized_weight=1.0, n_subjects=57
 71_80: rows=10, total_normalized_weight=1.0, n_subjects=33
 81_90: rows=10, total_normalized_weight=1.0, n_subjects=169
-91_100: rows=10, total_normalized_weight=1.0, n_subjects=26
 
 Species count: 10
 Shared metabolites: 649
@@ -48,13 +47,6 @@ Klebsiella_pneumoniae_pneumoniae_MGH78578: extracellular metabolites without dir
 
 81_90:
   objective weights -> Alistipes_onderdonkii_DSM_19147=0.093517, Alistipes_shahii_WAL_8301=0.043059, Bacteroides_dorei_DSM_17855=0.127858, Bacteroides_xylanisolvens_XB1A=0.033712, Bilophila_wadsworthia_3_1_6=0.000000, Escherichia_coli_UTI89_UPEC=0.245562, Faecalibacterium_prausnitzii_M21_2=0.235244, Klebsiella_pneumoniae_pneumoniae_MGH78578=0.032578, Parabacteroides_merdae_ATCC_43184=0.130397, Ruminococcus_torques_ATCC_27756=0.058072
-  western: matched diet metabolites=127, missing diet metabolites=37
-  western missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
-  high_fiber: matched diet metabolites=127, missing diet metabolites=37
-  high_fiber missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
-
-91_100:
-  objective weights -> Alistipes_onderdonkii_DSM_19147=0.021460, Alistipes_shahii_WAL_8301=0.000000, Bacteroides_dorei_DSM_17855=0.080165, Bacteroides_xylanisolvens_XB1A=0.029602, Bilophila_wadsworthia_3_1_6=0.000000, Escherichia_coli_UTI89_UPEC=0.624055, Faecalibacterium_prausnitzii_M21_2=0.098740, Klebsiella_pneumoniae_pneumoniae_MGH78578=0.000000, Parabacteroides_merdae_ATCC_43184=0.105391, Ruminococcus_torques_ATCC_27756=0.040587
   western: matched diet metabolites=127, missing diet metabolites=37
   western missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
   high_fiber: matched diet metabolites=127, missing diet metabolites=37
@@ -128,5 +120,3 @@ Columns:
   that age group.
 - 81_90: Solved biomass flux for this species in age group 81_90; blank means no row was written for
   that age group.
-- 91_100: Solved biomass flux for this species in age group 91_100; blank means no row was written
-  for that age group.
