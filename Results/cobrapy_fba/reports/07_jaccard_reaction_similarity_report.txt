@@ -1,0 +1,77 @@
+Jaccard reaction-set similarity across the 10 AGORA2 species
+
+Models directory: Models/vmh_agora2_sbml
+Number of species: 10
+Number of ordered pairs written to long CSV: 100
+
+Per-species reaction count
+  Alistipes_onderdonkii_DSM_19147: 1189
+  Alistipes_shahii_WAL_8301: 2434
+  Bacteroides_dorei_DSM_17855: 2115
+  Bacteroides_xylanisolvens_XB1A: 2657
+  Bilophila_wadsworthia_3_1_6: 1240
+  Escherichia_coli_UTI89_UPEC: 3198
+  Faecalibacterium_prausnitzii_M21_2: 2046
+  Klebsiella_pneumoniae_pneumoniae_MGH78578: 2113
+  Parabacteroides_merdae_ATCC_43184: 2495
+  Ruminococcus_torques_ATCC_27756: 998
+
+Pairwise Jaccard summary (off-diagonal, 45 unordered pairs)
+  Minimum: 0.195402
+  Median:  0.353474
+  Maximum: 0.793872
+  Closest pair: Bacteroides_xylanisolvens_XB1A vs Parabacteroides_merdae_ATCC_43184 -> Jaccard 0.793872
+  Farthest pair: Alistipes_shahii_WAL_8301 vs Ruminococcus_torques_ATCC_27756 -> Jaccard 0.195402
+
+Verification asserts run inside this script
+  Diagonal == 1.0 for all species: PASS
+  Symmetry within 1e-12 for all pairs: PASS
+  Per-species reaction counts match expected (1189, 2434, 2115, 2657, 1240,
+                                              3198, 2046, 2113, 2495, 998): PASS
+
+Output files
+  Wide matrix: Results/cobrapy_fba/tables/07_jaccard_reaction_matrix_wide.csv
+  Long pairs:  Results/cobrapy_fba/tables/07_jaccard_reaction_pairs_long.csv
+  This report: Results/cobrapy_fba/reports/07_jaccard_reaction_similarity_report.txt
+
+CSV Output Dictionary
+
+07_jaccard_reaction_matrix_wide.csv
+Path: Results/cobrapy_fba/tables/07_jaccard_reaction_matrix_wide.csv
+Row grain: one row per species; columns are the same 10 species (wide-format Jaccard matrix)
+Columns:
+- species_name: Species identifier (SBML file stem); also the row label of the Jaccard matrix.
+- Alistipes_onderdonkii_DSM_19147: Jaccard similarity between this species (column) and species_name
+  (row).
+- Alistipes_shahii_WAL_8301: Jaccard similarity between this species (column) and species_name
+  (row).
+- Bacteroides_dorei_DSM_17855: Jaccard similarity between this species (column) and species_name
+  (row).
+- Bacteroides_xylanisolvens_XB1A: Jaccard similarity between this species (column) and species_name
+  (row).
+- Bilophila_wadsworthia_3_1_6: Jaccard similarity between this species (column) and species_name
+  (row).
+- Escherichia_coli_UTI89_UPEC: Jaccard similarity between this species (column) and species_name
+  (row).
+- Faecalibacterium_prausnitzii_M21_2: Jaccard similarity between this species (column) and
+  species_name (row).
+- Klebsiella_pneumoniae_pneumoniae_MGH78578: Jaccard similarity between this species (column) and
+  species_name (row).
+- Parabacteroides_merdae_ATCC_43184: Jaccard similarity between this species (column) and
+  species_name (row).
+- Ruminococcus_torques_ATCC_27756: Jaccard similarity between this species (column) and species_name
+  (row).
+
+07_jaccard_reaction_pairs_long.csv
+Path: Results/cobrapy_fba/tables/07_jaccard_reaction_pairs_long.csv
+Row grain: one row per ordered species pair (100 rows for 10 species)
+Columns:
+- species_a: First species in the ordered pair; SBML file stem.
+- species_b: Second species in the ordered pair; SBML file stem.
+- n_reactions_a: Size of species_a's reaction-ID set.
+- n_reactions_b: Size of species_b's reaction-ID set.
+- intersection: Number of reaction IDs shared between species_a and species_b.
+- union: Number of distinct reaction IDs across the two species combined.
+- jaccard: Jaccard similarity between the two reaction sets. Formula: jaccard = intersection / union
+- dissimilarity: Jaccard dissimilarity; complementary distance metric used for hierarchical
+  clustering. Formula: dissimilarity = 1 - jaccard
