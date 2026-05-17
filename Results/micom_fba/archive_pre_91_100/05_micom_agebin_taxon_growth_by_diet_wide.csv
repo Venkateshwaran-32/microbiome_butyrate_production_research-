@@ -1,0 +1,19 @@
+taxon_id,species_name,paper_taxon,diet_name,21_40,41_60,61_70,71_80,81_90
+Alistipes_onderdonkii_DSM_19147,Alistipes onderdonkii,Alistipes onderdonkii,high_fiber,,,,0.2779917170386062,0.35698748993472074
+Alistipes_onderdonkii_DSM_19147,Alistipes onderdonkii,Alistipes onderdonkii,western,,,,0.3306957349348141,0.4079367291027863
+Alistipes_shahii_WAL_8301,Alistipes shahii,Alistipes shahii,high_fiber,0.018922627413942773,,,,0.13678460804807355
+Alistipes_shahii_WAL_8301,Alistipes shahii,Alistipes shahii,western,0.019744126719183828,,,,0.19532640709712457
+Bacteroides_dorei_DSM_17855,Bacteroides dorei,Bacteroides dorei,high_fiber,0.030511653032084314,0.02006873738200519,0.025408793594054943,0.22608305864834902,0.48808002226177694
+Bacteroides_dorei_DSM_17855,Bacteroides dorei,Bacteroides dorei,western,0.036539406732583254,0.023902502780061802,0.03052400951132953,0.26894851957774685,0.5577384404414933
+Bacteroides_xylanisolvens_XB1A,Bacteroides xylanisolvens,Bacteroides xylanisolvens,high_fiber,,,,0.013764263681431717,0.12869069405967062
+Bacteroides_xylanisolvens_XB1A,Bacteroides xylanisolvens,Bacteroides xylanisolvens,western,,,,0.016423369364765145,0.14705833191318918
+Escherichia_coli_UTI89_UPEC,Escherichia coli,Escherichia coli,high_fiber,0.037484328219501525,0.10371262053318439,0.03403068559474819,0.9034462824195498,0.9374007744178341
+Escherichia_coli_UTI89_UPEC,Escherichia coli,Escherichia coli,western,0.044891859667530176,0.12351599005380118,0.04088147485860091,1.0747410011390228,1.071186435965758
+Faecalibacterium_prausnitzii_M21_2,Faecalibacterium prausnitzii,Faecalibacterium prausnitzii,high_fiber,0.6047926988127872,0.657856442547251,0.5791448937375531,0.4772479060659867,0.8980105507288378
+Faecalibacterium_prausnitzii_M21_2,Faecalibacterium prausnitzii,Faecalibacterium prausnitzii,western,0.7242830483537536,0.7834760287146454,0.6957262314348291,0.5677352112827951,1.0261594657921929
+Klebsiella_pneumoniae_pneumoniae_MGH78578,Klebsiella pneumoniae,Klebsiella pneumoniae,high_fiber,,,,0.027401548148440584,0.1243635086424201
+Klebsiella_pneumoniae_pneumoniae_MGH78578,Klebsiella pneumoniae,Klebsiella pneumoniae,western,,,,0.03266562486798864,0.1421126431947842
+Parabacteroides_merdae_ATCC_43184,Parabacteroides merdae,Parabacteroides merdae,high_fiber,0.02767005172697935,0.02790361964378338,0.019283835226182496,,0.49777311907642086
+Parabacteroides_merdae_ATCC_43184,Parabacteroides merdae,Parabacteroides merdae,western,0.033153630373114286,0.033244035334311466,0.023209090344955597,,0.568815343682465
+Ruminococcus_torques_ATCC_27756,Ruminococcus torques,Ruminococcus torques,high_fiber,0.07315978849920662,0.1257271607137619,0.07387967828868654,0.0874255638189729,0.22168320816861467
+Ruminococcus_torques_ATCC_27756,Ruminococcus torques,Ruminococcus torques,western,0.08761314143459258,0.14973412794586105,0.08875200313364619,0.10400155664681283,0.2533218060600917

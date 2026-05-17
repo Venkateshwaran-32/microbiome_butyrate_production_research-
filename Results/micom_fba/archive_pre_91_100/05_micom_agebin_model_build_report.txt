@@ -2,7 +2,7 @@ MICOM age-bin community build report
 Input table: Suplementary_Data/processed_data/allcohort_agebin_median_abundance_10_species.csv
 Diet file: Medium_files/diet.csv
 Tradeoff fraction: 0.5
-Age bins: 21_40, 41_60, 61_70, 71_80, 81_90, 91_100
+Age bins: 21_40, 41_60, 61_70, 71_80, 81_90
 
 Input validation
 21_40: rows=10, total_normalized_weight=1.0, n_subjects=91
@@ -10,70 +10,62 @@ Input validation
 61_70: rows=10, total_normalized_weight=1.0, n_subjects=57
 71_80: rows=10, total_normalized_weight=1.0, n_subjects=33
 81_90: rows=10, total_normalized_weight=1.0, n_subjects=169
-91_100: rows=10, total_normalized_weight=1.0, n_subjects=26
 
 21_40:
   abundances -> Alistipes_onderdonkii_DSM_19147=0.000000, Alistipes_shahii_WAL_8301=0.020866, Bacteroides_dorei_DSM_17855=0.038617, Bacteroides_xylanisolvens_XB1A=0.000000, Bilophila_wadsworthia_3_1_6=0.000000, Escherichia_coli_UTI89_UPEC=0.047444, Faecalibacterium_prausnitzii_M21_2=0.765445, Klebsiella_pneumoniae_pneumoniae_MGH78578=0.000000, Parabacteroides_merdae_ATCC_43184=0.035036, Ruminococcus_torques_ATCC_27756=0.092593
-  western: solver_status=optimal, community_growth_rate=0.567610929294336, matched_diet_metabolites=123, missing_diet_metabolites=41
+  western: solver_status=optimal, community_growth_rate=0.5676254004241773, matched_diet_metabolites=123, missing_diet_metabolites=41
   western missing metabolite_ids: 12dgr180, 4hbz, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, fuc_L, galmannan, glcmannan, glu_D, hdcea, homogal, kestopt, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xylan, xyluglc
-  high_fiber: solver_status=optimal, community_growth_rate=0.4740305665069916, matched_diet_metabolites=123, missing_diet_metabolites=41
+  high_fiber: solver_status=optimal, community_growth_rate=0.47403039056691626, matched_diet_metabolites=123, missing_diet_metabolites=41
   high_fiber missing metabolite_ids: 12dgr180, 4hbz, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, fuc_L, galmannan, glcmannan, glu_D, hdcea, homogal, kestopt, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xylan, xyluglc
 
 41_60:
   abundances -> Alistipes_onderdonkii_DSM_19147=0.000000, Alistipes_shahii_WAL_8301=0.000000, Bacteroides_dorei_DSM_17855=0.021458, Bacteroides_xylanisolvens_XB1A=0.000000, Bilophila_wadsworthia_3_1_6=0.000000, Escherichia_coli_UTI89_UPEC=0.110890, Faecalibacterium_prausnitzii_M21_2=0.703386, Klebsiella_pneumoniae_pneumoniae_MGH78578=0.000000, Parabacteroides_merdae_ATCC_43184=0.029837, Ruminococcus_torques_ATCC_27756=0.134428
-  western: solver_status=optimal, community_growth_rate=0.5864162795974213, matched_diet_metabolites=122, missing_diet_metabolites=42
+  western: solver_status=optimal, community_growth_rate=0.5864161780559636, matched_diet_metabolites=122, missing_diet_metabolites=42
   western missing metabolite_ids: 12dgr180, 4hbz, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, fuc_L, galmannan, glcmannan, glu_D, hdcea, homogal, kestopt, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pheme, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xylan, xyluglc
-  high_fiber: solver_status=optimal, community_growth_rate=0.49239270116658873, matched_diet_metabolites=122, missing_diet_metabolites=42
+  high_fiber: solver_status=optimal, community_growth_rate=0.4923922832537026, matched_diet_metabolites=122, missing_diet_metabolites=42
   high_fiber missing metabolite_ids: 12dgr180, 4hbz, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, fuc_L, galmannan, glcmannan, glu_D, hdcea, homogal, kestopt, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pheme, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xylan, xyluglc
 
 61_70:
   abundances -> Alistipes_onderdonkii_DSM_19147=0.000000, Alistipes_shahii_WAL_8301=0.000000, Bacteroides_dorei_DSM_17855=0.034721, Bacteroides_xylanisolvens_XB1A=0.000000, Bilophila_wadsworthia_3_1_6=0.000000, Escherichia_coli_UTI89_UPEC=0.046503, Faecalibacterium_prausnitzii_M21_2=0.791410, Klebsiella_pneumoniae_pneumoniae_MGH78578=0.000000, Parabacteroides_merdae_ATCC_43184=0.026408, Ruminococcus_torques_ATCC_27756=0.100957
-  western: solver_status=optimal, community_growth_rate=0.5631262199104398, matched_diet_metabolites=122, missing_diet_metabolites=42
+  western: solver_status=optimal, community_growth_rate=0.5631387464346919, matched_diet_metabolites=122, missing_diet_metabolites=42
   western missing metabolite_ids: 12dgr180, 4hbz, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, fuc_L, galmannan, glcmannan, glu_D, hdcea, homogal, kestopt, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pheme, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xylan, xyluglc
-  high_fiber: solver_status=optimal, community_growth_rate=0.46878853502723494, matched_diet_metabolites=122, missing_diet_metabolites=42
+  high_fiber: solver_status=optimal, community_growth_rate=0.4687737867019011, matched_diet_metabolites=122, missing_diet_metabolites=42
   high_fiber missing metabolite_ids: 12dgr180, 4hbz, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, fuc_L, galmannan, glcmannan, glu_D, hdcea, homogal, kestopt, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pheme, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xylan, xyluglc
 
 71_80:
   abundances -> Alistipes_onderdonkii_DSM_19147=0.138096, Alistipes_shahii_WAL_8301=0.000000, Bacteroides_dorei_DSM_17855=0.112311, Bacteroides_xylanisolvens_XB1A=0.006837, Bilophila_wadsworthia_3_1_6=0.000000, Escherichia_coli_UTI89_UPEC=0.448802, Faecalibacterium_prausnitzii_M21_2=0.237081, Klebsiella_pneumoniae_pneumoniae_MGH78578=0.013443, Parabacteroides_merdae_ATCC_43184=0.000000, Ruminococcus_torques_ATCC_27756=0.043430
-  western: solver_status=optimal, community_growth_rate=0.6978874982034929, matched_diet_metabolites=125, missing_diet_metabolites=39
+  western: solver_status=optimal, community_growth_rate=0.6978873289016665, matched_diet_metabolites=125, missing_diet_metabolites=39
   western missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinogal, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lmn30, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
-  high_fiber: solver_status=optimal, community_growth_rate=0.5866554403450513, matched_diet_metabolites=125, missing_diet_metabolites=39
+  high_fiber: solver_status=optimal, community_growth_rate=0.5866557220029303, matched_diet_metabolites=125, missing_diet_metabolites=39
   high_fiber missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinogal, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lmn30, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
 
 81_90:
   abundances -> Alistipes_onderdonkii_DSM_19147=0.093517, Alistipes_shahii_WAL_8301=0.043059, Bacteroides_dorei_DSM_17855=0.127858, Bacteroides_xylanisolvens_XB1A=0.033712, Bilophila_wadsworthia_3_1_6=0.000000, Escherichia_coli_UTI89_UPEC=0.245562, Faecalibacterium_prausnitzii_M21_2=0.235244, Klebsiella_pneumoniae_pneumoniae_MGH78578=0.032578, Parabacteroides_merdae_ATCC_43184=0.130397, Ruminococcus_torques_ATCC_27756=0.058072
-  western: solver_status=optimal, community_growth_rate=0.7207881361686796, matched_diet_metabolites=127, missing_diet_metabolites=37
+  western: solver_status=optimal, community_growth_rate=0.7207822481046218, matched_diet_metabolites=127, missing_diet_metabolites=37
   western missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
-  high_fiber: solver_status=optimal, community_growth_rate=0.6293348589266555, matched_diet_metabolites=127, missing_diet_metabolites=37
+  high_fiber: solver_status=optimal, community_growth_rate=0.6292930142960496, matched_diet_metabolites=127, missing_diet_metabolites=37
   high_fiber missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, galmannan, glcmannan, glu_D, hdcea, homogal, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
-
-91_100:
-  abundances -> Alistipes_onderdonkii_DSM_19147=0.021460, Alistipes_shahii_WAL_8301=0.000000, Bacteroides_dorei_DSM_17855=0.080165, Bacteroides_xylanisolvens_XB1A=0.029602, Bilophila_wadsworthia_3_1_6=0.000000, Escherichia_coli_UTI89_UPEC=0.624055, Faecalibacterium_prausnitzii_M21_2=0.098740, Klebsiella_pneumoniae_pneumoniae_MGH78578=0.000000, Parabacteroides_merdae_ATCC_43184=0.105391, Ruminococcus_torques_ATCC_27756=0.040587
-  western: solver_status=optimal, community_growth_rate=0.6175032709463362, matched_diet_metabolites=125, missing_diet_metabolites=39
-  western missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, fuc_L, galmannan, glcmannan, glu_D, hdcea, homogal, kestopt, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
-  high_fiber: solver_status=optimal, community_growth_rate=0.5368430866617897, matched_diet_metabolites=125, missing_diet_metabolites=39
-  high_fiber missing metabolite_ids: 12dgr180, H2, acmana, amp, amylopect900, amylose300, arab_D, arabinan101, arabinoxyl, arachd, bglc, cellul, chor, chsterol, ddca, dextran40, fe3dcit, fuc_L, galmannan, glcmannan, glu_D, hdcea, homogal, kestopt, lanost, levan1000, lichn, lnlc, lnlnca, lnlncg, mobd, ocdcea, octa, pullulan1200, pydx5p, rhamnogalurI, rhamnogalurII, starch1200, xyluglc
 
 
 Taxon growth trend summary
-high_fiber | Alistipes_onderdonkii_DSM_19147: observed_bins=71_80, 81_90, 91_100; trend=mixed_nonmonotonic; values -> 71_80=0.277990, 81_90=0.357012, 91_100=0.027449
-western | Alistipes_onderdonkii_DSM_19147: observed_bins=71_80, 81_90, 91_100; trend=mixed_nonmonotonic; values -> 71_80=0.330694, 81_90=0.407970, 91_100=0.031573
-high_fiber | Alistipes_shahii_WAL_8301: observed_bins=21_40, 81_90; trend=increasing_across_observed_bins; values -> 21_40=0.020472, 81_90=0.136785
-western | Alistipes_shahii_WAL_8301: observed_bins=21_40, 81_90; trend=increasing_across_observed_bins; values -> 21_40=0.022723, 81_90=0.194010
-high_fiber | Bacteroides_dorei_DSM_17855: observed_bins=21_40, 41_60, 61_70, 71_80, 81_90, 91_100; trend=mixed_nonmonotonic; values -> 21_40=0.030510, 41_60=0.020069, 61_70=0.025393, 71_80=0.226084, 81_90=0.488113, 91_100=0.102537
-western | Bacteroides_dorei_DSM_17855: observed_bins=21_40, 41_60, 61_70, 71_80, 81_90, 91_100; trend=mixed_nonmonotonic; values -> 21_40=0.036535, 41_60=0.023902, 61_70=0.030523, 71_80=0.268949, 81_90=0.557783, 91_100=0.117943
-high_fiber | Bacteroides_xylanisolvens_XB1A: observed_bins=71_80, 81_90, 91_100; trend=mixed_nonmonotonic; values -> 71_80=0.013764, 81_90=0.128699, 91_100=0.037867
-western | Bacteroides_xylanisolvens_XB1A: observed_bins=71_80, 81_90, 91_100; trend=mixed_nonmonotonic; values -> 71_80=0.016422, 81_90=0.147069, 91_100=0.043552
-high_fiber | Escherichia_coli_UTI89_UPEC: observed_bins=21_40, 41_60, 61_70, 71_80, 81_90, 91_100; trend=mixed_nonmonotonic; values -> 21_40=0.037483, 41_60=0.103713, 61_70=0.034029, 71_80=0.903449, 81_90=0.937464, 91_100=0.798213
-western | Escherichia_coli_UTI89_UPEC: observed_bins=21_40, 41_60, 61_70, 71_80, 81_90, 91_100; trend=mixed_nonmonotonic; values -> 21_40=0.044886, 41_60=0.123516, 61_70=0.040880, 71_80=1.074741, 81_90=1.071268, 91_100=0.918143
-high_fiber | Faecalibacterium_prausnitzii_M21_2: observed_bins=21_40, 41_60, 61_70, 71_80, 81_90, 91_100; trend=mixed_nonmonotonic; values -> 21_40=0.604751, 41_60=0.657857, 61_70=0.579165, 71_80=0.477249, 81_90=0.898071, 91_100=0.126295
-western | Faecalibacterium_prausnitzii_M21_2: observed_bins=21_40, 41_60, 61_70, 71_80, 81_90, 91_100; trend=mixed_nonmonotonic; values -> 21_40=0.724186, 41_60=0.783476, 61_70=0.695711, 71_80=0.567735, 81_90=1.026287, 91_100=0.145272
-high_fiber | Klebsiella_pneumoniae_pneumoniae_MGH78578: observed_bins=71_80, 81_90; trend=increasing_across_observed_bins; values -> 71_80=0.027292, 81_90=0.124372
-western | Klebsiella_pneumoniae_pneumoniae_MGH78578: observed_bins=71_80, 81_90; trend=increasing_across_observed_bins; values -> 71_80=0.032677, 81_90=0.142124
-high_fiber | Parabacteroides_merdae_ATCC_43184: observed_bins=21_40, 41_60, 61_70, 81_90, 91_100; trend=mixed_nonmonotonic; values -> 21_40=0.027679, 41_60=0.027903, 61_70=0.019238, 81_90=0.497807, 91_100=0.134804
-western | Parabacteroides_merdae_ATCC_43184: observed_bins=21_40, 41_60, 61_70, 81_90, 91_100; trend=mixed_nonmonotonic; values -> 21_40=0.033127, 41_60=0.033240, 61_70=0.023213, 81_90=0.568830, 91_100=0.155061
-high_fiber | Ruminococcus_torques_ATCC_27756: observed_bins=21_40, 41_60, 61_70, 71_80, 81_90, 91_100; trend=mixed_nonmonotonic; values -> 21_40=0.073155, 41_60=0.125727, 61_70=0.073883, 71_80=0.087426, 81_90=0.221698, 91_100=0.051914
-western | Ruminococcus_torques_ATCC_27756: observed_bins=21_40, 41_60, 61_70, 71_80, 81_90, 91_100; trend=mixed_nonmonotonic; values -> 21_40=0.087603, 41_60=0.149734, 61_70=0.088750, 71_80=0.104002, 81_90=0.253342, 91_100=0.059714
+high_fiber | Alistipes_onderdonkii_DSM_19147: observed_bins=71_80, 81_90; trend=increasing_across_observed_bins; values -> 71_80=0.277992, 81_90=0.356987
+western | Alistipes_onderdonkii_DSM_19147: observed_bins=71_80, 81_90; trend=increasing_across_observed_bins; values -> 71_80=0.330696, 81_90=0.407937
+high_fiber | Alistipes_shahii_WAL_8301: observed_bins=21_40, 81_90; trend=increasing_across_observed_bins; values -> 21_40=0.018923, 81_90=0.136785
+western | Alistipes_shahii_WAL_8301: observed_bins=21_40, 81_90; trend=increasing_across_observed_bins; values -> 21_40=0.019744, 81_90=0.195326
+high_fiber | Bacteroides_dorei_DSM_17855: observed_bins=21_40, 41_60, 61_70, 71_80, 81_90; trend=mixed_nonmonotonic; values -> 21_40=0.030512, 41_60=0.020069, 61_70=0.025409, 71_80=0.226083, 81_90=0.488080
+western | Bacteroides_dorei_DSM_17855: observed_bins=21_40, 41_60, 61_70, 71_80, 81_90; trend=mixed_nonmonotonic; values -> 21_40=0.036539, 41_60=0.023903, 61_70=0.030524, 71_80=0.268949, 81_90=0.557738
+high_fiber | Bacteroides_xylanisolvens_XB1A: observed_bins=71_80, 81_90; trend=increasing_across_observed_bins; values -> 71_80=0.013764, 81_90=0.128691
+western | Bacteroides_xylanisolvens_XB1A: observed_bins=71_80, 81_90; trend=increasing_across_observed_bins; values -> 71_80=0.016423, 81_90=0.147058
+high_fiber | Escherichia_coli_UTI89_UPEC: observed_bins=21_40, 41_60, 61_70, 71_80, 81_90; trend=mixed_nonmonotonic; values -> 21_40=0.037484, 41_60=0.103713, 61_70=0.034031, 71_80=0.903446, 81_90=0.937401
+western | Escherichia_coli_UTI89_UPEC: observed_bins=21_40, 41_60, 61_70, 71_80, 81_90; trend=mixed_nonmonotonic; values -> 21_40=0.044892, 41_60=0.123516, 61_70=0.040881, 71_80=1.074741, 81_90=1.071186
+high_fiber | Faecalibacterium_prausnitzii_M21_2: observed_bins=21_40, 41_60, 61_70, 71_80, 81_90; trend=mixed_nonmonotonic; values -> 21_40=0.604793, 41_60=0.657856, 61_70=0.579145, 71_80=0.477248, 81_90=0.898011
+western | Faecalibacterium_prausnitzii_M21_2: observed_bins=21_40, 41_60, 61_70, 71_80, 81_90; trend=mixed_nonmonotonic; values -> 21_40=0.724283, 41_60=0.783476, 61_70=0.695726, 71_80=0.567735, 81_90=1.026159
+high_fiber | Klebsiella_pneumoniae_pneumoniae_MGH78578: observed_bins=71_80, 81_90; trend=increasing_across_observed_bins; values -> 71_80=0.027402, 81_90=0.124364
+western | Klebsiella_pneumoniae_pneumoniae_MGH78578: observed_bins=71_80, 81_90; trend=increasing_across_observed_bins; values -> 71_80=0.032666, 81_90=0.142113
+high_fiber | Parabacteroides_merdae_ATCC_43184: observed_bins=21_40, 41_60, 61_70, 81_90; trend=mixed_nonmonotonic; values -> 21_40=0.027670, 41_60=0.027904, 61_70=0.019284, 81_90=0.497773
+western | Parabacteroides_merdae_ATCC_43184: observed_bins=21_40, 41_60, 61_70, 81_90; trend=mixed_nonmonotonic; values -> 21_40=0.033154, 41_60=0.033244, 61_70=0.023209, 81_90=0.568815
+high_fiber | Ruminococcus_torques_ATCC_27756: observed_bins=21_40, 41_60, 61_70, 71_80, 81_90; trend=mixed_nonmonotonic; values -> 21_40=0.073160, 41_60=0.125727, 61_70=0.073880, 71_80=0.087426, 81_90=0.221683
+western | Ruminococcus_torques_ATCC_27756: observed_bins=21_40, 41_60, 61_70, 71_80, 81_90; trend=mixed_nonmonotonic; values -> 21_40=0.087613, 41_60=0.149734, 61_70=0.088752, 71_80=0.104002, 81_90=0.253322
 
 CSV Output Dictionary
 
@@ -140,6 +132,4 @@ Columns:
 - 71_80: MICOM taxon growth rate for age group 71_80; blank means no row was written for that age
   group.
 - 81_90: MICOM taxon growth rate for age group 81_90; blank means no row was written for that age
-  group.
-- 91_100: MICOM taxon growth rate for age group 91_100; blank means no row was written for that age
   group.
